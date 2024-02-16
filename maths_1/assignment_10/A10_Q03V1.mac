@@ -1,0 +1,17 @@
+depends(y,x);
+A1: (rand([1,2,3,4,5,6,7,8,9]))^2;
+A2: (rand([1,2,3,4,5,6,7,8,9]))^2;
+ode: A1*diff(y,x,2)=-A2*y;
+kval1: sqrt(A2/A1);
+kval2: -sqrt(A2/A1);
+[sol1, sol2]: rand([[sin(k*x),cos(k*x)],[cos(k*x),sin(k*x)]]);
+genfn: A*sin(k*x)+B*cos(k*x);
+gendv1: diff(genfn,x);
+gendv2: diff(genfn,x,2);
+
+tans1: {kval1,kval2};
+tans2: gendv2;
+tans3: A2-A1*k^2;
+tans4: (A2-A1*k^2)*B;
+tans5: A2/A1;
+

@@ -1,0 +1,17 @@
+solbase:rand([4,3,2]);
+despl:rand(solbase^2-2)+1;
+curv1:x^3-despl*x;
+curv2:(solbase^2-despl)*x;
+
+makelines(start,final,curve1,curve2,stepsize):=makelist([discrete,[[i,at(curve1,x=i)],[i,at(curve2,x=i)]]],i,start,final,stepsize);
+niceplot(startplot,finalplot,startlines,finalines,curve1,curve2):=plot(append([curve1,curve2],makelines(startlines,finalines,curve1,curve2,solbase/60)),[x,(startplot),finalplot],
+[box, false],[axes, solid],[color,black]);
+
+solgraph1:[1,true,niceplot(-(solbase*1.1),solbase*1.1,-solbase,solbase,curv1,curv2)];
+badgraphs:[[2,false,niceplot(-solbase*1.1,solbase*1.1,-solbase,solbase,curv1,0)],
+[3,false,niceplot(-solbase*0.5,solbase*1.5,solbase,solbase*1.5,curv1,curv2)],
+[4,false,niceplot(-(solbase*1.1),solbase*1.1,0,solbase,curv1,curv2)]
+];
+MCQsolutions:random_permutation(append([solgraph1],badgraphs));
+
+tans2:2*integrate(curv2-curv1,x,0,solbase);

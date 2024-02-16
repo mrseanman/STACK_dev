@@ -1,0 +1,14 @@
+ordergreat(x,y);
+negsumdispflag:false;
+findEquation(M, row) := first((submatrix(M,3).transpose([x,y]))[row])=first(col(M,3)[row]);
+
+[truek,m12,m13]:makelist(rand_with_prohib(-6,6,[0]),3);
+mult:rand_with_prohib(-3,3,[1,0,-1]);
+
+eqmatrix:matrix([k,m12,m13],mult*[truek,m12,m13]);
+
+eq1:findEquation(eqmatrix,1);
+eq2:findEquation(eqmatrix,2);
+tans1:{};
+tans2:%union(oo(-inf,truek),oo(truek,inf));
+tans3:{truek};

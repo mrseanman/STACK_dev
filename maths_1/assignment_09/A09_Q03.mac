@@ -1,0 +1,16 @@
+ordergreat(x,A,B,C,D);
+type:rand([0,1]);
+
+coeffs:makelist(rand_with_prohib(-5,5,[0]),6);
+coeffs[5]:rand_with_prohib(1,5,[0,coeffs[2]]);
+parametrizedfunc:(A*x+B)/(x^2+coeffs[5])+C/(x-coeffs[2]);
+if is(type=1) then parametrizedfunc:parametrizedfunc+D/(x-coeffs[2])^2;
+funcexp:at(parametrizedfunc,[A=coeffs[3],B=coeffs[4],C=coeffs[1],D=coeffs[6]]);
+func:xthru(funcexp);
+func:expand(num(func))/denom(func);
+tans1:integrate(funcexp,x)+C;
+
+/*variables for feedback*/
+parametrizedpoly:num(xthru(parametrizedfunc));
+firstsol:solve(at(num(func)=num(xthru(parametrizedpoly)),x=coeffs[2]))[1];
+parametrizedpolyFirsteval:at(num(xthru(parametrizedfunc)),firstsol);

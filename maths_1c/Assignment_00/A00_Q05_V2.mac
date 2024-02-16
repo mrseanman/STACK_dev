@@ -1,0 +1,12 @@
+num: sqrt(rand([2,3,5,6,7,8,10]) + rand(10) + 1);
+denom_rat: rand_with_prohib(-15,15,[-1,0,1]);
+denom_irrat: rand([1,-1]) * sqrt(rand([2,3,5,6,7,8,10]));
+denom: denom_rat + denom_irrat;
+
+rationalised_num: radcan(num * (denom_rat - denom_irrat));
+rationalised_denom: radcan(denom * (denom_rat - denom_irrat));
+
+tans1: radcan(rationalised_num);
+tans2: radcan(rationalised_denom);
+
+

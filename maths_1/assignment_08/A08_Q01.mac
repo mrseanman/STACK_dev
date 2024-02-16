@@ -1,0 +1,4 @@
+coeff1:rand(5)+2;
+[u,dv,r1,r2,r3,tans1,tans2,type,exception]:rand([[coeff1*sec(x)^(n-2),sec(x)^2,coeff1*tan(x)*sec(x)^(n+p)/(n-1),q*(n-2)/(n-1),sec(x)^(n-2),-2,coeff1,1,", n ≠ 1"],
+[coeff1*x^n,e^x,coeff1*x^(n+p)*e^x,q*n,x^(n-1)*e^x,0,-coeff1,2," "]]);
+func:u*dv;

@@ -1,0 +1,23 @@
+steps:6;
+stepsize:1/steps;
+startingpoint:rand(4)+1;
+endpoint:startingpoint+stepsize*steps;
+func:rand([%e^(-(x/endpoint)^2),sin(x)/(x),sqrt(1-(x/endpoint)^4),sin(x^2),e^(-x)/x]);
+startpoints:makelist(float(startingpoint+stepsize*i),i,0,steps-1);
+evalpoints:makelist(float(startingpoint+stepsize/2+stepsize*i),i,0,steps-1);
+evaluatedfunc:float(at(func,x=evalpoints));
+intervalarea:float(evaluatedfunc*stepsize);
+
+
+ptans1:float(simplify(sum(intervalarea[i], i, 1, steps)));
+tans1:decimalplaces(ptans1,6);
+
+evalpoints2:append(startpoints,[endpoint]);
+evaluatedfunc2:float(at(func,x=evalpoints2));
+ptans2:float(1/(steps*3)*(evaluatedfunc2[1]+evaluatedfunc2[steps+1]+sum((2+2*mod(i+1,2))*evaluatedfunc2[i],i,2,steps)));
+tans2:decimalplaces(ptans2,6);
+
+ptans3:float(1/(steps*2)*(evaluatedfunc2[1]+evaluatedfunc2[steps+1]+sum(2*evaluatedfunc2[i],i,2,steps)));
+tans3:decimalplaces(ptans3,6);
+
+betterapprox:float(quad_qag(func,x,startingpoint,endpoint,1)[1]);

@@ -1,0 +1,10 @@
+[funcnum,minim]:rand([
+    [e^(-x^2),      e^(-1)],
+    [cos(x)^4,      cos(1)^4],
+    [sec(x)^3,      1],
+    [log(2+tan(x)), log(2)]]);
+funcdenom:1/x^(3/2);
+integrand:funcnum*funcdenom;
+startint:0;
+finalint:1;
+tans1:DNE;

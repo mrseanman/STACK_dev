@@ -1,0 +1,18 @@
+ordergreat(x,y);
+center:[0,rand_with_prohib(-5,5,[0])];
+radius:rand(5)+2;
+curveeq:x^2+(y-center[2])^2=radius^2;
+getparcurve(startangle,direction,rounds,time):=
+    [   center[1]+radius*cos(rounds/time*direction*t+startangle),
+        center[2]+radius*sin(rounds/time*direction*t+startangle)];
+
+startangle:append([0],rand_selection([%pi/2,%pi,3*%pi/2], 2));
+direction:append([1],rand_selection([1,-1], 2));
+rounds:append([1],rand_selection([2,4,6], 2));
+time:[1,rounds[2],rounds[3]/2];
+
+directionword(direction):= if(is(direction=1)) then "counterclockwise" else "clockwise";
+
+tans:makelist(ntupleify(getparcurve(startangle[i],direction[i],rounds[i],time[i])),i,3);
+[tans1,tans2,tans3]:tans;
+starts:at(tans,t=0);

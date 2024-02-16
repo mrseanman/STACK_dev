@@ -1,0 +1,13 @@
+ordergreat(t,i,j,k);
+texput(i, "\\mathbf{i}");
+texput(j, "\\mathbf{j}");
+texput(k, "\\mathbf{k}");
+
+
+funclist:[cos(t),sin(t),(t/%pi)^2*%pi,sec(t)^2,(%pi/t)^2*%pi];
+funcselected:rand_selection(funclist,3);
+func:funcselected[1]*i+funcselected[2]*j+funcselected[3]*k;
+
+tpoint:rand([%pi/3,2*%pi/3,%pi/4]);
+absvalue(vector):=vector/sqrt(coeff(vector,i)^2+coeff(vector,j)^2+coeff(vector,k)^2);
+[type,tans1]:rand([[1,diff(func,t)],[2,absvalue(at(diff(func,t),t=tpoint))],[3,integrate(func,t)]]) /*differentiation, tangent, integration*/

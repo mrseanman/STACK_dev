@@ -1,0 +1,15 @@
+simp:false;
+vectorify(list):=sconcat("⟨",list[1],",",list[2],",",list[3],"⟩");
+planeLHS(vector):=vector[1]*x+vector[2]*y+vector[3]*z;
+
+vector:makelist(rand_with_prohib(-5,5,[0]),3);
+
+coeff1:rand_with_prohib(-20,20,[0]);
+plane1:planeLHS(vector)=rand_with_prohib(-20,20,[0]);
+coeff2:rand_with_prohib(-20,20,[coeff1,0])
+coeff3:rand_with_prohib(-3,3,[1,0]);
+vector2:simplify(coeff3*vector);
+plane2:planeLHS(vector2)=simplify(coeff3*coeff2);
+
+point1:[0,0,rhs(solve(at(plane1,[x=0,y=0]))[1])];
+tans1:simplify(abs(vector[3]*point1[3]-coeff2)/sqrt(vector[1]^2+vector[2]^2+vector[3]^2));

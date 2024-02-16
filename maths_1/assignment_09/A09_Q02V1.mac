@@ -1,0 +1,9 @@
+lowy:rand(4)+1;
+highy:lowy+rand(4)+1;
+func:(rand(4)+1)*y^2+(rand(4)+1);
+tans1:y;
+tans2:func;
+tans3:lowy;
+tans4:highy;
+tans5:y*func;
+tans6:integrate(2*%pi*tans5,y,lowy,highy);

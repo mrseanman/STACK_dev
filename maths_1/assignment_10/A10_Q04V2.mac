@@ -1,0 +1,27 @@
+depends(y,x);
+
+ode1: 1/(1+x^2);
+potential_sol1: atan(x);
+
+ode2: 1+sin(x)-sin(y);
+potential_sol2: x;
+
+ode3: exp(x) + exp(-x);
+potential_sol3: 1/5*(exp(x) - exp(-x));
+
+ode4: x*exp(-x^2);
+potential_sol4: 1-exp(-x^2);
+
+doplot(func) := plot(func, [x,-7,7], [xlabel, "x"], [y,-7,7], [ylabel, "y(x)"],
+[axes, solid], [xtics, false], [ytics, false], [yx_ratio, 1] );
+
+all_plots: map(doplot, [potential_sol1, potential_sol2, potential_sol3, potential_sol4]);
+index_perm: random_permutation([1,2,3,4]);
+reverse_index_perm: makelist(first(sublist_indices(index_perm, lambda ([x], x=i))), i, 1, 4);
+
+make_mcq(plotnum) := makelist([i, is(i=index_perm[plotnum])], i, 1, 4);
+
+drop_down_sols: makelist(make_mcq(j), j, 1, 4);
+
+tans: makelist(first(mcq_correct(mcq)), mcq, drop_down_sols);
+

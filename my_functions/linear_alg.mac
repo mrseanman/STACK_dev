@@ -1,0 +1,24 @@
+/*  Find if a list of m-vectors are linearly independent */
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+
+/*  Matrix multiplication that always returns a matrix and only works on matrices */
+/*  Normal Maxima behaviour is to evaluate [1].[2] = 2 ... not [1].[2]=[2] as we would expect.*/
+safe_matrix_mult(A,B) :=
+    block(
+        [ncolsA,nrowsB],
+        ncolsA: length(transpose(A)),
+        nrowsB: length(B),
+        if (not(matrixp(A)) or not(matrixp(B))) then
+            return(false)
+        elseif (not(is(ncolsA=nrowsB))) then
+            return(false)
+        else
+            block(
+                [mult],
+                mult:A.B,
+                if (matrixp(mult)) then
+                    return(mult)
+                else    
+                    return(matrix([mult]))
+            )
+    );

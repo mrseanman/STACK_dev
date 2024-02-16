@@ -1,0 +1,11 @@
+[Totalint,S1S2nS3,S2S3nS1,S3S1nS2,S1nS2S3,S2nS3S1,S3nS1S2]:[rand(25)+5,rand(5)+5,rand(15)+5,rand(45)+5,rand(55)+5,rand(75)+5,rand(95)+5];
+TotalStudents:Totalint+S1S2nS3+S2S3nS1+S3S1nS2+S1nS2S3+S2nS3S1+S3nS1S2;
+S1S2:S1S2nS3+Totalint;
+S2S3:S2S3nS1+Totalint;
+S3S1:S3S1nS2+Totalint;
+S1:S1nS2S3+S1S2nS3+S3S1nS2+Totalint;
+S2:S2nS3S1+S2S3nS1+S1S2nS3+Totalint;
+S3:S3nS1S2+S3S1nS2+S2S3nS1+Totalint;
+tans1:Totalint;
+tans2:S1+S2-S1S2;
+MCQsolutions:[[2,false,"a"],[1,true,"b"],[3,false,"c"],[4,false,"d"]];

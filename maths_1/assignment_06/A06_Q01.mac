@@ -1,0 +1,19 @@
+texput(i, "\\mathbf{i}");
+texput(j, "\\mathbf{j}");
+texput(k, "\\mathbf{k}");
+
+crossProduct(a,b) := [a[2]*b[3]-a[3]*b[2],a[3]*b[1]-a[1]*b[3],a[1]*b[2]-a[2]*b[1]];
+
+c: makelist(rand_with_prohib(-9, 9, [-1,0,1]), 6);
+p: makelist(rand(6) - 3, 6);
+
+a: makelist(c[i]*t^p[i], i, 1, 3);
+b: makelist(c[i]*t^p[i], i, 4, 6);
+
+coordinate: [i, j, k];
+
+crossAB: crossProduct(a, b);
+solution: crossAB . coordinate;
+orthogSolutions: simplify([crossAB . a, crossAB . b]);
+
+ordergreat(i,j,k);

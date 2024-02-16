@@ -1,0 +1,8 @@
+choices:makelist(rand(5)+3,3);
+tans1:choices[1]*choices[2]*choices[3];
+word:rand([["TATTOOS",[["T",3],["O",2],7]],["FREEZER",[["E",3],["R",2],7]],["COOKBOOK",[["O",4],["K",2],8]]]);
+tans2:word[2][3]!/(word[2][1][2]!*word[2][2][2]!);
+coeffs:makelist(rand_with_prohib(-5,5,[1,0]),3);
+polynomial:(coeffs[1]+coeffs[2]/x^2+coeffs[3]*x^3)^7;
+tans3:coeffs[1]^7+coeffs[2]^3*coeffs[3]^2*coeffs[1]^2*binomial(7,3)*binomial(4,2);
+simp:false;

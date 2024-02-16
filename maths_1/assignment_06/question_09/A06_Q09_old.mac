@@ -1,0 +1,15 @@
+expvalues:append([rand(300)+50],rand_selection(makelist(i+20,i,50),2));
+modvalues:[rand(30)+20,18,rand(30)+20];
+basevalues:[modvalues[1]+1,7,modvalues[3]-1];
+[tans1,tans2,tans3]:[1,mod(basevalues[2]^mod(expvalues[2],3),modvalues[2]),mod((-1)^mod(expvalues[3],2),modvalues[3])];
+
+baseprime:rand([5,7]);
+polynomialLHS:rand([-1,1])*x^2+rand([-1,1])*x+rand([-3,-2,-1,1,2,3]);
+solutions:[];
+for i:0 thru baseprime do (if (is(mod(at(polynomialLHS,x=i),baseprime)=0)) then solutions:append(solutions,[i]));
+tans4:setify(solutions);
+polynomialValues:makelist(p(i-1)=at(polynomialLHS,x=i-1),i,7);
+polynomialValuesReduced:makelist(p(i-1)=mod(at(polynomialLHS,x=i-1),baseprime),i,7);
+
+basefinal:(rand(5)+8)*3;
+tans5:{};

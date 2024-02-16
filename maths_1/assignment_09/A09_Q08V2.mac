@@ -1,0 +1,12 @@
+xexp:rand([2,4,6]);
+yexp:(3*xexp)/2;
+xcoeff:rand([3,6,9]);
+ycoeff:2*xcoeff/3;
+[xfunc,yfunc]:[xcoeff*t^xexp,ycoeff*t^yexp];
+[lowert,uppert]:rand([[0,1],[0,2],[1,2]]);
+
+dydt:ratsimp(diff(yfunc,t));
+dxdt:ratsimp(diff(xfunc,t));
+integrand:sqrt(dxdt^2+dydt^2);
+integrated:integrate(integrand,t);
+tans1:expand(integrate(integrand,t,lowert,uppert));

@@ -1,0 +1,29 @@
+intersection:rand([[[0,-1],sin(t),cos(t)],[[-1,0],cos(t),sin(t)]]);
+coeffs:makelist(rand(3)+3,2);
+xcoord1:coeffs[1]*intersection[2];
+ycoord1:coeffs[2]*intersection[3];
+inttime:%pi/2;
+intpoint:at([xcoord1,ycoord1],t=inttime);
+coeffs2:rand_selection(makelist(i,i,min(coeffs[1],coeffs[2])-1),2);
+center2:intpoint+coeffs2*intersection[1];
+xcoord2:center2[1]+coeffs2[1]*intersection[3];
+ycoord2:center2[2]+coeffs2[2]*intersection[2];
+niceplot(xcoord1,ycoord1,xcoord2,ycoord2):=plot([[parametric, xcoord2, ycoord2, [t,0,2*%pi]],
+[parametric, xcoord1, ycoord1, [t,0,2*%pi]]],
+[nticks, 500],[box, false],[label,["y",0.2,coeffs[2]+0.3],["x",coeffs[1]+0.2,0.2]],[axes, solid],[color, red,blue]);
+
+solgraph1:[1,true,niceplot(xcoord1,ycoord1,xcoord2,ycoord2)];
+badgraphs:[[2,false,niceplot(xcoord1,ycoord1,xcoord2,-ycoord2)],
+[3,false,niceplot(xcoord1,ycoord1,-xcoord2,ycoord2)],
+[4,false,niceplot(xcoord1,ycoord1,-xcoord2,-ycoord2)]
+];
+MCQsolutions:random_permutation(append([solgraph1],badgraphs));
+tans2:2;
+tans3:{ntupleify(intpoint)};
+xcoord3:-center2[1]+coeffs2[1]*intersection[3];
+tans4:{};
+/*feedback variables*/
+feedbackplot:niceplot(xcoord3,ycoord1,xcoord2,ycoord2);
+equationsubbed:at(xcoord1=xcoord2,ycoord1/coeffs[2]=ycoord2/coeffs[2]);
+equationsolved:solve(equationsubbed,intersection[2])[1];
+equationsolved2:solve(at(xcoord1=xcoord3,ycoord1/coeffs[2]=ycoord2/coeffs[2]),intersection[2])[1];

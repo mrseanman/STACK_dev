@@ -1,0 +1,10 @@
+9c9
+< for i:0 thru baseprime do (if (is(mod(at(polynomialLHS,x=i),baseprime)=0)) then solutions:append(solutions,[i]));
+---
+> for i:0 thru baseprime-1 do (if (is(mod(at(polynomialLHS,x=i),baseprime)=0)) then solutions:append(solutions,[i]));
+11,12c11,12
+< polynomialValues:makelist(p(i-1)=at(polynomialLHS,x=i-1),i,7);
+< polynomialValuesReduced:makelist(p(i-1)=mod(at(polynomialLHS,x=i-1),baseprime),i,7);
+---
+> polynomialValues:makelist(p(i-1)=at(polynomialLHS,x=i-1),i,baseprime);
+> polynomialValuesReduced:makelist(p(i-1)=mod(at(polynomialLHS,x=i-1),baseprime),i,baseprime);

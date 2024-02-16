@@ -1,0 +1,21 @@
+/* log, tan, sinh*/
+lower_limit_function_type: rand([1,2,3])
+lower_limit_exponent: rand(3) + 2;
+lower_limit:    charfun(lower_limit_function_type=1) * log(x)^lower_limit_exponent + 
+                charfun(lower_limit_function_type=2) * tan(x)^lower_limit_exponent +
+                charfun(lower_limit_function_type=3) * sinh(x)^lower_limit_exponent;
+
+/* cosh, sin, sec*/
+upper_limit_function_type: rand([1,2,3])
+upper_limit_exponent: rand(3) + 2;
+upper_limit:    charfun(upper_limit_function_type=1) * cosh(x)^upper_limit_exponent + 
+                charfun(upper_limit_function_type=2) * sin(x)^upper_limit_exponent +
+                charfun(upper_limit_function_type=3) * sec(x)^upper_limit_exponent;
+
+
+integrand: 1/sqrt(1+rand(5)+t^(rand(3)+1));
+
+to_lower_df_dx: diff(lower_limit,x)*at(integrand,t=lower_limit);
+to_upper_df_dx: diff(upper_limit,x)*at(integrand,t=upper_limit);
+
+df_dx: to_upper_df_dx - to_lower_df_dx;

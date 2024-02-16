@@ -1,0 +1,4 @@
+MCQSolution: random_permutation([[1, true, "the sum of the squares of the entries of A"], [2, false, "the sum of the entries of \(A\)"],
+[3, false, "the sum of the entries on the main diagonal of A"],
+[4, false, "the sum of the squares of the entries on the main diagonal of A"],
+[5, false, "the product of the entries on the main diagonal of A"]]);

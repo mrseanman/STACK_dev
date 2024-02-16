@@ -1,0 +1,13 @@
+simp: true;
+
+X: makelist(rand([ sqrt(rand([1,2,4,5,9,11,13,18,25])),
+                    (rand(10)+1)/(rand(10)+1), rand([%pi,%e])/rand([3,5,6,10,11,12])]),
+         i, 10);
+
+X_irrational: sublist(X, lambda([x], not(ratnump(x))));
+set_X: setify(X);
+set_X_irrational: setify(X_irrational);
+
+tans: set_X_irrational;
+
+

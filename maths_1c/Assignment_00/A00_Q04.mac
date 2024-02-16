@@ -1,0 +1,7 @@
+sol1: rand([1,2,3,4]);
+sol2: rand([5,6,7,8]);
+factor1: x-sol1;
+factor2: x-sol2;
+poly: expand(factor1*factor2);
+tans1: factor1;
+tans2: factor2;

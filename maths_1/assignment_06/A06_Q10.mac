@@ -1,0 +1,13 @@
+prime1:29;
+prime2:53;
+pkey1:prime1*prime2;
+pkey2:17;
+
+preencriptedvalues1:[230,805,180,501,141,9];
+encriptedvalues1:[976,147,708,284,722];
+elevating21:makelist(mod(976^(2^i),1537),i,8);
+
+tans1:2986721347155603700;
+tans2:{prime1,prime2};
+tans3:257;
+tans4:021525041518018;

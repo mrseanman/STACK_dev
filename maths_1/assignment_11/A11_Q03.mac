@@ -1,0 +1,20 @@
+depends(y,t);
+/* for enumerating rationals without duplicates */
+/* maximum stack height is small, so don't call rats[1000] */
+/* see https://oeis.org/A002487 */
+rats[n]:=1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]:1;
+
+seq_pos: rand_selection(makelist(i,i,1,20),2);
+components: [rats[seq_pos[1]],rats[seq_pos[2]]];
+
+sols:[components[1]+%i*components[2],components[1]-%i*components[2]];
+poly:num(ratsimp(expand((y-sols[1])*(y-sols[2]))));
+ode:coeff(poly,y^2)*diff(diff(y,t),t)+coeff(poly,y)*diff(y,t)+at(poly,y=0)*y;
+value:makelist(rand(4)+2,2);
+
+gsol:%e^(components[1]*t)*(C[1]*cos(components[2]*t)+C[2]*sin(components[2]*t));
+/* Adding C[2] to both sides a hack to force C[2] to be recognised as an unknown,
+    otherwise the error "more equations than unknowns" is possible */
+solutions:solve([at(gsol+C[2],t=0)=value[1]+C[2],at(gsol,t=%pi)=value[2]]);
+if(is(length(solutions)=0)) then tans1:DNE else tans1:ev(gsol,solutions[1]);

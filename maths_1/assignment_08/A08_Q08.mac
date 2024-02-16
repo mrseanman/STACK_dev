@@ -1,0 +1,7 @@
+type:rand([0,1]);
+coeff:rand(7)+2;
+if is(type=1) then block(func:sqrt(x^2-coeff^2)/x^3,
+assume(x>0),
+tans1:1/(2*coeff)*asec(x/coeff)-1/(2*coeff)*sqrt(1-coeff^2/x^2)*coeff/x+C )
+else block(func:x/sqrt(x^2+coeff),
+tans1:integrate(func,x)+C);

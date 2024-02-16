@@ -1,0 +1,11 @@
+factor1: x-rand([1,2,3]);
+factor2: x-rand([4,5,6]);
+coeff: rand([3,4,5]);
+
+poly: expand(factor1*factor2 - coeff*x);
+tans1: coeff(poly, x^2);
+tans2: coeff(poly, x);
+tans3: coeff(poly, x, 0);
+
+q: factor1*factor2 - coeff*x;
+

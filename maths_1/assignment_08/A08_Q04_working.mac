@@ -1,0 +1,17 @@
+p: apply("+",makelist((rand(5)+1)/(rand(5)+1)*x^(k-1),k,4));
+dp_dx: diff(p,x);
+
+x_pos: rand(30)/2 - 10;
+gradient_at_x_pos: at(dp_dx, x=x_pos);
+y_intercept_of_tangent: at(p, x=x_pos) - gradient_at_x_pos * x_pos;
+
+tangent_line: y = gradient_at_x_pos*x + y_intercept_of_tangent;
+
+possible_x_pos_solutions : map(rhs, solve(dp_dx=gradient_at_x_pos,x));
+
+
+p_no_constant: integrate(dp_dx,x); 
+possible_constants: map(lambda([x_pos], ev(rhs(tangent_line), ratsimpsimp, x=x_pos) - ev(p_no_constant, simp,x=x_pos)), possible_x_pos_solutions);
+possible_p_solutions: map(lambda([const], p_no_constant + const), possible_constants);
+
+listify(setdifference(setify(possible_p_solutions),{p}));

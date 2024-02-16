@@ -1,0 +1,47 @@
+diff_eq_LHS: rand(
+    [   x * 'diff(f,x,2) + f,
+        x * 'diff(f,x) - f,
+        x * 'diff(f,x) + f]
+);
+
+/* Ensures all coeffs are different */
+coeff_bank : random_permutation(makelist(i+1,i,10));
+coeffs_1: firstn(coeff_bank,3);
+coeffs_2: firstn(rest(coeff_bank,3),3);
+
+/* This must be bijective from codes to functions.
+    Hence all the effort to ensure coeffs are different etc. */
+function_generator(code) :=
+    coeffs_1[code[1]] * x^(-1) + coeffs_2[code[2]] * x + [0,x^2,x^3][code[3]] ;
+
+all_codes: makelist([   mod(quotient(i,9),3) + 1,
+                        mod(quotient(i,3),3) + 1,
+                        mod(i,3) + 1                ],
+                        i, 0, 26);
+
+[solution, decoy_1, decoy_2, decoy_3]:
+    map(function_generator, firstn(random_permutation(all_codes),4));
+
+diff_eq_RHS: ev(diff_eq_LHS, f=solution, diff);
+diff_eq_RHS_wrt_f: ratsimp(ratsubst(f, solution, diff_eq_RHS));
+
+start_point: 1;
+f_0: ev(solution, x=start_point);
+
+is_solution(func) := 
+    is(ev(func, x=f_0) = f_0) and
+    is(ratsimp(ratsubst(f, func, ev(diff_eq_LHS, f=func, diff))) = diff_eq_RHS_wrt_f);
+
+/* Throw an error if any of the decoys are a valid solution.
+    We can't use the error function in stack */
+if  is_solution(decoy_1) or 
+    is_solution(decoy_2) or 
+    is_solution(decoy_3) then 1/0;
+    
+MCQSolution: random_permutation([
+    [1, true, solution],
+    [2, false, decoy_1],
+    [3, false, decoy_2],
+    [4, false, decoy_3]]);
+
+position_of_correct_ans: first(sublist_indices(MCQSolution, lambda([x], second(x))));

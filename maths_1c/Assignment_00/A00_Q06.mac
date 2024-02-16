@@ -1,0 +1,7 @@
+sqpart: x + rand([1,2,3,4,5]) - 10;
+addpart: rand_with_prohib(-12,12,[0])
+poly: expand(sqpart^2 + addpart);
+
+tans1: sqpart;
+tans2: addpart;
+

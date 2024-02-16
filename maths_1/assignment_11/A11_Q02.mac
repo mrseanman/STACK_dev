@@ -1,0 +1,19 @@
+depends(y,t);
+
+/* for enumerating rationals without duplicates */
+/* maximum stack height is small, so don't call rats[1000] */
+/* see https://oeis.org/A002487 */
+rats[n]:=1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]:1;
+seq_pos: rand_selection(makelist(i,i,1,15),2);
+sols: [rand([-1,1]) * rats[seq_pos[1]], rand([-1,1]) * rats[seq_pos[2]]];
+
+poly:num(ratsimp(expand((y-sols[1])*(y-sols[2]))));
+if (is(coeff(poly,y)=0)) then {poly:2*y^2-3*y+1,
+sols:[1,1/2]};
+ode:coeff(poly,y^2)*diff(diff(y,t),t)+coeff(poly,y)*diff(y,t)+at(poly,y=0)*y;
+value:makelist(rand(4)+2,2);
+gsol:C[1]*%e^(sols[1]*t)+C[2]*%e^(sols[2]*t);
+
+partcoeff:solve([at(gsol,t=1)=value[1],at(diff(gsol,t),t=1)=value[2]]);
+tans1:at(gsol,partcoeff[1]);

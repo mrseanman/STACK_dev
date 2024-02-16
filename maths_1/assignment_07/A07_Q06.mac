@@ -1,0 +1,15 @@
+[a,b,c]:makelist(rand_with_prohib(-5,5,[0]),3);
+d:rand_with_prohib(-5,5,[b*c/a]);
+matrix1:matrix([a,b],[c,d]);
+matrix1:matrix1*denom(d);
+indvector:matrix([rand_with_prohib(-5,5,[0])],[rand_with_prohib(-5,5,[0])]);
+ordergreat(x,y);
+findEquation(M, row) := first((matrix1.transpose([x,y]))[row])=indvector[row,1];
+negsumdispflag:false;
+eq1:findEquation(matrix1,1);
+eq2:findEquation(matrix1,2);
+
+inversematrix:invert(matrix1);
+solvector:inversematrix.indvector;
+tans1:solvector[1,1];
+tans2:solvector[2,1];

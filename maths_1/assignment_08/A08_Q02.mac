@@ -1,0 +1,15 @@
+/* trig, sqrt*/
+f: rand([sin, sqrt]);
+internal_exp: rand_with_prohib(-15,15,[-1,0,1]);
+factor: rand([3,%pi,1/%pi]);
+summand: charfun(f=sqrt) * rand_with_prohib(-15,15,[0]);
+
+integral: 'integrate(x^(internal_exp -1) * f(factor * x^internal_exp + summand), x);
+
+u_sub: factor * x^internal_exp + summand;
+u_sub_integral: 1/(factor * internal_exp) * 'integrate(f(u), u);
+
+model_ans_1: x^(internal_exp - 1);
+model_ans_2: 1/(factor * internal_exp);
+model_ans_3: ev(u_sub_integral + C, nouns);
+model_ans_4: ev(integral + C, nouns);

@@ -1,0 +1,12 @@
+coeffs:makelist(rand(5)+1,2);
+func:rand([coeffs[1]*(x^coeffs[2])/(4+x^coeffs[2])*e^(-x/(x+1)),coeffs[1]*(x^coeffs[2])/(4+x^coeffs[2])*sin(sqrt(x))]);
+steps:rand([4,6]);
+stepsize:rand([1/2,1,2,4]);
+startingpoint:rand(6);
+endpoint:startingpoint+stepsize*steps;
+startpoints:makelist(float(startingpoint+stepsize*i),i,0,steps-1);
+evalpoints:makelist(float(startingpoint+stepsize/2+stepsize*i),i,0,steps-1);
+evaluatedfunc:float(at(func,x=evalpoints));
+intervalarea:float(evaluatedfunc*stepsize);
+precisevalue:sum(intervalarea[i], i, 1, steps);
+tans1:decimalplaces(precisevalue,4);

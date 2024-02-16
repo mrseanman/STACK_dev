@@ -1,0 +1,27 @@
+ordergreat(a,b,c,d);
+negsumdispflag:false;
+
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+findEquation(M, row) := first((submatrix(M,5).transpose([a,b,c,d]))[row])=first(col(M,5)[row]);
+
+vectors:[[1],[1]];
+while not(linearly_independent(vectors)) do
+    (vectors:makelist(makelist(rand_with_prohib(-3,3,[1,0]),3),2));
+
+line1:append([1,0],vectors[1]);
+line2:append([0,1],vectors[2]);
+tans2:matrix(line1,line2);
+
+
+coeffs:makelist(rand_with_prohib(-3,3,[1,0]),4);
+move1:rowadd(tans2,1,2,coeffs[1]);
+move2:rowmul(move1,2,coeffs[2]);
+move3:rowmul(move2,1,coeffs[3]);
+move4:rowswap(move3,1,2);
+tans1:move4;
+
+eq1:findEquation(tans1,1);
+eq2:findEquation(tans1,2);
+
+solutions:[tans2[1,5]-tans2[1,3]*t-tans2[1,4]*s,tans2[2,5]-tans2[2,3]*t-tans2[2,4]*s,t,s];
+[tans3,tans4,tans5,tans6]:solutions;

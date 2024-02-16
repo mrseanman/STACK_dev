@@ -1,0 +1,6 @@
+base: rand([2, 3, 4]);
+exponent: rand([3, 4, 5]);
+coeff: rand([2, -3, -4]);
+make_multsgn("cross")
+tans: coeff*base^exponent;
+simp:false;

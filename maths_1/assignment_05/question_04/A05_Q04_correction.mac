@@ -1,0 +1,27 @@
+criticalPoints(f) := map(rhs, solve(diff(f,x) = 0,x));
+criticalPointsWithSecondDir(f) := map(lambda([p], [p, at(diff(diff(f,x),x),[x=p])]), criticalPoints(f));
+specificValues(f, comparison) := setify(map(first, sublist(criticalPointsWithSecondDir(f), lambda([x], comparison(x[2])))));
+
+a: rand(99) + 1;
+f: x^2 / (x^2 + a);
+
+increasingSolutions:[{co(0,inf)},{oo(0,inf)}];
+increasingSolution:increasingSolutions[1];
+decreasingSolutions:[{oc(-inf,0)},{oo(-inf,0)}];
+decreasingSolution:decreasingSolutions[1];
+
+
+minimumSolution: specificValues(f, lambda([x], x > 0));
+maximumSolution: specificValues(f, lambda([x], x < 0));
+
+inflectionSolution: map(lambda([v], ntuple(v, at(f, x=v))), specificValues(diff(f,x), lambda([x], notequal(x,0))));
+
+concaveDownSolutions: [{oc(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oc(-inf, -sqrt(a/3)), oo(sqrt(a/3), inf)},{oo(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oo(-inf, -sqrt(a/3)), oo(sqrt(a/3), inf)}];
+concaveDownSolution:concaveDownSolutions[1];
+concaveUpSolutions:[{cc(-sqrt(a/3), sqrt(a/3))},{oc(-sqrt(a/3), sqrt(a/3))},{co(-sqrt(a/3), sqrt(a/3))},{oo(-sqrt(a/3), sqrt(a/3))}];
+concaveUpSolution:concaveUpSolutions[1];
+
+/* For feedback */
+criticalPoint: first(solve(diff(f,x) = 0, x));
+secondDir: factor(diff(diff(f,x),x));
+potentialInflection: setify(solve(secondDir = 0, x));

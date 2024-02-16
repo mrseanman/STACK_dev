@@ -1,0 +1,7 @@
+coeff:[rand([1,2,3]),rand([5,6,7]),rand(8)+2];
+integrand:ratexpand(coeff[3]/((x-coeff[1])*(x-coeff[2])));
+startint:0;
+finalint:4;
+tans1:DNE;
+/*For feedback*/
+simpintegrand:coeff[3]/((x-coeff[1])*(x-coeff[2]));

@@ -1,0 +1,30 @@
+ordergreat(x,y,z,w);
+negsumdispflag:false;
+
+findEquation(M, row) := first((submatrix(M,5).transpose([x,y,z,w]))[row])=first(col(M,5)[row]);
+
+reducedMatrix:matrix(
+[rand_with_prohib(-4,4,[0]),rand_with_prohib(-4,4,[]),rand_with_prohib(-4,4,[]),rand_with_prohib(-4,4,[]),rand_with_prohib(-4,4,[])],
+[0,rand_with_prohib(-4,4,[0]),rand_with_prohib(-4,4,[]),rand_with_prohib(-4,4,[]),rand_with_prohib(-4,4,[])],
+[0,0,0,rand_with_prohib(-4,4,[0]),rand_with_prohib(-4,4,[])],
+[0,0,0,0,0]);
+tans6:reducedMatrix[3,5]/reducedMatrix[3,4];
+tans5:t;
+tans4:(reducedMatrix[2,5]-reducedMatrix[2,4]*tans6-reducedMatrix[2,3]*t)/reducedMatrix[2,2];
+tans3:expand((reducedMatrix[1,5]-reducedMatrix[1,4]*tans6-reducedMatrix[1,3]*t-reducedMatrix[1,2]*tans4)/reducedMatrix[1,1]);
+
+augmatrix:reducedMatrix;
+addcoeffs1:makelist([i+1,rand_with_prohib(-3,3,[0])/rand_with_prohib(-3,3,[0])],i,3);
+addcoeffs2:makelist([i+2,rand_with_prohib(-3,3,[0])/rand_with_prohib(-3,3,[0])],i,2);
+addcoeffs3:makelist([i+3,rand_with_prohib(-3,3,[0])/rand_with_prohib(-3,3,[0])],i,1);
+for j in addcoeffs1 do augmatrix:rowadd(augmatrix,j[1],1,j[2]);
+for j in addcoeffs2 do augmatrix:rowadd(augmatrix,j[1],2,j[2]);
+for j in addcoeffs3 do augmatrix:rowadd(augmatrix,j[1],3,j[2]);
+eq1:findEquation(augmatrix,1);
+eq2:findEquation(augmatrix,2);
+eq3:findEquation(augmatrix,3);
+eq4:findEquation(augmatrix,4);
+rmatrix1:augmatrix;
+for j in addcoeffs1 do rmatrix1:rowadd(rmatrix1,j[1],1,-rmatrix1[j[1],1]/rmatrix1[1,1]);
+rmatrix2:rmatrix1;
+for j in addcoeffs2 do rmatrix2:rowadd(rmatrix2,j[1],2,-rmatrix2[j[1],2]/rmatrix2[2,2]);

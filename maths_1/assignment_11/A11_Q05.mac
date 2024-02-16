@@ -1,0 +1,17 @@
+depends(Q,t);
+components:makelist(rand_with_prohib(-5,-1,[0])/rand_with_prohib(1,5,[0]),2);
+components[2]:-components[2];
+sols:[components[1]+%i*components[2],components[1]-%i*components[2]];
+poly:num(ratsimp(expand((Q-sols[1])*(Q-sols[2]))));
+capvalue:1/at(poly,Q=0);
+resvalue:coeff(poly,Q);
+indvalue:coeff(poly,Q^2);
+batvalue:12;
+odelhs:indvalue*diff(diff(Q,t),t)+resvalue*diff(Q,t)+1/capvalue*Q;
+value:[0,0];
+
+gsolh:%e^(components[1]*t)*(C[1]*cos(components[2]*t)+C[2]*sin(components[2]*t));
+gsol:gsolh+batvalue;
+solutions:solve([at(gsol,t=0)=value[1],at(diff(gsol,t),t=0)=value[2]]);
+tans1:at(gsol,solutions[1]);
+tans2:diff(tans1,t);

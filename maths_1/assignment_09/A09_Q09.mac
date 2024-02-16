@@ -1,0 +1,40 @@
+length:rand(4)+5;
+firstsmaller (a, b) := a[1] < b[1];
+seed:random_permutation([1,2,3,4,5,6,7,8]);
+flist:sort(append(
+    makelist([seed[mod(i,3)+1],seed[mod(i+1,3)+1]],i,0,2),
+    makelist([seed[mod(i,4)+4],seed[mod(i+1,4)+4]],i,0,3),
+    [[seed[8],seed[8]]]),firstsmaller);
+glist:sort([
+    [seed[1],seed[5]],
+    [seed[2],seed[8]],
+    [seed[3],seed[4]],
+    [seed[4],seed[6]],
+    [seed[5],seed[3]],
+    [seed[6],seed[1]],
+    [seed[7],seed[2]],
+    [seed[8],seed[7]]],firstsmaller);
+matrixify(list):=transpose(apply('matrix,list));
+fmatrix:matrixify(flist);
+gmatrix:matrixify(glist);
+composepermutations(list1,list2):=sort(makelist([i,list1[list2[i][2]][2]],i,8),firstsmaller);
+tans1:factorial(length);
+tans2:12;
+tans3:8;
+listgf:composepermutations(glist,flist);
+listans4:composepermutations(glist,glist);
+listans5:composepermutations(flist,flist);
+listans6:composepermutations(flist,glist);
+listans7:composepermutations(glist,composepermutations(flist,glist));
+listans8:composepermutations(flist,composepermutations(glist,flist));
+tans4:matrixify(listans4);
+tans5:matrixify(listans5);
+tans6:matrixify(listans6);
+tans7:matrixify(listans7);
+tans8:matrixify(listans8);
+/*for PRTs*/
+unmatrixify(matrix):=sort(args(transpose(matrix)),firstsmaller);
+
+
+matrix([1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1])

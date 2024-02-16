@@ -1,0 +1,41 @@
+mult:rand([2,3,4,5,6]);
+solbase:rand([1,2,3]);
+func:expand(mult*(solbase^2-x^2));
+funcborders:if x<-solbase then 5000 else if x<solbase then func else 5000;
+funcborders2:if x<0 then 5000 else if x<solbase then func else 5000;
+heighellipse:at(func,x=0)/2;
+bigradiusellipse:rhs(solve(func=heighellipse)[2]);
+hellipsefunc:heighellipse*(sqrt(1-(x/bigradiusellipse)^2)/6+1);
+hellipsefunc2:-hellipsefunc+2*heighellipse;
+dispellipse:solbase/2;
+bigradiusellipse2:at(func,x=dispellipse);
+vellipsefunc:bigradiusellipse2*(sqrt(1-((x-dispellipse)*10/solbase)^2));
+vellipsefunc2:-vellipsefunc;
+
+makelines(start,final,curve1,curve2,stepsize):=makelist([discrete,[[i,at(curve1,x=i)],[i,at(curve2,x=i)]]],i,start,final,stepsize);
+niceplot(startplot,finalplot,startlines,finalines,curve1,curve2):=plot(makelines(startlines,finalines,curve1,curve2,solbase/40),[x,(startplot),finalplot],[y,at(curve2,x=0)*1.1-0.1,at(curve1,x=0)*1.1],[label,["x",finalplot*0.95,at(curve1,x=0)*0.05],["y",finalplot*0.05,at(curve1,x=0)*1.05]],
+[box, false],[axes, solid],[color,red]);
+
+niceplot2(startplot,finalplot,curve1,curve2,curve3,curve4):=plot([curve1,curve2,curve3,curve4],[x,(startplot),finalplot],[y,at(curve2,x=0)*1.1-0.1,at(curve1,x=0)*1.1],[label,["x",finalplot*0.95,at(curve1,x=0)*0.05],["y",finalplot*0.05,at(curve1,x=0)*1.05]],
+[box, false],[axes, solid],[color,black,black,red,red]);
+
+solgraph1:[1,true,niceplot(-(solbase*1.1),solbase*1.1,-solbase,solbase,func,0)];
+badgraphs:[[2,false,niceplot(-solbase*1.1,solbase*1.1,-solbase,solbase,func,-func)],
+[3,false,niceplot(-solbase*0.5,solbase*1.2,0,solbase,func,0)],
+[4,false,niceplot(-solbase*0.5,solbase*1.2,0,solbase,func,-func)]
+];
+MCQsolutions:random_permutation(append([solgraph1],badgraphs));
+
+tans2:func;
+
+solgraph2:[1,true,niceplot2(-(solbase*1.1),solbase*1.1,funcborders,-funcborders,vellipsefunc,vellipsefunc2)];
+badgraphs2:[[2,false,niceplot2(-solbase*1.1,solbase*1.1,funcborders,-funcborders,hellipsefunc,hellipsefunc2)],
+[3,false,niceplot2(-(solbase*1.1),solbase*1.1,funcborders,0,hellipsefunc,hellipsefunc2)],
+[4,false,niceplot2(-solbase*0.5,solbase*1.2,funcborders2,-funcborders2,vellipsefunc,vellipsefunc2)]
+];
+MCQsolutions2:random_permutation(append([solgraph2],badgraphs2));
+
+tans4:-solbase;
+tans5:solbase;
+tans6:func^2*%pi;
+tans7:integrate(tans6,x,-solbase,solbase);

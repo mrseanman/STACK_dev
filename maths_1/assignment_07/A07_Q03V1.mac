@@ -1,0 +1,25 @@
+coeffs:makelist(rand(5)+1,2);
+func:coeffs[1]*%e^(-sqrt(x));
+steps:6;
+stepsize:1/steps;
+startingpoint:0;
+endpoint:startingpoint+stepsize*steps;
+startpoints:makelist(float(startingpoint+stepsize*i),i,0,steps-1);
+evalpoints:makelist(float(startingpoint+stepsize/2+stepsize*i),i,0,steps-1);
+evaluatedfunc:float(at(func,x=evalpoints));
+intervalarea:float(evaluatedfunc*stepsize);
+
+
+ptans1:float(simplify(sum(intervalarea[i], i, 1, steps)));
+tans1:decimalplaces(ptans1,6);
+
+intvalue:float(int(func,x,0,1));
+ptans2:simplify(int(func,x,0,1)-tans1);
+tans2:decimalplaces(ptans2,6);
+
+evalpoints2:append(startpoints,[endpoint]);
+evaluatedfunc2:float(at(func,x=evalpoints2));
+ptans3:float(1/(steps*3)*(evaluatedfunc2[1]+evaluatedfunc2[steps+1]+sum((2+2*mod(i+1,2))*evaluatedfunc2[i],i,2,steps)));
+tans3:decimalplaces(ptans3,6);
+ptans4:abs(intvalue-ptans3);
+tans4:decimalplaces(ptans4,6);

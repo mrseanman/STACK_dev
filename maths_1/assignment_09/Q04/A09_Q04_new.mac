@@ -1,0 +1,11 @@
+coeff:rand([4,9,16]);
+[type,equation,isolated,inttarget,simpintegrand]:rand([
+    [0, x^(2/3)+y^(2/3)=coeff,  (coeff-x^(2/3))^(3/2),  coeff^(3/2),    expand(radcan(sqrt(1+diferent^2)))],
+    [1, y=log(1-x^2),           log(1-x^2),             1/coeff,        -1+1/(1+x)+1/(1-x)]]);
+dydx:diff(isolated,x);
+/* Below line must be changed, there is a big with radcan */
+integrand:(radcan(sqrt(1+dydx^2)));
+simpintegrand:radcan(at(simpintegrand,diferent=dydx));
+if(is(type=1)) then {tans1:expand(integrate(simpintegrand,x,0,inttarget)),pretans1:tans1}
+else {tans1:4*radcan(integrate(simpintegrand,x,0,inttarget)),pretans1:tans1/4};
+assume(x>0,y>0);

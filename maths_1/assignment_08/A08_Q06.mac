@@ -1,0 +1,19 @@
+/*without cos sub, with cos sub*/
+type: rand([0,1]);
+maybe_cos: lambda([x], (1-type)*x + type*cos(x));
+
+limit_coeffs_1: if(type=0) then
+                    makelist(rand([1/sqrt(3), 1, sqrt(3)]),2)
+                    else
+                    [0, %pi/2];
+limit_coeff_2: rand_with_prohib(2,11,[3,6,9]);
+
+lower_limit: rand([0,-1]) * limit_coeffs_1[1] * (1/limit_coeff_2);
+upper_limit: limit_coeffs_1[2] * (1/limit_coeff_2); 
+
+u_sub(x):= maybe_cos(limit_coeff_2*x);
+u_sub_integral: (1/limit_coeff_2) * (-1)^type * 'integrate(1/(1+u^2),u,u_sub(lower_limit),u_sub(upper_limit));
+
+integrand: (1/limit_coeff_2) * (-1)^type * diff(maybe_cos(limit_coeff_2*x),x)/(1+maybe_cos(limit_coeff_2*x)^2);
+integral: 'integrate(integrand,x,lower_limit, upper_limit);
+model_ans: ev(integral, nouns);

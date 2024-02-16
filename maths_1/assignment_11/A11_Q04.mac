@@ -1,0 +1,12 @@
+depends(y,x);
+value:makelist(rand(4)+2,2);
+sols:[0,1];
+poly:num(ratsimp(expand((y-sols[1])*(y-sols[2]))));
+odelhs:coeff(poly,y^2)*diff(diff(y,x),x)+coeff(poly,y)*diff(y,x)+at(poly,y=0)*y;
+ode:odelhs=x*e^x;
+compsol:C[1]+C[2]*%e^x;
+partsol:x*(A*x+B)*%e^x;
+gsol:at(compsol+partsol,[A=1/2,B=-1]);
+
+partcoeff:solve([at(gsol,x=0)=value[1],at(diff(gsol,x),x=0)=value[2]]);
+tans1:at(gsol,partcoeff[1]);

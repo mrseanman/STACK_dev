@@ -1,0 +1,4 @@
+19c19
+< concaveDownSolutions: [{oc(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oc(-inf, -sqrt(a/3)), oo(sqrt(a/3), inf)},{oo(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oc(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)}];
+---
+> concaveDownSolutions: [{oc(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oc(-inf, -sqrt(a/3)), oo(sqrt(a/3), inf)},{oo(-inf, -sqrt(a/3)), co(sqrt(a/3), inf)},{oo(-inf, -sqrt(a/3)), oo(sqrt(a/3), inf)}];

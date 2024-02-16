@@ -1,0 +1,16 @@
+simp:false;
+crossProduct(a,b) := [a[2]*b[3]-a[3]*b[2],a[3]*b[1]-a[1]*b[3],a[1]*b[2]-a[2]*b[1]];
+vectorify(list):=sconcat("⟨",list[1],",",list[2],",",list[3],"⟩");
+planeLHS(vector):=vector[1]*x+vector[2]*y+vector[3]*z;
+dotProduct(a,b) := a[1]*b[1]+a[2]*b[2]+a[3]*b[3];
+
+vectors:makelist(makelist(rand_with_prohib(-5,5,[0]),3),3);
+if is(ev(dotProduct(vectors[1],vectors[2]),simp)=0)
+    then vectors[2][3]:vectors[2][3]+1;
+
+plane1:planeLHS(vectors[1])=rand_with_prohib(-20,20,[0]);
+line:simplify(vectors[2]*t+vectors[3]);
+
+planesubstituted:at(plane1,[x=line[1],y=line[2],z=line[3]]);
+tvalue:rhs(solve(planesubstituted)[1]);
+tans1:ntupleify(simplify(at(line,t=tvalue)));

@@ -1,0 +1,7 @@
+coeff:rand(5)+2;
+integrand:1/(x-coeff)^(3/2);
+startint:coeff+rand(2);
+finalint:inf;
+if (is(startint=coeff)) then tans1:DNE else tans1:integrate(integrand,x,startint,finalint);
+/*For feedback*/
+indefint:integrate(integrand,x);

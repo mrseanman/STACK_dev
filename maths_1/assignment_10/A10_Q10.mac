@@ -1,0 +1,37 @@
+/* Select true statements */
+mcq1:[
+    [1,true,  "For any finite group 𝐺 the order of a subgroup 𝐻 must divide the order of 𝐺." ],
+    [2,false, "All group cosets are also subgroups."],
+    [3,false, "The set ℝ is a group under multiplication."],
+    [4,true,  "The set ℝ is a group under addition."],
+    [5,false, "The set ℤ is a group under multiplication."],
+    [6,true, "The set ℤ is a group under addition."],
+    [7,false, "Given a group ant for the (element 𝑥, and homomorphism φ, φ(𝑥) has the same order as 𝑥."],
+    [8,true,  "All cyclic groups are abelian."]
+];
+
+/* Select cyclic groups */
+mcq2:[
+    [1, true,   "The symmetric group on 2 letters."],
+    [2, false,  "The group ℤ×ℤ under addition."],
+    [3, false,  "The dihedral group corresponding to the hexagon."],
+    [4, true,   "The trivial group."],
+    [5, true,   "Any subgroup of a cyclic group."],
+    [6, true,   "The group 〈10〉inside (ℤ,+)."],
+    [7, false,  "The symmetric group on 3 letters."],
+    [8, true,   "The group (ℤ,+)."]
+];
+
+rand_prime_1:10;
+while not(primep(rand_prime_1)) do rand_prime_1:rand(25)+3;
+rand_prime_2:10;
+while (not(primep(rand_prime_2)) or is(rand_prime_2=rand_prime_1)) do rand_prime_2:rand(25)+3;
+
+rand_composite: rand_prime_1*rand_prime_2;
+
+/* Select true statements */
+mcq3:[
+    [1, true, sconcat("Any group of order ", rand_prime_1, " has no proper subgroups.")],
+    [2, true, sconcat("Any group of order ", rand_prime_2, " is cyclic.")],
+    [3, false, sconcat("The exists a group of order ", rand_composite, " with a subgroup of order ", rand_prime_1+1)]
+];

@@ -1,0 +1,15 @@
+depends(y,x);
+A1: rand([1,2,3,4]);
+A2: rand([5,6,7,8,9]);
+C1: -(A1+A2);
+C2: A1*A2;
+ode: diff(y,x)=y^4+C1*y^3+C2*y^2;
+tint1: oo(-inf, 0);
+tint2: oo(0,A1);
+tint3: oo(A2, inf);
+tint4: oo(A1, A2);
+
+tans1: {0,A1,A2};
+tans2: {tint1, tint2, tint3};
+tans2alt: {oo(-inf,A1), tint3};
+tans3: {tint4};

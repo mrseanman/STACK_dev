@@ -1,0 +1,22 @@
+symmeq(point,vector):=[(x-point[1])/vector[1],(y-point[2])/vector[2],(z-point[3])/vector[3]];
+parandsymmatch(paraeq,symmeq):= is(at(symmeq[1],x=paraeq[1])=at(symmeq[2],y=paraeq[2])) and
+                                is(at(symmeq[1],x=paraeq[1])=at(symmeq[3],z=paraeq[3]));
+vectorify(list):=sconcat("⟨",list[1],",",list[2],",",list[3],"⟩");
+
+type:rand([1,2,3]);/*Variant: origin, point, line*/
+point2:makelist(rand_with_prohib(-5,5,[0]),3);
+point1:makelist(rand_with_prohib(-5,5,[0,point2[i]]),i,3);
+basepoint:point2;
+otherpoint:point1;
+
+if is(type=1) then
+block(point1:[0,0,0],basepoint:point1,otherpoint:point2);
+
+lineVector:otherpoint-basepoint;
+paramfunc:makelist(lineVector[i]*t+basepoint[i],i,3);
+tans1:ntupleify(paramfunc);
+
+paralleleq:symmeq(point1+makelist(rand_with_prohib(-5,5,[0]),3),lineVector);
+
+tans2:symmeq(basepoint,lineVector);
+

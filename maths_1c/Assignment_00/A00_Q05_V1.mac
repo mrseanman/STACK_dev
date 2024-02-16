@@ -1,0 +1,18 @@
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+coeffs: makelist([rand(10) + 1, rand(10) + 1], 2);
+
+if not(linearly_independent(coeffs)) then
+    coeffs[1][1]: coeffs[1][1] + 1;
+
+eqns: [
+    coeffs[1][1]*x + coeffs[1][2]*y = a,
+    coeffs[2][1]*x + coeffs[2][2]*y = b
+    ];
+
+tans: map(rhs, first(algsys(eqns, [x,y])));
+
+/* Fedback */
+system_matrix: apply(matrix, coeffs);
+lhs_vector: matrix([x],[y]);
+rhs_vector: matrix([a],[b]);
+detout:true;

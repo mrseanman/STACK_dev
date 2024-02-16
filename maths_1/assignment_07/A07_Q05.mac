@@ -1,0 +1,6 @@
+invertible:rand([true,false]);
+[a,b,c]:makelist(rand_with_prohib(-5,5,[0]),3);
+if invertible then d:rand_with_prohib(-5,5,[b*c/a]) else d:b*c/a;
+matrix1:matrix([a,b],[c,d]);
+matrix1:matrix1*denom(d);
+if invertible then tans1:invert(matrix1) else tans1:matrix([nd]);   

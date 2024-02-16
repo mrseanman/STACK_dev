@@ -1,0 +1,8 @@
+p(x) := apply("+",makelist((rand(5)+1)/(rand(5)+1)*x^(k-1),k,3));
+dp_dx : diff(p(x),x);
+
+x_pos: rand(30)/2 - 10;
+gradient_at_x_pos: at(dp_dx, x=x_pos);
+y_intercept_of_tangent: p(x) - gradient_at_x_pos * x_pos;
+
+tangent_line: y = gradient_at_x_pos*x + y_intercept_of_tangent;
