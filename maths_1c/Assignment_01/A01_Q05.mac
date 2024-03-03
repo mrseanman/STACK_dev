@@ -1,0 +1,35 @@
+A(x) := x^2/10.016;
+B(x) := (sin(x/2)+2)*(x/4)^2*exp(-x/80);
+C(x) := (x^3-30*x^2+420*x)/120;
+
+A_end: find_root(A(x) - 100, 0, 40);
+B_end: find_root(B(x) - 100, 0, 40);
+C_end: find_root(C(x) - 100, 0, 40);
+
+form_discrete(func, start, end, nticks) := block(
+    xvals: makelist(float(start + i/nticks * (end - start)), i, 0, nticks),
+    [discrete, makelist([x1, apply(func, [x1])], x1, xvals)]
+);
+
+nticks: 50;
+A_disc: form_discrete(A, 0, A_end, nticks);
+B_disc: form_discrete(B, 0, B_end, nticks);
+C_disc: form_discrete(C, 0, C_end, nticks);
+
+
+p: plot([A_disc, B_disc, C_disc],
+    [x,0,46], [y,0,140], [axes, false],
+    [xtics, 0, 5, 30], [ytics, 0, 100, 100],
+    [label, ["A", A_end, 104], ["B", B_end, 104], ["C", C_end, 104]],
+    [legend,"Runner A", "Runner B", "Runner C"],
+    [xlabel, "Time(s) t"], [ylabel, "Distance(m) D(t)"],
+    /* line thickness and colour */
+    [style, [lines, 2, 1], [lines, 2, 2], [lines, 2, 3]],
+    /* total size of plot */
+    [size, 600, 400]);
+
+MCQ1: [[A, false], [B, true], [C, false]];
+MCQ2: [[A, false], [B, false], [C, true]];
+MCQ3: [[A, false], [B, true], [C, false]];
+tans4: true;
+

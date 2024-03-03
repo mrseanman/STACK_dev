@@ -1,0 +1,58 @@
+coeff_2: rand_with_prohib(-10,10,[-1,0,1]);
+coeff_1: rand_with_prohib(-10,10,[-1,0,1]);
+coeff_0: rand_with_prohib(-20,20,[-1,0,1]);
+f(x):= coeff_2 * x^2 + coeff_1 * x + coeff_0;
+
+/* running list of randoms to form question note */
+randoms: [coeff_0, coeff_1, coeff_2];
+
+/* ----- Q1 ----------------------------------- */
+q1_eval_int_1: rand_with_prohib(-10,10,[0]);
+randoms: append(randoms, [q1_eval_int_1]);
+q1: 'f(q1_eval_int_1);
+tans1: ev(q1, nouns);
+
+/* ----- Q2 ----------------------------------- */
+q2_eval_int_2: -q1_eval_int_1;
+q2: 'f(q2_eval_int_2);
+tans2: ev(q2, nouns);
+
+/* ----- Q3 ----------------------------------- */
+q3: 'f(a);
+tans3: ev(q3, nouns, expand);
+
+/* ----- Q4 ----------------------------------- */
+q4: 'f(-a);
+tans4: ev(q4, nouns, expand);
+
+/* ----- Q5 ----------------------------------- */
+q5_summand: rand(3) + 1;
+randoms: append(randoms, [q5_summand]);
+q5: 'f(a + q5_summand);
+tans5: ev(q5, nouns, expand);
+
+/* ----- Q6 ----------------------------------- */
+q6_coeff: rand(2) + 2;
+randoms: append(randoms, [q6_summand]);
+q6: q6_coeff * 'f(a);
+tans6: ev(q6, nouns, expand);
+
+/* ----- Q7 ----------------------------------- */
+q7_coeff: q6_coeff;
+q7: 'f(q7_coeff * a);
+tans7: ev(q7, nouns, expand);
+
+/* ----- Q8 ----------------------------------- */
+q8: 'f(a^2);
+tans8: ev(q8, nouns, expand);
+
+/* ----- Q9 ----------------------------------- */
+q9: ('f(a))^2;
+tans9: ev(q9, nouns, expand);
+
+
+/* ----- Q10 ---------------------------------- */
+q10_coeff: rand([-1,1]);
+randoms: append(randoms, [q10_coeff]);
+q10: 'f(a + (q10_coeff)*h);
+tans10: ev(q10, nouns, expand);

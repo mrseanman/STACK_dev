@@ -1,0 +1,41 @@
+depends(f,x);
+depends(g,x);
+f(x):= -(1/8)*x^3+x^2/2+x-1;
+g(x):= -x^2/4+x/2+2;
+
+p: plot([f(x),g(x)],
+    [x,-4,4],[y,-4,4],
+    grid2d,
+    [legend,"y=f(x)","y=g(x)"],
+    [ylabel,"y"]);
+
+/*eval f and g at these points:*/
+fXpt: rand([-2,0,2,4]);
+gXpt: rand([-4,-2,0,2,4]);
+tans1: f(fXpt);
+tans2: g(gXpt);
+
+/*compare f and g at this point:*/
+compX: rand([-3,-1,0,1,3,4]);
+compfg: if f(compX)>g(compX) then "f(x)" else "g(x)";
+tans3: [["f(x)", is(compfg="f(x)")], ["g(x)", is(compfg="g(x)")]];
+
+/*x-vals of intersection:*/
+tans4: {-2,2};
+
+/*interval where f<g:*/
+tans5: cc(-2,2);
+
+/*solutions to g(x)=0:*/
+tans6: {-2,4};
+
+/*g increasing:*/
+tans7: cc(-4,1);
+
+/*domain of f*/
+tans8: cc(-3,4);
+
+/*range of g*/
+min: ev(g(x),x=-4);
+max: float(ev(g(x),x=1));
+tans9: cc(min,max);

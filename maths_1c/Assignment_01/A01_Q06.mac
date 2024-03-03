@@ -1,0 +1,30 @@
+eqns1: [
+    [x^2/3, true, 1],
+    [1-exp(-x^2), false, 2],
+    [1-(x/3)^2, false, 3],
+    [1-(x/1.5-1)^2, false, 4]
+];
+
+eqns2: [
+    [1 + log(x+1/%e)-x/5.5, true, 1],
+    [x^2/20, false, 2],
+    [2.5-x^2/30, false, 3],
+    [2-1.5*exp(-(x-6)^2), false, 4]
+];
+
+make_plot(expr, ylab, xmax, ymax) := plot(
+    expr,
+    [x,0,xmax],
+    [y,0,ymax],
+    [xtics, false], [ytics, false],
+    [xlabel, "Tree height"], [ylabel, ylab],
+    [size, 250, 250],
+    [plottags,false]
+);
+
+p1: random_permutation(eqns1);
+p2: random_permutation(eqns2)
+
+MCQ1: makelist([a[3], a[2], make_plot(a[1], "Energy cost", 3, 1.8)  ], a, p1);
+MCQ2: makelist([a[3], a[2], make_plot(a[1], "Fitness", 12, 3)       ], a, p2);
+

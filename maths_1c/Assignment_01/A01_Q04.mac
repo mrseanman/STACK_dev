@@ -1,0 +1,67 @@
+/* 5 year center-aligned moving average of annual average temperatures in Svalbard */
+/* 1977 to 2017 */
+/* Source: https://www.visualcrossing.com */
+svalbard_temp: [[1977,-3.841],[1978,-3.9481],[1979,-4.4989],[1980,-4.5004],[1981,-4.4519],[1982,-3.6644],[1983,-3.0819],[1984,-2.634],[1985,-2.3781],[1986,-2.456],[1987,-3.0473],[1988,-2.87],[1989,-2.7815],[1990,-2.7208],[1991,-2.5135],[1992,-2.4047],[1993,-3.0164],[1994,-3.1074],[1995,-3.2971],[1996,-3.3607],[1997,-3.0159],[1998,-2.5949],[1999,-2.5242],[2000,-2.1983],[2001,-2.1954],[2002,-2.2094],[2003,-2.043],[2004,-1.5385],[2005,-1.237],[2006,-0.8671],[2007,-0.8381],[2008,-1.0702],[2009,-1.3681],[2010,-1.2911],[2011,-1.2041],[2012,-0.953],[2013,-0.5488],[2014,-0.0077],[2015,-0.0633],[2016,0.2497],[2017,0.0092]];
+years: makelist(x[1], x, svalbard_temp);
+temps: makelist(x[2], x, svalbard_temp);
+
+temp_discrete_plot: [discrete,
+    makelist(x[1], x, svalbard_temp),
+    makelist(x[2], x, svalbard_temp)];
+
+p: plot([temp_discrete_plot, temp_discrete_plot],
+    [x,1977,2017], [y,-5,1],
+    [style, [points,1.2,2,1], [lines,1,1]],
+    [xlabel, "Year"], [ylabel, "T₅ (℃)"],
+    grid2d,
+    [size, 600, 400]);
+
+acceptable_margin: 0.3;
+
+/* ---------- Question 1 ---------- */
+/* index of random year*/
+index1: rand(2017 - 1977) + 1;
+/* random year */
+year1: 1977 - 1 + index1;
+temp_at_year1: temps[index1];
+
+/* ---------- Question 2 ---------- */
+/* random temp */
+temp2: float(rand_with_step(-40,0,1)/10);
+temp_boundary: 0.3;
+temp_min: temp2 - temp_boundary;
+temp_max: temp2 + temp_boundary;
+acceptable_years: makelist(x[1], x, sublist(svalbard_temp,
+    lambda([y], y[2] >= temp_min and y[2] <= temp_max)));
+
+/* make sure there are correct answers */
+if (length(acceptable_years) < 1) then 1/0;
+
+min_delta: apply(min,abs(temps - temp2));
+index_at_min_delta: first(
+    sublist_indices(svalbard_temp,
+    lambda([y], abs(y[2] - temp2) = min_delta)));
+year_at_min_delta: years[index_at_min_delta];
+temp_at_min_delta_year: temps[index_at_min_delta];
+
+/* ---------- Question 3 ---------- */
+min_temp: apply(min, temps);
+year_of_min_temp: years[first(sublist_indices(temps, lambda([x], x=min_temp)))];
+
+/* ---------- Question 4 ---------- */
+max_temp: apply(max, temps);
+year_of_max_temp: years[first(sublist_indices(temps, lambda([x], x=max_temp)))];
+
+tans1: temp_at_year1;
+tans2: year_at_min_delta;
+tans3: year_of_min_temp;
+tans4: year_of_max_temp;
+tans5: min_temp;
+tans6: max_temp;
+
+acceptables_ans2: setify(acceptable_years);
+acceptables_ans3: setify([1979, 1980, 1981]);
+acceptables_ans4: setify([2016]);
+
+
+
