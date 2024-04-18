@@ -1,0 +1,35 @@
+/* For expressions that may be hard to test for algebraic equality. */
+/* We instead test for numeric equality at one point, */
+/* defined by a list of equations in evalat */
+are_numerically_equal(f, g, evalat, [margin]) := block(
+    [f_eval_real, f_eval_imag, g_eval_real, g_eval_imag],
+    if margin=[] or margin=[[]] then margin:0.0001,
+    f_eval_real: float(realpart(float(ev(f,evalat)))),
+    f_eval_imag: float(imagpart(float(ev(f,evalat)))),
+    g_eval_real: float(realpart(float(ev(g,evalat)))),
+    g_eval_imag: float(imagpart(float(ev(g,evalat)))),
+    if not( floatnump(f_eval_real) and
+            floatnump(f_eval_imag) and
+            floatnump(g_eval_real) and
+            floatnump(g_eval_imag)) then 1/0,
+    return(is(
+        abs(f_eval_real-g_eval_real) <= margin and
+        abs(f_eval_imag-g_eval_imag) <= margin
+    ))
+);
+/* e.g. are_numerically_equal(2/sqrt(-4*x-4), 1/sqrt(-x-1), [x=10]) */
+
+/* Perform are_numerically_equal at sevaral points. */
+/* If vars=[x,y] and points=[[1,2],[3,4]], then we test equality at the points, */
+/* [x=1, y=2] and [x=3, y=4]*/
+are_numerically_equal_at_points(f, g, vars, points, [margin]) := block(
+    [evalat_equations, var_i, point, numerically_equal_at_points, evalat_equation, L00, R00],
+    evalat_equations:
+        makelist(
+            makelist(vars[var_i] = point[var_i], var_i, 1, length(vars)),
+            point, points),
+    numerically_equal_at_points: makelist(
+        are_numerically_equal(f, g, evalat_equation, margin), evalat_equation, evalat_equations),
+    return(lreduce(lambda([L00,R00], L00 and R00), numerically_equal_at_points))
+);
+/* e.g. are_numerically_equal_at_points(2/sqrt(-4*x*y-4), 1/sqrt(-x*y-1), [x,y], [[1,1],[2,2],[2,3]]) */

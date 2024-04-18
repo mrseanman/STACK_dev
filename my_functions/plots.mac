@@ -1,0 +1,15 @@
+/* For forming discrete plot points from a f(x) function */
+form_discrete(func, start_x, end_x, n_ticks) := block(
+    [x_vals, i, x],
+    x_vals: makelist(float(start_x + i/n_ticks * (end_x - start_x)), i, 0, n_ticks),
+    [discrete, makelist([x, apply(func, [x])], x, x_vals)]
+);
+
+/* For forming discrete plot points from a parametric function */
+/* func should return [x(t),y(t)] list */
+form_discrete_para(func, start_t, end_t, n_ticks) := block(
+    [t_vals, i, t],
+    t_vals: makelist(float(start_t + i/n_ticks * (end_t - start_t)), i, 0, n_ticks),
+    [discrete, makelist([apply(func, [t])], t, t_vals)]
+
+)

@@ -1,0 +1,8 @@
+coef: makelist(rand_with_prohib(-5,5,[0]),4);
+pow: makelist(rand([3,4,5]),2);
+F: coef[1]*t^pow[1]+coef[2];
+G: coef[3]*t^pow[2]+coef[4]*t;
+D: F*G;
+tans: expand(diff(D,t));
+
+

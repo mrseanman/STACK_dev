@@ -1,0 +1,14 @@
+radius: rand([3,5,7,8]);
+px: -rand([1,2]);
+py: sqrt(radius^2-px^2);
+
+/* sin(x) */
+tans1: ratsimp(py/radius);
+/* tan(x) */
+tans2: ratsimp(py/px);
+/* sec(x) */
+tans3: ratsimp(radius/px);
+/* cosec(x) */
+tans4: ratsimp(radius/py);
+/* cot(x) */
+tans5: ratsimp(px/py);

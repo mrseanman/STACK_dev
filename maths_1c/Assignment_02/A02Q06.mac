@@ -1,0 +1,9 @@
+A0: rand(10);
+F1: A0-sec(x);
+F2: tan(x);
+fn: F1/F2;
+dF1: diff(F1,x);
+dF2: diff(F2,x);
+deriv: factor(diff(fn,x));
+id: sec(x)^2=1+tan(x)^2;
+tans: ev(deriv, id);

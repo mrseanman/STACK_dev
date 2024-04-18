@@ -1,0 +1,17 @@
+/* for enumerating rationals without duplicates */
+/* maximum stack height is small, so don't call rats[1000] */
+/* see https://oeis.org/A002487 */
+rats[n]:= 1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]: 1;
+
+rand_index: random_permutation(makelist(i,i,1,30));
+exp1: rats[rand_index[1]];
+exp2: rats[rand_index[2]];
+poly: rand_index[3]* x ^ exp1 + rand_index[4] * x ^ exp2;
+
+tans1: integrate(poly, x) + C;
+
+/* for feedback */
+degree: hipow(poly, x);
+leading_coeff: coeff(poly, x, degree);
+leading_term: leading_coeff * x^degree;

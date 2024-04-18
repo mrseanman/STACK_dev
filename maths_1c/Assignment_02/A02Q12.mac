@@ -1,0 +1,15 @@
+/* for enumerating rationals without duplicates */
+/* maximum stack height is small, so don't call rats[1000] */
+/* see https://oeis.org/A002487 */
+rats[n]:=1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]:1;
+
+const1: rats[rand(5) + 1];
+const2: rats[rand(5) + 1];
+const3: rats[rand(5) + 1];
+lin: x + const2;
+poly: expand(const1 * lin^2 + const3);
+
+tans1: const1
+tans2: lin;
+tans3: const3;

@@ -1,0 +1,11 @@
+A2: rand_with_prohib(-4,4,[0]);
+A1: rand_with_step(-5,5,1);
+A0: rand_with_prohib(-9,9,[0]);
+quad: ev(A2*x^2+A1*x+A0,simp);
+XVal: rand([-3,-2,-1,1,2,3]);
+
+tans: ev(subst(XVal,x,quad),simp);
+unsimp: subst(XVal,x,quad);
+unsimp0: A0+A2*ev(XVal^2,simp);
+unsimp1: A0+A1*XVal+A2*ev(XVal^2,simp);
+unsimp2: A0+ev(A1*XVal,simp)+ev(A2*XVal^2,simp);

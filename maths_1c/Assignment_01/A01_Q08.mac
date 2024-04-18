@@ -1,0 +1,12 @@
+num: rand_with_prohib(-10,10,[0]) + rand_with_step(1,15,1)*x^2;
+roots: makelist(rand_with_prohib(-10,10,[0]),i,2);
+denom: rand_with_step(1,3,1) * ( x - roots[1]) * (x - roots[2]);
+
+f: ratsimp(num/denom);
+
+/* Order of roots matters here  */
+r1: apply(min, roots);
+r2: apply(max, roots);
+
+tans: interval_tidy(%union(oo(-inf,r1), oo(r1, r2), oo(r2, inf)));
+

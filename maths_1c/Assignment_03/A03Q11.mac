@@ -1,0 +1,5 @@
+A: rand_with_step(1,10,1);
+B: rand_with_step(1,10,1);
+
+eqn: y = 'log(A*x^2+B*y^2);
+tans1: ratsimp(2*A*x/(A*x^2+B*y^2-2*B*y));

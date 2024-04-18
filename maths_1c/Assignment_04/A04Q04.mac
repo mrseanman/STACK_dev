@@ -1,0 +1,7 @@
+lim1: -rand([2,3,4,5]);
+lim2: rand([1,2,3,4,5]);
+lim3: rand_range(lim2+1, 7, 1);
+lim4: -rand_range(1, -lim1-1, 1);
+tans1: lim4;
+tans2: lim3;
+

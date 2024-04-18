@@ -1,0 +1,5 @@
+type: rand([1,2]);
+A1: rand([1,2,3,4,5,6,7]);
+eqn: if type =1  then A1*sin(2*x) + 2*A1*cos(x) = 0 else 2*A1*sin(x)^2 = A1;
+eqn2: subst(2*cos(x)*sin(x),sin(2*x),eqn);
+tans1: if type = 1 then {pi/2, 3*pi/2} else {pi/4, 3*pi/4, 5*pi/4, 7*pi/4};

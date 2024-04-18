@@ -1,0 +1,6 @@
+mult: rand([1,2,3]);
+denom: rand([2,3,4,6]);
+frac: %pi/denom + mult*2*%pi;
+f0: rand([sin,cos]);
+fn(x):= f0(x);
+tans: fn(frac);

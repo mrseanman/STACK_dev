@@ -1,0 +1,10 @@
+A0: rand_with_prohib(-9,9,[0]);
+sgn: rand([-1,1]);
+P: makelist(rand([2,3,4,5]),2);
+F1: x^P[1];
+F2: A0+sgn*x^P[2];
+fn: F1/F2;
+dF1: diff(F1,x);
+dF2: diff(F2,x);
+tans: ratsimp(diff(fn,x));
+num: x^(P[1]-1)*(A0*P[1]+sgn*(P[1]-P[2])*x^P[2]);

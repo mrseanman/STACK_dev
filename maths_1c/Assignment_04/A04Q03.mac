@@ -1,0 +1,64 @@
+/* for drawing rectangles */
+form_rectangle(value,interval):= [[interval[1],0],[interval[2],0],[interval[2],value],[interval[1],value],[interval[1],0]];
+form_rectangle_no_base(value,interval):= [[interval[1],0],[interval[1],value],[interval[2],value],[interval[2],0]]
+form_rectangles_discrete(xvals, heights):= block([intervals,i,all_rectangles],
+    intervals: makelist([xvals[i],xvals[i+1]],i,1,length(xvals)-1),
+    all_rectangles: makelist(form_rectangle_no_base(heights[i], intervals[i]),i,1,length(intervals)),
+    [discrete,
+    lreduce(append,all_rectangles)]);
+
+form_discrete(func, start, end, nticks) := block(
+    xvals: makelist(float(start + i/nticks * (end - start)), i, 0, nticks),
+    [discrete, makelist([x1, apply(func, [x1])], x1, xvals)]
+);
+
+coeff: (rand(100)+1)/100;
+ftype: rand([1,2,3]);
+f(x) := coeff * (if ftype=1 then
+            1.04 + x^3/70
+                elseif ftype=2 then
+            0.32 + 10*sin(x/6)^3
+                else
+            -0.88 + x^3/100 + x/30);
+
+start: rand([-8,-6,-4]);
+end: rand([4,6,8]);
+x_points: makelist(float(start + (end-start)*i/10),i,0,10);
+f_points: makelist(float(round(100*f(x_point))/100), x_point, x_points);
+display_table: apply(table,
+    append( [[x, 'f(x)]],
+        makelist([x_points[i],f_points[i]], i, 1, length(x_points))));
+
+
+/* integral of function using 5 intervals and left endpoints */
+interval_width: (end-start)/5;
+f_left_endpoints: makelist(f_points[2*i-1],i,1,5);
+tans1: float(round(100 * lreduce("+", interval_width*f_left_endpoints))/100);
+
+/* integral of function using 5 intervals and right endpoints */
+f_right_endpoints: makelist(f_points[2*i+1],i,1,5);
+tans2: float(round(100 * lreduce("+", interval_width*f_right_endpoints))/100);
+
+MCQ3: [["upper", false], ["lower", true]];
+MCQ4: [["upper", true], ["lower", false]];
+
+
+
+/* for feedback */
+x_left_endpoints: makelist(x_points[2*i-1],i,1,5);
+x_right_endpoints: makelist(x_points[2*i+1],i,1,5);
+
+interval_set: setify(makelist([x_left_endpoints[i], x_right_endpoints[i]], i, 1, 5));
+
+f_disc: form_discrete(f, start, end, 100);
+left_rectangles: form_rectangles_discrete(append(x_left_endpoints, [end]), f_left_endpoints);
+right_rectangles: form_rectangles_discrete(append(x_left_endpoints, [end]), f_right_endpoints);
+p_left: plot([f_disc, left_rectangles],
+        [x, start-1, end+1], [y, apply(min, f_points)-1, apply(max, f_points) + 1],
+        [xlabel, "x"], [ylabel, "f(x)"],
+        [style, [lines, 2, 1], [lines, 1, 2]]);
+p_right: plot([f_disc, right_rectangles],
+        [x, start-1, end+1], [y, apply(min, f_points)-1, apply(max, f_points) + 1],
+        [xlabel, "x"], [ylabel, "f(x)"],
+        [style, [lines, 2, 1], [lines, 1, 2]]);
+

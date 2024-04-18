@@ -3,12 +3,6 @@ depends(g,x);
 f(x):= -(1/8)*x^3+x^2/2+x-1;
 g(x):= -x^2/4+x/2+2;
 
-p: plot([f(x),g(x)],
-    [x,-4,4],[y,-4,4],
-    grid2d,
-    [legend,"y=f(x)","y=g(x)"],
-    [ylabel,"y"]);
-
 /*eval f and g at these points:*/
 fXpt: rand([-2,0,2,4]);
 gXpt: rand([-4,-2,0,2,4]);

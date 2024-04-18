@@ -1,0 +1,4 @@
+fn(x):= asin(x);
+A1: rand([1,2,3,4,5,6,7,8,9]);
+arg: A1*x+1;
+tans: ratsimp(diff(fn(arg), x));

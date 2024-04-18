@@ -31,9 +31,13 @@ randoms: append(randoms, [q5_summand]);
 q5: 'f(a + q5_summand);
 tans5: ev(q5, nouns, expand);
 
+/* for feedback */
+q5_expand_1: a+q5_summand;
+q5_expand_2: expand((a+q5_summand)^2);
+
 /* ----- Q6 ----------------------------------- */
 q6_coeff: rand(2) + 2;
-randoms: append(randoms, [q6_summand]);
+randoms: append(randoms, [q6_coeff]);
 q6: q6_coeff * 'f(a);
 tans6: ev(q6, nouns, expand);
 
@@ -56,3 +60,7 @@ q10_coeff: rand([-1,1]);
 randoms: append(randoms, [q10_coeff]);
 q10: 'f(a + (q10_coeff)*h);
 tans10: ev(q10, nouns, expand);
+
+/* for feedback */
+q10_expand_1: a + (q10_coeff)*h;
+q10_expand_2: expand((a + (q10_coeff)*h)^2);

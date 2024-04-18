@@ -1,0 +1,4 @@
+const: rand_with_prohib(-24,24,[0]);
+deg: const*15;
+rads: const*%pi/12;
+tans1: rads;

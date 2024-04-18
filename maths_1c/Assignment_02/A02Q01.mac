@@ -1,0 +1,12 @@
+F(x) := if (x<3) then (x-2)^2+3 else (x+13)/4;
+G(x) := if (x<4) then (x+2)/2 else (17-2*x)/3;
+plots: plot([F(x),G(x)],
+    [x,-1,8], [y,-1,8], [yx_ratio, 1],
+    [size, 400, 400],
+    [axes, true], grid2d,
+    [ylabel, "y"], [legend, "F(x)", "G(x)"],
+    [label, ["F", 3, 4.5], ["G", 6, 2]],
+    [style, [lines, 2, 1], [lines, 2, 2]]);
+
+tans1: 3/2;
+tans2: 43/12;

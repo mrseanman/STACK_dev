@@ -1,0 +1,49 @@
+/* 1st parametric curve
+    pi < t < 3pi */
+c1(t) := [1/%pi * (t-sin(t)) - 1,
+        1/%pi * (1-cos(t)) + 1];
+
+/* 2nd parametric curve 
+    pi < t < 5pi */
+c2(t) := [1/(2*%pi) * (t-sin(t)) + 3/2,
+        1/(2*%pi) * (1-cos(t))];
+
+/* For feedback 
+    pi < t < 3pi */
+c3(t) := [1/%pi * (t-sin(t)) - 1,
+    1 + (if t < 2*%pi then 1 else -1) * 1/%pi * (1-cos(t))]
+
+form_discrete_para(func, start_t, end_t, n_ticks) := block(
+    [t_vals, i, t],
+    t_vals: makelist(float(start_t + i/n_ticks * (end_t - start_t)), i, 0, n_ticks),
+    [discrete, makelist(float(apply(func, [t])), t, t_vals)]
+);
+
+c1_discrete: form_discrete_para(c1, %pi, 3*%pi, 100);
+c2_discrete: form_discrete_para(c2, %pi, 5*%pi, 100);
+
+discontinuity_1: [discrete, [c1(3* %pi)]];
+
+
+p: plot([c1_discrete, c2_discrete, discontinuity_1],
+    [x,0,4], [y,0,2.5],
+    grid2d,
+    [legend,false],
+    [xlabel, "x"], [ylabel, "f(x)"],
+    /* line thickness and colour */
+    [style, [lines, 2, 1], [lines, 2, 1], [points, 2, 1, 1]],
+    /* total size of plot */
+    [size, 600, 400]);
+
+tans: {1, 2, 2.5, 3.5}
+
+c3_discrete: form_discrete_para(c3, %pi, 3*%pi, 100);
+p_feedback: plot(c3_discrete,
+    [x,0,4], [y,0,2.5],
+    grid2d,
+    [legend,false],
+    [xlabel, "x"], [ylabel, "g(x)"],
+    /* line thickness and colour */
+    [style, [lines, 2, 1]],
+    /* total size of plot */
+    [size, 400, 300]);

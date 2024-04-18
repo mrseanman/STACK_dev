@@ -1,0 +1,2 @@
+fn: exp(tan(x));
+tans: diff(fn, x);

@@ -1,0 +1,10 @@
+coeff: rand([2,3,4,5,6]);
+F1: coeff*x^2;
+F2: rand([sin(x),cos(x)]);
+F3: rand([tan(x),cot(x)]);
+fn: F1*F2*F3;
+dF1: diff(F1, x);
+dF2: diff(F2, x);
+dF3: diff(F3, x);
+dfn: diff(fn, x);
+tans: factor(trigrat(dfn));

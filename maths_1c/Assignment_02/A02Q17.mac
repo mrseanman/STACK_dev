@@ -1,0 +1,18 @@
+num1: rand(10) + 5;
+num2: rand(20) + 10;
+
+/* 0 ~ >= inequality */
+/* 1 ~ <= inequality */
+type: rand([0,1])
+
+if (type=0) then
+    expr: 'abs(x-num1) >= num2
+    else
+    expr: 'abs(x-num1) <= num2;
+
+if (type=0) then
+    tans1: %union(oc(-inf, num1-num2), co(num1 + num2, inf))
+    else
+    tans1: cc(num1 - num2, num1 + num2)
+
+

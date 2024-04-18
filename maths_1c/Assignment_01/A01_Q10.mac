@@ -1,0 +1,9 @@
+depends(f,t);
+Exp1: rand([5,6]);
+Exp2: rand([3,4]);
+Exp3: rand([0,1,2]);
+C1: rand([1,2,3,4,5,1/Exp1,2/Exp1,3/Exp1,4/Exp1,5/Exp1]);
+C2: rand([-5,-4,-3,-2,-1,1,2,3,4,5,1/Exp2,2/Exp2,3/Exp2,4/Exp2,5/Exp2]);
+C3: rand_with_prohib(-10,10,[0]);
+f: C1*t^Exp1 + C2*t^Exp2 + C3*t^Exp3;
+tans: diff(f,t)

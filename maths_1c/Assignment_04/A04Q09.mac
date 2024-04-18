@@ -1,0 +1,10 @@
+inner_coeff: rand([2,3,4]);
+outer_coeff: rand([2,3,4]);
+summand: rand([1,-1]) * rand([%pi/4,%pi/3,7*%pi/4,5*%pi/3]);
+
+expr_og: outer_coeff * sin(inner_coeff*x + summand);
+expr_expand: factor(ratsimp(trigexpand(expr_og)));
+
+tans1: outer_coeff;
+tans2: inner_coeff;
+tans3: summand; 

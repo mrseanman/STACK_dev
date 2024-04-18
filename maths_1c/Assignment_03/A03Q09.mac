@@ -1,0 +1,10 @@
+A0: rand([1,2,3]);
+A1: rand([1,2,3,4]);
+P1: if A0=1 then 1/2 else 2;
+factor1: (A0*x)^(P1);
+factor2: log(A1*x);
+fn: factor1*factor2;
+df1: diff(factor1, x);
+df2: diff(factor2, x);
+tans1: factor(diff(fn, x));
+tans2: factor(diff(tans1, x))

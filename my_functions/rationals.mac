@@ -1,5 +1,13 @@
 /* for enumerating rationals without duplicates */
 /* maximum stack height is small, so don't call rats[1000] */
 /* see https://oeis.org/A002487 */
-rats[n]:=1/(2*floor(rats[n-1])+1-rats[n-1]);
-rats[1]:1;
+rats[n]:= 1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]: 1;
+
+/* only rationals */
+/* re-index the rats sequence so that integers are skipped. */
+/* only works because rats never has two integers in a row. */
+/* this is SO inefficient :) */
+re_index[n]:= if integerp(rats[re_index[n-1] + 1]) then re_index[n-1] + 2 else re_index[n-1] + 1;
+re_index[1]: 2;
+exc_rats[n]:= rats[re_index[n]];

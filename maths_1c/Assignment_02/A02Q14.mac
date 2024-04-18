@@ -1,0 +1,6 @@
+pool: append(makelist(i,i,1,8), [%pi, sqrt(2), %e^(-1)]);
+set1: setify(firstn(random_permutation(pool),5));
+set2: union(setify([first(set1)]), setify(firstn(random_permutation(pool),5)));
+
+isect: intersect(set1,set2);
+tans1: isect;

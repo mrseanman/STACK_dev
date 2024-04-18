@@ -1,0 +1,57 @@
+factor_pairs(n) := block([divs],
+    divs: sublist(listify(divisors(n)), lambda([x],x<=sqrt(n))),
+    makelist([div,n/div],div,divs)
+    );
+
+gen_pyth_triple():= block(
+    r: 2*(rand(10) + 1),
+    st: r^2/2,
+    factor_pair: rand(factor_pairs(st)),
+    s: factor_pair[1],
+    t: factor_pair[2],
+    /* (r+s)^2 + (r+t)^2 = (r+s+t)^2 */
+    [r+s, r+t, r+s+t]
+);
+
+
+pyth: gen_pyth_triple();
+/* divide through by any common factors */
+pyth: pyth/first(apply(ezgcd, pyth));
+
+xv: pyth[1];
+yv: pyth[2];
+rv: pyth[3];
+
+sint: yv/rv;
+cost: xv/rv;
+tant: yv/xv;
+
+sin2t: 2*sint*cost;
+cos2t: cost^2-sint^2;
+tan2t: (2*tant)/(1-tant^2);
+
+tans1: sin2t;
+tans2: cos2t;
+tans3: tan2t;
+
+show_type: rand([1,2,3]);
+if show_type = 1 then
+        show_eq: 'sin(theta) = sint
+    elseif show_type =2 then
+        show_eq: 'cos(theta) = cost
+    else
+        show_eq: 'tan(theta) = tant;
+
+/* for feedback */
+p: plot([discrete, [[0,0],[xv,0],[xv,yv],[0,0]]],
+    [x,-xv/3,xv*1.1], [y,-yv/3,yv*1.1], [axes, false],
+    [label, ["theta", xv/10, yv/15],
+            [string(xv), xv/2, -yv/5],
+            [string(yv), xv*1.15, yv/2],
+            [string(rv), xv/2.5, yv/1.6]],
+    /* line thickness and colour */
+    [style, [lines, 2, 1]],
+    /* total size of plot */
+    [box, false],
+    [plottags, false],
+    [size, 300, 200]);        

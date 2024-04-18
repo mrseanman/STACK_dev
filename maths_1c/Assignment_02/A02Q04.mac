@@ -1,0 +1,6 @@
+G: rand_with_step(2,10,1) * x^rand([2,3,4]);
+F: rand([sin(t), cos(t)]);
+fn: ev(F, t=G);
+dG: diff(G,x);
+dF: diff(F,t);
+tans: diff(fn,x);

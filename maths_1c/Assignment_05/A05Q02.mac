@@ -1,0 +1,7 @@
+poly: sum((rand(20)+1)*x^(rand(2)+k),k,1,3) + rand(10) + 1;
+tans1: integrate(poly,x) + C;
+
+/* for feedback */
+degree: hipow(poly, x);
+leading_coeff: coeff(poly, x, degree);
+leading_term: leading_coeff * x^degree;

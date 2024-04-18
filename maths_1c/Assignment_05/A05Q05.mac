@@ -1,0 +1,12 @@
+/* for enumerating rationals without duplicates */
+/* maximum stack height is small, so don't call rats[1000] */
+/* see https://oeis.org/A002487 */
+rats[n]:= 1/(2*floor(rats[n-1])+1-rats[n-1]);
+rats[1]: 1;
+
+p0: rand(7) + 1;
+poly: t^rats[rand(10)+1]*(sum((rand(20)+1)*t^(rand(2)+k),k,1,2) + rand(10) + 1);
+int1: expand(integrate(poly,t)) + C;
+Csolv: rhs(first(solve(ev(int1, t=0)=p0,C)));
+
+tans1: ev(int1, C=Csolv);

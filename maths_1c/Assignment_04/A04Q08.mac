@@ -1,0 +1,40 @@
+produce_plot(f, ylbl) :=
+    plot(
+    f,
+    [x, -2.5, 2.5], [y,-7,7],
+    [xtics, -2.5, 0.25, 2.5],
+    grid2d,
+    [xlabel, "x"], [ylabel, ylbl],
+    [yx_ratio, 0.5],
+    [size, 650, 325],
+    [plottags,false]
+    );
+
+transform_sin(x,t):= t[1] + t[2]*sin(t[3]*%pi*x + t[4]*%pi/4);
+
+/* each encodes a unique transformation of sin(x) */
+/* codes possibilities: [{-3,-2,...,3}, {1,2,3}, {1,2,3}, {-1,0,1}]*/
+all_codes: makelist([   mod(quotient(i,27),7) - 3,
+                        mod(quotient(i,9),3) + 1,
+                        mod(quotient(i,3),3) + 1,
+                        mod(i,3) - 1               ],
+                        i, 0, 188);
+
+chosen_codes: firstn(random_permutation(all_codes),4);
+chosen_transformations: map(lambda([code], transform_sin(x, code)), chosen_codes);
+
+/* testing, all should be non-equal */
+all_diffs:  [   chosen_transformations[1] - chosen_transformations[2], chosen_transformations[1] - chosen_transformations[3], chosen_transformations[1] - chosen_transformations[4],
+                chosen_transformations[2] - chosen_transformations[3], chosen_transformations[2] - chosen_transformations[4],
+                chosen_transformations[3] - chosen_transformations[4]];     
+any_equal:  lreduce(lambda([a,b],a or b), map(lambda([x],is(trigsimp(trigrat(x))=0)),all_diffs));
+if any_equal then 1/0;
+/* end testing */
+
+plots: map(lambda([f], produce_plot(f, "g(x)")), chosen_transformations);
+no_transformation: transform_sin(x, [0,1,1,0]);
+no_transformation_plot: produce_plot(no_transformation, "f(x)");
+MCQ1: random_permutation(   [   [1, true, plots[1]],
+                                [2, false, plots[2]],
+                                [3, false, plots[3]],
+                                [4, false, plots[4]]]);

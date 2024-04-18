@@ -1,0 +1,6 @@
+pool: append(makelist(i,i,1,5), [%pi, sqrt(2), %e^(-1)]);
+set1: setify(firstn(random_permutation(pool),3));
+set2: union(setify([first(set1)]), setify(firstn(random_permutation(pool),2)));
+
+set_union: union(set1,set2);
+tans1: set_union;

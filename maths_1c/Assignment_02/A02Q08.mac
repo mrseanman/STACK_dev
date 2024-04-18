@@ -1,0 +1,9 @@
+coeff: makelist(rand([1,2,3,4,5,6]), 4);
+px: makelist(rand([1,2,3]),2);
+pf: makelist(rand([2,3,4,5]),2);
+F1: (coeff[1]*x^px[1]-coeff[2])^pf[1];
+F2: (coeff[3]*x^px[2]-coeff[4])^(-pf[2]);
+fn: F1*F2;
+dF1: diff(F1, x);
+dF2: diff(F2, x);
+tans: factor(diff(fn, x));

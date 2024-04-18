@@ -1,0 +1,15 @@
+factor_pairs(n) := block([divs],
+    divs: sublist(listify(divisors(n)), lambda([x],x<=sqrt(n))),
+    makelist([div,n/div],div,divs)
+    );
+
+gen_pyth_triple() := block(
+    r: 2*(rand(10) + 1),
+    st: r^2/2,
+    factor_pair: rand(factor_pairs(st)),
+    s: factor_pair[1],
+    t: factor_pair[2],
+    /* (r+s)^2 + (r+t)^2 = (r+s+t)^2 */
+    [r+s, r+t, r+s+t]
+);
+
