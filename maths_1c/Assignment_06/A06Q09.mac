@@ -1,0 +1,18 @@
+type: rand([1,2]);
+depends(y,x);
+if type = 1 then block(
+    point: sort( rand_selection( makelist( i, i, 9), 2)),
+    eqnlhs: x^2+2*x*y-y^2+x,
+    eqn: eqnlhs = ev(eqnlhs, x=point[1], y=point[2]),
+    deriv: diff(eqn, x),
+    dy: diff(y,x) = (2*x+2*y+1)/(2*y-2*x)
+)
+else block(
+    point_x: rand(9)+1,
+    const: makelist(rand(8)+1, 2),
+    eqn: y = x^3 - const[1]*x + const[2],
+    point: [point_x, rhs(first(solve(ev(eqn, x = point_x))))],
+    dy: diff(eqn, x)
+);
+mval: at( rhs(dy), [x = point[1], y = point[2]]);
+tans1: ratsimp(mval*x - mval*point[1] + point[2]);

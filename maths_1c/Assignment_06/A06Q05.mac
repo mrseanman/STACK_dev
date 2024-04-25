@@ -1,0 +1,11 @@
+A0: rand(8)+1;
+A1: rand_with_prohib(-8,8,[0]);
+P1: rand(6)+1;
+P2: rand_with_prohib(-9,9,[-1,0,1]);
+var: A0+A1*t^P1;
+dvar: diff(var, t);
+arg: t^(P1-1)*var^P2;
+intl: 'integrate(arg, t);
+tans1: ev(intl, nouns) + C;
+newint: changevar(intl, u = var, u, t);
+newval: integrate(u^P2, u)/(A1*P1) + C;

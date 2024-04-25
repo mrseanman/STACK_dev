@@ -1,0 +1,11 @@
+lim: sort(rand_selection(makelist(r^2, r, 2, 9), 2));
+u: log(x);
+du: diff(u, x);
+dv: x^(-1/2);
+v: integrate(dv, x);
+arg: u*dv;
+intl: 'integrate(arg, x, lim[1], lim[2]);
+tans1: ev(intl, nouns);
+secondint: 'integrate(v*du, x, lim[1], lim[2]);
+secondintindef: integrate(v*du, x);
+secondintdef: integrate(v*du, x, lim[1], lim[2]);

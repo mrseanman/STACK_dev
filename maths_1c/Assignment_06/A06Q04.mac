@@ -1,0 +1,27 @@
+/*1 is log fn, 2 is poly*/
+type: rand([1,2]);
+if type = 1 then block(
+    limn: sort(rand_selection(makelist(r^2, r, 3, 9), 2)),
+    lim: map(exp, limn),
+    arg: 1/(x*log(x)^(1/2)),
+    intl: 'integrate(arg, x, lim[1], lim[2]),
+    tans1: ev(intl, nouns),
+    var: log(x),
+    dvar: diff(var, x),
+    newint: changevar(intl, var = u, u, x),
+    newarg: 2*u^(1/2),
+    bdry: map( lambda([e], ev(newarg, u = e)), limn)
+)
+else block(
+    const: rand(8) + 1,
+    pow: rand_range(21, 39, 2),
+    lim: [0, 2*const],
+    limn: [-const, const],
+    arg: (x-const)^pow,
+    intl: 'integrate(arg, x, lim[1], lim[2]),
+    tans1: ev(intl, nouns),
+    var: x-const,
+    dvar: 1,
+    newint: changevar(intl, var = u, u, x),
+    newarg: u^pow
+)

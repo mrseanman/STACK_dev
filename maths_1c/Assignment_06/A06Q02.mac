@@ -1,0 +1,6 @@
+arg: sin(x)/cos(x)^2;
+uplim: rand([%pi/3, %pi/4, %pi/6]);
+tans1: defint(arg, x, 0, uplim);
+var: cos(x);
+dvar: -sin(x);
+newul: cos(uplim);

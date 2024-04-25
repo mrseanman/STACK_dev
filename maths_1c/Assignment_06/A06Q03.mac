@@ -1,0 +1,12 @@
+inner_coeff: rand([2,3,4,5]);
+old_int_val: rand_with_step(10,20,1);
+
+new_lower_limit: rand([1,2,3]);
+new_upper_limit: rand([7,8,9]);
+
+old_lower_limit: inner_coeff * new_lower_limit;
+old_upper_limit: inner_coeff * new_upper_limit;
+
+old_eqn: 'integrate(f(x), x, old_lower_limit, old_upper_limit) = old_int_val;
+new_int: 'integrate(f(inner_coeff*x), x, new_lower_limit, new_upper_limit);
+tans1: old_int_val/inner_coeff;

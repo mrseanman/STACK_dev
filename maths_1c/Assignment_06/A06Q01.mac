@@ -1,0 +1,12 @@
+p1: rand(5)+2;
+p2: rand([1/2, -1/2, 3/2, -3/2]);
+const: rand(9)+1;
+pm: rand([1,-1]);
+arg: z^(p1-1)*(const+pm*z^(p1))^p2;
+tans1: integrate(arg, z) + C;
+/*change of var*/
+var: const+pm*z^(p1);
+dvar: diff(var, z);
+lin: 1/coeff(dvar, z, p1-1);
+new: lin*u^p2;
+newint: integrate(new, u) + C;

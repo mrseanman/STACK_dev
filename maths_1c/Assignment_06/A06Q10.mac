@@ -1,0 +1,42 @@
+x_centre: rand(11);
+y_shift: rand(5) + 1;
+tangent_offeset: rand(2) + 1;
+
+poly_tangent_point: [
+    [   (x-x_centre)^2 + y_shift,   x_centre + tangent_offeset  ],
+    [   (x-x_centre)^2 + y_shift,   x_centre - tangent_offeset  ],
+    [   -(x+x_centre)^2 + y_shift,  -x_centre                   ],
+    [   -(x+x_centre)^2 - y_shift,  -x_centre                   ]
+];
+
+chosen_index: rand(4) + 1;
+chosen_poly: poly_tangent_point[chosen_index][1];
+chosen_x_point: poly_tangent_point[chosen_index][2];
+chosen_y_point: ev(chosen_poly, x=chosen_x_point);
+
+/* return the tangent line to f at x_point */
+make_tangent(f, x_point):= block([y_point, grad],
+    y_point: ev(f, x=x_point),
+    grad: at(diff(f,x), x=x_point),
+    rhs(first(solve((y-y_point) = grad*(x-x_point), y)))
+);
+
+make_plot(f_poly, x_point):= plot(
+    [f_poly, make_tangent(f_poly, x_point)],
+    [x, -2*x_centre-3, 2*x_centre+3],
+    [y, -2*y_shift-3, 2*y_shift+3],
+    [xlabel, "x"], [ylabel, "y(x)"]
+);
+
+/* using x breaks things, hence x_ */
+plots: map(lambda([x_], make_plot(x_[1], x_[2])), poly_tangent_point);
+
+display_eqn: y = expand(chosen_poly);
+MCQ1: random_permutation(makelist([i, is(i=chosen_index), plots[i]], i, 1, 4));
+
+/* for feedback */
+depends(y,x);
+turning_point_x: rhs(first(solve(diff(chosen_poly,x)=0, x)));
+turning_point: [turning_point_x, ev(chosen_poly, x=turning_point_x)];
+gradient_of_tangent: at(diff(chosen_poly,x), x=chosen_x_point);
+grad_eqn: at(diff(y,x), x=chosen_x_point) = gradient_of_tangent;

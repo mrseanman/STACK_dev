@@ -1,0 +1,10 @@
+u: log(x);
+du: diff(u, x);
+const: rand(8) + 1;
+pow: rand(7) + 2;
+dv: const*x^pow;
+v: integrate(dv, x);
+arg: u*dv;
+intl: 'integrate(arg, x);
+tans1: expand(ev(intl, nouns)) + C;
+secondint: 'integrate(v*du, x);
