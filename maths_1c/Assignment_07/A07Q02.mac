@@ -1,0 +1,15 @@
+inner_coeff: rand_with_step(2,9,1);
+fns: rand([ [sin(inner_coeff * x), cos(inner_coeff * x)],
+            [cos(inner_coeff * x), sin(inner_coeff * x)]]);
+ux: fns[1];
+
+arg: fns[2]/(1 + ux^2);
+
+upper_limit: %pi/2 * 1/inner_coeff;
+
+disp_int: 'integrate(arg, x, 0, upper_limit);
+tans1: ev(disp_int, nouns);
+
+/* for feedback */
+u_disp_int: changevar(disp_int, ux = u, u, x);
+general_u_int_disp_eq: 'integrate(1/(1+u^2),u) = integrate(1/(1+u^2),u) + C;  

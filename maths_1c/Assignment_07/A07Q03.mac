@@ -1,0 +1,13 @@
+const: rand(6);
+/* I don't know why, but when fn=sec, the u-sibstitution line */
+/* newint: changevar(dispint, var = u, u, x) */
+/* introduces an abs(u), this is to avoid that happening */
+assume(u>0);
+fn: if const = 0 then rand([sin, tan, sec]) else rand([sin, tan]);
+pow: rand([6,7,8,9]);
+var: const + fn(x);
+dvar: diff(var, x);
+arg: dvar*(var^pow);
+dispint: 'integrate(arg, x);
+newint: changevar(dispint, var = u, u, x);
+tans1: ev(dispint + C, nouns);

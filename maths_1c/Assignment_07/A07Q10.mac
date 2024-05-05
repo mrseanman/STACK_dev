@@ -1,0 +1,11 @@
+A0: rand_range(1, 9, 1);
+arg: A0*sec(t)^6;
+disp_int: 'integrate(arg, t);
+tans1: expand(ev(disp_int+C, nouns));
+
+/*feedback*/
+arg_alt: A0*(tan(t)^2+1)^2*sec(t)^2;
+disp_int_alt: 'integrate(arg_alt, t);
+disp_int_u: 'integrate(A0*(u^2+1)^2, u);
+disp_int_u2: expand(disp_int_u);
+ev_int_u: expand(ev(disp_int_u + C, nouns));

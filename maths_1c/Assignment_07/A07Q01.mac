@@ -1,0 +1,8 @@
+fn: rand([sin,cos]);
+coeff: rand_with_step(2,10,1);
+summand: rand_with_step(0,10,1);
+ux: coeff * x + summand;
+arg: fn(ux);
+disp_int: 'integrate(arg, x);
+u_disp_int: changevar(disp_int, ux = u, u, x);
+tans1: ev(disp_int + C, nouns);

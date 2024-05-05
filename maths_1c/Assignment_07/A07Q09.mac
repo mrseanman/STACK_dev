@@ -1,0 +1,6 @@
+const: rand_selection(makelist(i, i, 9), 3);
+fn1: rand([cos(const[1]*x), sin(const[1]*x)]);
+fn2: cos(const[2]*x);
+arg: const[3]*fn1*fn2;
+dispint: 'integrate(arg, x);
+tans1: expand(ev(dispint+C, nouns));

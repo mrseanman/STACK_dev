@@ -1,0 +1,24 @@
+/* 1: odd power trig integral*/
+/* 2: cos^4 */
+type: rand([1,2]);
+
+if type=1 then
+    block(
+        trigs: rand([[sin(x), cos(x)], [cos(x), sin(x)]]),
+        odd_pow: 1+2*rand([2,3]),
+        even_pow: 2*rand([1,2,3,4]),
+        arg: trigs[1]^odd_pow*trigs[2]^even_pow,
+        
+        /* for feedback */
+        re_express_arg: trigs[1] * expand((1-trigs[2]^2)^((odd_pow-1)/2) * trigs[2]^even_pow),
+        u_disp_int: changevar('integrate(re_express_arg, x), trigs[2] = u, u, x),
+        u_ev_int: ev(u_disp_int, nouns)
+    )
+else 
+    block(
+        coeff: rand(4)+1,
+        arg: coeff*cos(x)^4
+    );
+
+q_disp_int: 'integrate(arg, x);
+tans1: expand(ev(q_disp_int + C, nouns));

@@ -1,0 +1,16 @@
+const: rand_range(2,10,1);
+ufn: x^2+const*x;
+dufn: diff(ufn, x);
+Ufn: dufn;
+dUfn: diff(Ufn, x);
+dvfn: cos(x);
+vfn: sin(x);
+dVfn: vfn;
+Vfn: -cos(x);
+arg: ufn*dvfn;
+dispint1: 'integrate(arg, x);
+tans1: collectterms(expand(ev(dispint1 + C, nouns)), sin(x), cos(x));
+dispint2: 'integrate(Ufn*dVfn, x); 
+dispint3: 'integrate(-Vfn*dUfn, x);
+evint3: ev(dispint3 + C, nouns);
+evint2: Ufn*Vfn + evint3;

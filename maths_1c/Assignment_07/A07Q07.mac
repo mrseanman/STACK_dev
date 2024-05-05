@@ -1,0 +1,27 @@
+ufn: rand([1, x]);
+du: diff(ufn, x);
+dv: rand([  [sin(x)*cos(x), (1/2)*sin(2*x)],
+            [cos(x)^2,      (1/2)*(1+cos(2*x)), (1/2)*cos(2*x)],
+            [sin(x)^2,      (1/2)*(1-cos(2*x)), -(1/2)*cos(2*x)]]);
+uplim: rand([%pi/2, %pi, 2*%pi]);
+arg: ufn*dv[1];
+dispint: 'integrate(arg, x, 0, uplim);
+tans1: expand(ev(dispint, nouns));
+
+/*feedback (both cases of ufn)*/
+altarg: ufn*dv[2];
+altdispint: 'integrate(altarg, x, 0, uplim);
+
+/* if ufn=1 */
+evint: expand(integrate(altarg, x));
+
+/* if ufn=x */
+term1disp: 'integrate(x/2, x, 0, uplim);
+altint2: if dv[1]=sin(x)*cos(x) then altdispint else term1disp + 'integrate(x*dv[3], x, 0, uplim);
+vfn: integrate(last(dv), x);
+term1: integrate(x/2, x);
+term1ev: ev(term1disp, nouns);
+term2ev: expand(ev(ufn*vfn, x=uplim)-ev(ufn*vfn, x=0));
+term3disp: 'integrate(vfn, x, 0, uplim);
+expr: term2ev - term3disp;
+term3: integrate(vfn, x);

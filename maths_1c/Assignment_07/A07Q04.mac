@@ -1,0 +1,11 @@
+A0: rand_range(1,9,1);
+A1: rand_range(3,9,1);
+fn: rand([sin, cos]);
+ufn: A0*t;
+dufn: diff(ufn, t);
+dvfn: fn(A1*t);
+vfn: integrate(dvfn, t);
+arg: ufn*dvfn;
+dispint: 'integrate(arg, t);
+tans1: ev(dispint + C, nouns);
+newint: 'integrate(vfn*dufn, t);
