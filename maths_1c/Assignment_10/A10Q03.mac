@@ -1,0 +1,23 @@
+type: rand([1,2,3]);
+if type = 1 then block (
+  fn(x):= abs(x)*x,
+  x_range: [x, -5, 5],
+  y_range: [y, -30, 30],
+  fnlabel: ["f", 3, 15],
+  tans1: [ [1, false, "even"], [2, true, "odd"], [3, false, "neither even nor odd"] ]
+) elseif type = 2 then block (
+  fn(x):= x/(x^2+1),
+  x_range: [x, -10, 10],
+  y_range: [y, -0.6, 0.6],
+  fnlabel: ["f", 7, 0.3],
+  tans1: [ [1, false, "even"], [2, true, "odd"], [3, false, "neither even nor odd"] ]
+) else block(
+  fn(x):= exp(-x^2),
+  x_range: [x, -5, 5],
+  y_range: [y, -0.2, 1.2],
+  fnlabel: ["f", 2, 0.6],
+  tans1: [ [1, true, "even"], [2, false, "odd"], [3, false, "neither even nor odd"] ]
+);
+
+/*feedback*/
+makeplot: plot(fn(x), x_range, y_range, [xlabel, "x"], [ylabel, "y"], [label, fnlabel]);

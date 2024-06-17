@@ -1,0 +1,6 @@
+coeff: rand_with_prohib(-10, 10, [0]);
+
+Z: (coeff * %i)^3;
+
+tans1: realpart(Z);
+tans2: imagpart(Z);

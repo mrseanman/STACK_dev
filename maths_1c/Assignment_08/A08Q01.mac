@@ -1,0 +1,31 @@
+/* 1: \int 1/(1+(ax)^2) */
+/* 2: \int x^(a-1)/sqrt(1+x^(2a)) */
+type: rand([1,2]);
+if type = 1 then block(
+  A0: rand_range(2,9,1),
+  ufn: A0*x,
+  du: diff(ufn, x),
+  uplim: sqrt(3)/A0,
+  newlim: sqrt(3),
+  arg: 1/(1+ufn^2),
+  disp_int: 'integrate(arg, x, 0, uplim),
+  tans1: ev(disp_int, nouns),
+  /*feedback*/
+  alt_disp_int: changevar(disp_int, u=ufn, u, x),
+  alt_ev_int: (1/A0)*atan(u),
+  trig_id: 'integrate(1/(1+u^2), u) = atan(u)
+)
+else block(
+  P1: rand([2,3,4,5]),
+  ufn: x^P1,
+  du: diff(ufn, x),
+  uplim: 1,
+  newlim: 1,
+  arg: du/(P1*sqrt(1-ufn^2)),
+  disp_int: 'integrate(arg, x, 0, uplim),
+  tans1: ev(disp_int, nouns),
+  /*feedback*/
+  alt_disp_int: 'integrate(1/(P1*sqrt(1-u^2)), u, 0, newlim),
+  alt_ev_int: (1/P1)*asin(u),
+  trig_id: 'integrate(1/sqrt(1-u^2), u) = asin(u)
+)

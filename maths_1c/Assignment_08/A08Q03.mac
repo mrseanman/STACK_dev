@@ -1,0 +1,102 @@
+/* 1: sqrt((a*x)^2+b^2)  ~~~ tan(theta) sub */
+/* 2: sqrt(-(a*x)^2+b^2) ~~~ sin(theta) sub */
+type: rand([1,2]);
+
+a: rand(4) + 2;
+b: rand_with_prohib(2,6,[a]);
+if type=1 then block(
+    arg: sqrt((a*x)^2 + b^2),
+    disp_int: 'integrate(arg, x),
+    /* for feedback */
+    arg_modified: sqrt((a*x/b)^2 + 1) * b,
+    sub_u: tan(theta),
+    standard_int_eq: 'integrate(sec(x)^3, x) = 1/2 * (sec(x)*tan(x) + log(abs(sec(x) + tan(x)))) + C
+) else block(
+    arg: sqrt(-(a*x)^2 + b^2),
+    disp_int: 'integrate(arg, x),
+    /* for feedback */
+    arg_modified: sqrt(-(a*x/b)^2 + 1) * b,
+    sub_u: sin(theta)
+);
+
+disp_int_arg_modified: 'integrate(arg_modified, x);
+u_fn: a*x/b;
+/* annoyingly.... this does some extra factorisation when type=2 that messes things up */
+/* disp_int_u: changevar(disp_int_arg_modified, u=u_fn, u, x); */
+u_integrand: b^2/a * sqrt((if type = 1 then 1 else -1)*u^2 + 1);
+disp_int_u: 'integrate( u_integrand, u);
+ev_int_u: ev(disp_int_u, nouns);
+maxima_ans: ev(disp_int, nouns);
+
+/* for feedback */
+
+if type=1 then block(
+    theta_fn: tan(theta)
+) else block(
+    theta_fn: sin(theta)
+);
+
+/* again, need to do this manually because of unwanted factorisations */
+/* this doesn't work */
+/* disp_int_theta: changevar(disp_int_u, u=theta_fn, theta, u); */
+disp_int_theta: 'integrate(diff(theta_fn, theta) * subst(u=theta_fn, u_integrand), theta);
+disp_int_theta_simp: trigsimp(disp_int_theta);
+/* assume(cos(theta)>0, sin(theta)>0); */
+disp_int_theta_assumption: ev(disp_int_theta_simp, abs(cos(theta))=cos(theta), simp);
+
+if type=1 then block(
+    ev_int_theta: b^2/a * (subst(theta, x, rhs(standard_int_eq)) - C ) + C,
+    ev_int_theta_all_tan: subst(sqrt(tan(theta)^2+1), sec(theta), ev_int_theta),
+    ev_int_back_to_u: subst(u, tan(theta), ev_int_theta_all_tan),
+    ev_int_back_to_x: expand(subst(u_fn, u, ev_int_back_to_u))
+) else block(
+    ev_int_theta: ev(disp_int_theta_assumption + C, nouns, expand),
+    ev_int_theta_trigexpand: trigexpand(ev_int_theta),
+    ev_int_theta_all_sin: subst(sqrt(1-sin(theta)^2), cos(theta), ev_int_theta_trigexpand),
+    ev_int_back_to_u_step_1: subst(u, sin(theta), ev_int_theta_all_sin),
+    ev_int_back_to_u: subst(asin(u), theta, ev_int_theta_all_sin),
+    ev_int_back_to_x: subst(u_fn, u, ev_int_back_to_u)
+);
+tans1: ev_int_back_to_x;
+
+
+/* For prt*/
+/* points at which to evaluate student answers and numerically compare with teacher answer*/
+test_points: [[0.1], [0.2], [0.3], [0.5]]
+
+
+/* For expressions that may be hard to test for algebraic equality. */
+/* We instead test for numeric equality at one point, */
+/* defined by a list of equations in evalat */
+are_numerically_equal(f, g, evalat, [margin]) := block(
+    [f_eval_real, f_eval_imag, g_eval_real, g_eval_imag],
+    if flatten(margin)=[] then margin:0.0001 else margin: first(flatten(margin)),
+    f_eval_real: float(realpart(float(ev(f,evalat)))),
+    f_eval_imag: float(imagpart(float(ev(f,evalat)))),
+    g_eval_real: float(realpart(float(ev(g,evalat)))),
+    g_eval_imag: float(imagpart(float(ev(g,evalat)))),
+    if not( floatnump(f_eval_real) and
+            floatnump(f_eval_imag) and
+            floatnump(g_eval_real) and
+            floatnump(g_eval_imag)) then 1/0,
+    return(is(
+        abs(f_eval_real-g_eval_real) <= margin and
+        abs(f_eval_imag-g_eval_imag) <= margin
+    ))
+);
+/* e.g. are_numerically_equal(2/sqrt(-4*x-4), 1/sqrt(-x-1), [x=10]) */
+
+/* Perform are_numerically_equal at sevaral points. */
+/* If vars=[x,y] and points=[[1,2],[3,4]], then we test equality at the points, */
+/* [x=1, y=2] and [x=3, y=4]*/
+are_numerically_equal_at_points(f, g, vars, points, [margin]) := block(
+    [evalat_equations, var_i, point, numerically_equal_at_points, evalat_equation, L00, R00],
+    evalat_equations:
+        makelist(
+            makelist(vars[var_i] = point[var_i], var_i, 1, length(vars)),
+            point, points),
+    numerically_equal_at_points: makelist(
+        are_numerically_equal(f, g, evalat_equation, margin), evalat_equation, evalat_equations),
+    return(lreduce(lambda([L00,R00], L00 and R00), numerically_equal_at_points))
+);
+/* e.g. are_numerically_equal_at_points(2/sqrt(-4*x*y-4), 1/sqrt(-x*y-1), [x,y], [[1,1],[2,2],[2,3]]) */

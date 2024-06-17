@@ -1,0 +1,33 @@
+/* for brevity */
+r():= rand_with_prohib(-10, 10, [0]);
+
+/* Again, annoyingly depends(y,x) seems to have no 
+effect on what is displayed in the mcq.
+So explicit y(x) is necessary */
+
+sols: [
+    'diff(y(x), x) = r() * x * y,
+    'diff(y(x), x) = cos(x) * sin(y),
+    'diff(y(x), x) = exp(r() * x + r() * y),
+    'diff(y(x), x) = r() * x + r()
+];
+
+decoys: [
+    'diff(y(x), x) = r() * x + y,
+    'diff(y(x), x) = sin(x*y),
+    'diff(y(x), x) = r() * x^2 + r()*y,
+    'diff(y(x), x) = log(x * y)
+];
+
+chosen_sols: rand_selection(sols, 3);
+chosen_decoys: rand_selection(decoys, 2);
+
+MCQ1: random_permutation([
+    [1, true,   chosen_sols[1]    ],
+    [2, true,   chosen_sols[2]    ],
+    [3, true,   chosen_sols[3]    ],
+    [4, false,  chosen_decoys[1]  ],
+    [5, false,  chosen_decoys[2]  ]
+]);
+
+tans1: setify(mcq_correct(MCQ1));

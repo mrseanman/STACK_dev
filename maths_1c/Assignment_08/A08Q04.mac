@@ -1,0 +1,79 @@
+/* 1: 1/(x^2*sqrt(a^2-x^2))   ~~~ sin(theta) sub */
+/* 2: a*x/(sqrt(b-x^2)      ~~~ sin(theta) sub */
+type: rand([1,2]);
+
+a: rand(4) + 2;
+b: rand_with_prohib(2,6,[a]);
+if type=1 then block(
+    arg: 1/(x^2 * sqrt(a^2 - x^2)),
+    disp_int: 'integrate(arg, x),
+    /* for feedback */
+    arg_modified: 1/(x^2 * a * sqrt(1-(x/a)^2)),
+    theta_fn: a*sin(theta),
+    disp_int_arg_modified: 'integrate(arg_modified, x),
+    /* need to do manually unfortunately */
+    disp_int_theta: 'integrate(diff(theta_fn, theta) * subst(theta_fn, x, arg_modified), theta),
+    disp_int_theta_simp: 'integrate(1/a^2 * cos(theta)/(sin(theta)^2 * abs(cos(theta))), theta),
+    disp_int_theta_simp_assumption: ev(disp_int_theta_simp, abs(cos(theta)) = cos(theta), simp),
+    ev_int_theta_simp_assumption: ev(disp_int_theta_simp_assumption, nouns) + C,
+    ev_int_theta_modified_1: -1/a^2 * cos(theta)/sin(theta) + C,
+    ev_int_theta_modified_2: -1/a^2 * sqrt(1-sin(theta)^2)/sin(theta) + C,
+    ev_int_back_to_x: expand(ratsimp(subst(x/a, theta_fn/a, ev_int_theta_modified_2)))
+) else block(
+    arg: b*x/(sqrt(a^2 - x^2)),
+    disp_int: 'integrate(arg, x),
+    /* for feedback */
+    arg_modified: b*x/(a * sqrt(1-(x/a)^2)),
+    theta_fn: a*sin(theta),
+    disp_int_arg_modified: 'integrate(arg_modified, x),
+    /* need to do manually unfortunately */
+    disp_int_theta: 'integrate(diff(theta_fn, theta) * subst(theta_fn, x, arg_modified), theta),
+    disp_int_theta_simp: 'integrate(a*b*sin(theta)/(a*abs(cos(theta))) * '(a*cos(theta)), theta),
+    disp_int_theta_simp_assumption: ev(disp_int_theta_simp, abs(cos(theta)) = cos(theta), simp),
+    ev_int_theta_simp_assumption: ev(disp_int_theta_simp_assumption, nouns) + C,
+    ev_int_theta_modified_2: subst(sqrt(1-sin(theta)^2), cos(theta), ev_int_theta_simp_assumption),
+    ev_int_back_to_x: expand(ratsimp(subst(x/a, theta_fn/a, ev_int_theta_modified_2)))
+);
+
+maxima_ans: ev(disp_int, nouns);
+tans1: ev_int_back_to_x;
+
+/* For prt*/
+/* points at which to evaluate student answers and numerically compare with teacher answer*/
+test_points: [[0.1], [0.2], [0.3]];
+
+/* For expressions that may be hard to test for algebraic equality. */
+/* We instead test for numeric equality at one point, */
+/* defined by a list of equations in evalat */
+are_numerically_equal(f, g, evalat, [margin]) := block(
+    [f_eval_real, f_eval_imag, g_eval_real, g_eval_imag],
+    if margin=[] or margin=[[]] then margin:0.0001,
+    f_eval_real: float(realpart(float(ev(f,evalat)))),
+    f_eval_imag: float(imagpart(float(ev(f,evalat)))),
+    g_eval_real: float(realpart(float(ev(g,evalat)))),
+    g_eval_imag: float(imagpart(float(ev(g,evalat)))),
+    if not( floatnump(f_eval_real) and
+            floatnump(f_eval_imag) and
+            floatnump(g_eval_real) and
+            floatnump(g_eval_imag)) then 1/0,
+    return(is(
+        abs(f_eval_real-g_eval_real) <= margin and
+        abs(f_eval_imag-g_eval_imag) <= margin
+    ))
+);
+/* e.g. are_numerically_equal(2/sqrt(-4*x-4), 1/sqrt(-x-1), [x=10]) */
+
+/* Perform are_numerically_equal at sevaral points. */
+/* If vars=[x,y] and points=[[1,2],[3,4]], then we test equality at the points, */
+/* [x=1, y=2] and [x=3, y=4]*/
+are_numerically_equal_at_points(f, g, vars, points, [margin]) := block(
+    [evalat_equations, var_i, point, numerically_equal_at_points, evalat_equation, L00, R00],
+    evalat_equations:
+        makelist(
+            makelist(vars[var_i] = point[var_i], var_i, 1, length(vars)),
+            point, points),
+    numerically_equal_at_points: makelist(
+        are_numerically_equal(f, g, evalat_equation, margin), evalat_equation, evalat_equations),
+    return(lreduce(lambda([L00,R00], L00 and R00), numerically_equal_at_points))
+);
+/* e.g. are_numerically_equal_at_points(2/sqrt(-4*x*y-4), 1/sqrt(-x*y-1), [x,y], [[1,1],[2,2],[2,3]]) */

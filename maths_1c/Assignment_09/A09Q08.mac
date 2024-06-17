@@ -1,0 +1,22 @@
+depends(y,x);
+const: rand_range(1,9,1);
+ic_x: %pi/2;
+ic_y: rand(5);
+ode: sin(x)*diff(y,x)+cos(x)*y = const*cos(x)*sin(x);
+/*needed to be done manually*/
+/*gensol: ode2(ode, y, x);
+tans1: ic1(gensol, x=ic_x, y=ic_y);*/
+
+/*feedback*/
+ode_sf: diff(y,x)+cot(x)*y = const*cos(x);
+pfn: cot(x);
+qfn: rhs(ode_sf);
+intfac_gen: exp('integrate(p(x), x));
+intfac_uneval: subst(pfn, p(x), intfac_gen);
+intfac: ev(intfac_uneval, nouns);
+ode_if: sin(x)*diff(y,x)+cos(x)*y = const*sin(x)*cos(x);
+int_1: sin(x)*y = 'integrate(rhs(ode_if), x);
+/*maxima wants to eval this integral as cos^2*/
+int_2: lhs(int_1) = (const/2)*sin(x)^2 + C;
+CVal: rhs(first( solve(at(int_2, [x=ic_x, y=ic_y]), C) ));
+tans1: (const/2)*sin(x) + CVal*csc(x);

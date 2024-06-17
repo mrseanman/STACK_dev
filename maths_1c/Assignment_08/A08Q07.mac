@@ -1,0 +1,45 @@
+
+/* 1: f' = A*f + B */
+/* 2: f' = A* f^2 */
+type: rand([1,2]);
+
+depends(f, x);
+
+if type=1 then block([A, B],
+    A: rand_with_prohib(-10, 10, [0,1]),
+    B: rand(10) + 1,
+    diff_eqn: 'diff(f,x) = A*f + B,
+
+    sol_consts: [-rand(10)-1, rand(10)+1, 0],
+    sols: map(lambda([z], f(x) = z*exp(A*x) - B/A), sol_consts),
+    decoy: f(x) = exp(A*x) + x,
+
+    MCQ1: random_permutation([
+        [1, true,  sols[1]],
+        [2, true,  sols[2]],
+        [3, true,  sols[3]],
+        [4, false, decoy  ]
+    ])
+) else block(
+    A: rand_with_prohib(-10, 10, [0,1]),
+    diff_eqn: 'diff(f,x) = A*f^2,
+
+    sol_consts: [-rand(10)-1, rand(10) + 1],
+    sols: map(lambda([z], f(x) = 1/(z-A*x)), sol_consts),
+    decoy_1: f(x) = rand_with_prohib(10,10,[0]) * exp(A*x),
+    decoy_2: f(x) = rand_with_prohib(10,10,[0]) * exp(A*x^2),
+
+    MCQ1: random_permutation([
+        [1, true,  sols[1]],
+        [2, true,  sols[2]],
+        [3, false, decoy_1],
+        [4, false, decoy_2]
+    ])
+);
+
+tans1: setify(mcq_correct(MCQ1));
+
+/* For feedback */
+demo_sol: rhs(sols[1]);
+subst_eq: at(diff_eqn, f = (demo_sol));
+subst_eq_ev: factor(ev(subst_eq, nouns));

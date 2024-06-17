@@ -1,0 +1,9 @@
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+
+mod_a: rand(9)+1;
+mod_b: sqrt(rand(10)+10);
+angle: rand([30, 45, 60, 90, 120, 180]);
+
+radns: angle*%pi/180;
+tans1: mod_a*mod_b*cos(radns);

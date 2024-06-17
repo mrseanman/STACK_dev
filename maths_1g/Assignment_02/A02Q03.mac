@@ -1,0 +1,26 @@
+simp:true;
+A0: rand([1,2,4,5,6,7,8,9]);
+z_rect: A0*sqrt(3)-A0*%i;
+w_rect: 2*A0*%i;
+
+z_mod: abs(z_rect);
+z_arg: carg(z_rect);
+
+w_mod: abs(w_rect);
+w_arg: carg(w_rect);
+
+zw_mod: abs(z_rect*w_rect);
+zw_arg: carg(z_rect*w_rect);
+
+z_w_mod: abs(z_rect/w_rect);
+z_w_arg: carg(z_rect/w_rect);
+
+invw_mod: abs(1/w_rect);
+invw_arg: carg(1/w_rect);
+
+simp: false;
+w_pol: w_mod*(cos(w_arg)+%i*sin(w_arg));
+tans1: z_mod*(cos(z_arg)+%i*sin(z_arg));
+tans2: zw_mod*(cos(zw_arg)+%i*sin(zw_arg));
+tans3: z_w_mod*(cos(z_w_arg)+%i*sin(z_w_arg));
+tans4: invw_mod*(cos(invw_arg)+%i*sin(invw_arg));

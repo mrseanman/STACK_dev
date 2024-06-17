@@ -1,0 +1,19 @@
+r():= rand_with_prohib(-10, 10, [0]);
+r_1: r();
+r_2: makelist(r(), i, 2);
+
+frac_1: r_1/(x - 1);
+frac_2: r_2[1]/(r_2[2]^2 + x^2);
+arg: ratsimp(frac_1 + frac_2);
+
+disp_int: 'integrate(arg, x);
+tans1: ev(disp_int + C, nouns);
+
+/* feedback */
+fact_denom: factor(denom(arg));
+part_frac: frac_1 + frac_2;
+rewrite_frac_2: r_2[1]/(r_2[2]^2*(1 + (x/r_2[2])^2));
+frac_2_disp_int_rewrite: 'integrate(rewrite_frac_2, x);
+u_fn: x/r_2[2]
+frac_2_disp_int_u: changevar(frac_2_disp_int_rewrite, u_fn = u, u, x);
+standard_atan_int_eqn: 'integrate(1/(1+u^2), u) = integrate(1/(1+u^2), u) + C_2

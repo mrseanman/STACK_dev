@@ -1,0 +1,16 @@
+texput(x, "\\mathbf{x}");
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+
+cs: firstn(random_permutation(makelist(i+1,i,20)), 4);
+simp:false;
+expr: cs[1] * x + a + cs[2] * b = cs[3] * (x - rand([a,b])) - (a + cs[4] * b);
+simp: true;
+tans1: rhs(expand(first(solve(expand(expr), [x]))));
+
+/* feedback */
+collected_1: expand(lhs(expr) - rhs(expr)) = 0;
+a_coeff: -coeff(lhs(collected_1), a);
+b_coeff: -coeff(lhs(collected_1), b);
+x_coeff: coeff(lhs(collected_1), x);
+collected_2: x_coeff * x = a_coeff * a + b_coeff * b;

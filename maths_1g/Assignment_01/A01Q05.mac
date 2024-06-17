@@ -1,0 +1,14 @@
+r():= rand_with_prohib(-10, 10, [0]);
+
+A_r: r();
+A_i: r() * %i;
+A: A_r + A_i;
+
+B_r: r();
+B_i: r() * %i;
+B: B_r + B_i;
+
+Z: rectform(A/B);
+
+tans1: realpart(Z);
+tans2: imagpart(Z);

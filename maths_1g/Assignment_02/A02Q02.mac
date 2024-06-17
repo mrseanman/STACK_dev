@@ -1,0 +1,17 @@
+polar_to_rect(X_):= [X_[1]*cos(X_[2]), X_[1]*sin(X_[2])];
+
+fracs: [0, 1/4, 1/3, 1/2, 2/3, 3/4];
+angles: %pi * append(fracs, 1 + fracs);
+radii: makelist(i, i, 4);
+
+arg_selections: firstn(random_permutation(angles), 3);
+r_selections: firstn(random_permutation(radii), 3);
+polar_points: makelist([r_selections[i], arg_selections[i]], i, 3);
+
+disp_rects: map(lambda([X_], ntupleify(polar_to_rect(X_))), polar_points);
+tans1: ntupleify(polar_points[1]);
+tans2: ntupleify(polar_points[2]);
+tans3: ntupleify(polar_points[3]);
+
+/* for feedback */
+arg_rects: map(args, disp_rects);

@@ -3,7 +3,7 @@
 /* defined by a list of equations in evalat */
 are_numerically_equal(f, g, evalat, [margin]) := block(
     [f_eval_real, f_eval_imag, g_eval_real, g_eval_imag],
-    if margin=[] or margin=[[]] then margin:0.0001,
+    if flatten(margin)=[] then margin:0.0001 else margin: first(flatten(margin)),
     f_eval_real: float(realpart(float(ev(f,evalat)))),
     f_eval_imag: float(imagpart(float(ev(f,evalat)))),
     g_eval_real: float(realpart(float(ev(g,evalat)))),

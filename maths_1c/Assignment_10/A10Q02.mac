@@ -1,0 +1,5 @@
+coord: makelist( rand_with_prohib(-10, 10, [0]), i, 4 );
+even: ntuple( coord[1], coord[2] );
+tans1: ntuple( -coord[1], coord[2] );
+odd: ntuple( -coord[3], coord[4] );
+tans2: ntuple( coord[3], -coord[4] );

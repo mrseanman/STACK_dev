@@ -1,0 +1,59 @@
+/* 1: sqrt(x^2-a^2)/x */
+/* 2: x^3 * sqrt(a^2 - x^2) */
+type: rand([1,2]);
+
+a: rand(6)+2;
+
+if type=1 then block(
+    lower_limit: rand(3) + a,
+    upper_limit: lower_limit + rand(4) + 1,
+    arg: sqrt(x^2-a^2)/x,
+
+    /* for feedback */
+    arg_modified: a*sqrt((x/a)^2 - 1)/x,
+    disp_int_arg_modified: 'integrate(arg_modified, x, lower_limit, upper_limit),
+    u_fn: x/a,
+    /* have to do manually */
+    u_integrand: a*sqrt(u^2-1)/u,
+    disp_u_int: 'integrate(u_integrand, u, lower_limit/a, upper_limit/a),
+    theta_fn: sec(theta),
+    dtheta_fn: diff(theta_fn, theta),
+    theta_lims: [acos(a/lower_limit), acos(a/upper_limit)],
+    disp_theta_int: 'integrate(dtheta_fn * subst(theta_fn, u, u_integrand), theta, theta_lims[1], theta_lims[2]),
+    disp_theta_int_simp: 'integrate(a * tan(theta) * abs(tan(theta)), theta, theta_lims[1], theta_lims[2]),
+    disp_theta_int_assumption: ev(disp_theta_int_simp, abs(tan(theta)) = tan(theta), simp),
+    general_int_eqn: 'integrate(tan(theta)^2, theta) = tan(theta) - theta + C,
+    trig_eqn: trigsimp(tan(acos(x))),
+    ev_theta_int_indef: a * (tan(theta) - theta),
+    ev_theta_int_def: ev(ev_theta_int_indef, theta = theta_lims[2]) - ev(ev_theta_int_indef, theta = theta_lims[1]),
+    final_ans: expand(ev_theta_int_def)
+) else block(
+    upper_limit: rand([a,a-1]),
+    lower_limit: 0,
+    arg: x^3 * sqrt(a^2 - x^2),
+    
+    /* for feedback */
+    arg_modified: a * x^3 * sqrt(1 - (x/a)^2),
+    disp_int_arg_modified: 'integrate(arg_modified, x, lower_limit, upper_limit),
+    u_fn: x/a,
+    /* have to do manually */
+    u_integrand: a^5 * u^3 * sqrt(1-u^2),
+    disp_u_int: 'integrate(u_integrand, u, lower_limit/a, upper_limit/a),
+    theta_fn: sin(theta),
+    dtheta_fn: diff(theta_fn, theta),
+    theta_lims: [asin(lower_limit/a), asin(upper_limit/a)],
+    disp_theta_int: 'integrate(dtheta_fn * subst(theta_fn, u, u_integrand), theta, theta_lims[1], theta_lims[2]),
+    disp_theta_int_simp: trigsimp(disp_theta_int),
+    disp_theta_int_assumption: ev(disp_theta_int_simp, abs(cos(theta)) = cos(theta), simp),
+    v_fn: cos(theta),
+    dv_fn: diff(v_fn, theta),
+    trig_eqn: trigsimp(cos(asin(x))),
+    v_lims: [cos(theta_lims[1]), cos(theta_lims[2])],
+    disp_v_int: 'integrate(a^5 * (v^4 - v^2), v, v_lims[1], v_lims[2]),
+    ev_v_int_indef: integrate(a^5 * (v^4 - v^2), v),
+    ev_v_int_def: ev(ev_v_int_indef, v = v_lims[2]) - ev(ev_v_int_indef, v = v_lims[1]),
+    final_ans: expand(ev_v_int_def)
+);
+
+disp_int: 'integrate(arg, x, lower_limit, upper_limit);
+tans1: ev(disp_int, nouns);

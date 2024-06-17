@@ -1,0 +1,15 @@
+d: rand([2,3,4,6]);
+n: rand(3)+1;
+arg: %pi*n/d;
+mod: rand(9)+1;
+x_simp: mod*cos(arg);
+y_simp: mod*sin(arg);
+
+simp: false;
+z_exp: mod*exp(arg*%i);
+x_unsimp: mod*cos(arg);
+y_unsimp: mod*sin(arg);
+z_rect: x_unsimp + %i*y_unsimp;
+z_pol: mod*(cos(arg)+%i*sin(arg));
+
+tans1: ev(rectform(z_exp), simp);

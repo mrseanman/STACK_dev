@@ -1,0 +1,47 @@
+/* 1: (x*f(x))'    = 1/x * (x*f'(x) + f(x)) */
+/* 2: log(f(x))'   = f'(x)/f(x)             */
+/* 3: (f(x)^2/2)'  = f(x) * f'(x)           */
+type: rand([1,2,3]);
+
+depends(f, x);
+
+if type=1 then block(
+    disp: x * ('diff(f(x),x) + 1/x * f(x)),
+    ans: '('diff(x * f(x), x))
+) elseif type=2 then block(
+    disp: 'diff(f(x),x)/f(x),
+    ans: '('diff(log(f(x)), x))
+) else block(
+    disp: f(x) * 'diff(f(x),x),
+    ans: '('diff((f(x))^2/2, x))
+);
+
+decoys: [
+    '('diff(f(x),      x)/x),
+    '('diff(x^2*f(x),  x)  ),
+    '('diff(f(x)^2,    x)  ),
+    '('diff(f(x)/x,    x)  ),
+    '('diff(exp(f(x)), x)  )
+];
+
+chosen_decoys: rand_selection(decoys, 3);
+abc: ["A", "B", "C", "D"];
+
+
+/* Separation of options from MCQ is beause of STACK bug */
+/* see https://github.com/maths/moodle-qtype_stack/issues/1189 */
+MCQ_options: random_permutation([
+    [ans             , true     ],
+    [chosen_decoys[1], false    ],
+    [chosen_decoys[2], false    ],
+    [chosen_decoys[3], false    ]
+]);
+
+MCQ_table: apply(table,
+    append([["", ""]],
+    makelist([abc[i], MCQ_options[i][1]], i, 1, length(MCQ_options)))
+);
+
+MCQ1: makelist([abc[i], MCQ_options[i][2]], i, 1, length(MCQ_options));
+
+tans1: first(mcq_correct(MCQ1));

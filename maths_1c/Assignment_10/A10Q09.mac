@@ -1,0 +1,6 @@
+vol: rand_range(200,500,50);
+init: rand_range(10,100,10);
+rate: rand([1,2,5,10]);
+
+tans1: exp(-rate*t/vol)*init;
+const: rate/vol;

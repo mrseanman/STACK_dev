@@ -1,0 +1,15 @@
+texput(eqn1, "\\mathbf{a}\\cdot\\mathbf{b} = \\mathbf{a}\\cdot\\mathbf{c}");
+texput(eqn2, "\\mathbf{a}\\times\\mathbf{b} = \\mathbf{a}\\times\\mathbf{c}");
+texput(result, "\\implies \\; \\mathbf{b} = \\mathbf{c}");
+expr: [
+    castext("{@eqn1@} {@result@}"),
+    castext("{@eqn2@} {@result@}"),
+    castext("{@eqn1@} and {@eqn2@} {@result@}")
+    ];
+
+tans1: [
+            [1, false, expr[1]                ],
+            [2, false, expr[2]                ],
+            [3, true,  expr[3]                ], 
+            [4, false, "None of these options"]
+        ];

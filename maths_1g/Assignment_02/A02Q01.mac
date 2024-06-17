@@ -1,0 +1,45 @@
+make_point_plot(X_):= plot(
+        [discrete, [X_]],
+        [x, -5, 5], [y, -5, 5],
+        [style, [points, 2, 1]],
+        [plottags, false],
+        [size,350,350],
+        [yx_ratio, 1],
+        grid2d
+    );
+
+polar_to_rect(X_):= [X_[1]*cos(X_[2]), X_[1]*sin(X_[2])];
+
+make_decoys(X_):= 
+    [
+        [X_[1], X_[2] + %pi],
+        [X_[1], X_[2] + %pi/2],
+        [X_[1] * (if X_[1]<=2 then 2 else 1/2), X_[2]]
+    ];
+
+make_mcq(X_):= block(
+    decoys: make_decoys(X_),
+    random_permutation(
+        [
+            [1, true, make_point_plot(polar_to_rect(X_))],
+            [2, false, make_point_plot(polar_to_rect(decoys[1]))],
+            [3, false, make_point_plot(polar_to_rect(decoys[2]))],
+            [4, false, make_point_plot(polar_to_rect(decoys[3]))]
+        ]
+    )
+);
+
+    
+
+fracs: [0, 1/4, 1/3, 1/2, 2/3, 3/4];
+angles: %pi * append(fracs, 1 + fracs);
+
+radii: makelist(i, i, 4);
+
+arg_selections: firstn(random_permutation(angles), 3);
+r_selections: firstn(random_permutation(radii), 3);
+polar_points: makelist([r_selections[i], arg_selections[i]], i, 3);
+
+MCQ1: make_mcq(polar_points[1]);
+MCQ2: make_mcq(polar_points[2]);
+MCQ3: make_mcq(polar_points[3]);

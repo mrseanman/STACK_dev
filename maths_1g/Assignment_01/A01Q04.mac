@@ -1,0 +1,8 @@
+r():= rand_with_prohib(-10, 10, [0])/rand_with_prohib(-10, 10, [0]);
+A: rand(10) + 1 + r() * %i;
+B: r() + (rand(10) + 1) * %i;
+
+Z: expand(conj(A*B));
+
+tans1: realpart(Z);
+tans2: imagpart(Z);

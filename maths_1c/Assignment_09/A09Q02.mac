@@ -1,0 +1,20 @@
+/*Part a)*/
+const_a: rand_selection(makelist(i, i, 1, 9), 3);
+denom_a: expand((x+const_a[1])*(x-const_a[2]));
+frac_a: (x-const_a[3])/denom_a;
+tans1: x+const_a[1];
+tans2: x-const_a[2];
+
+/*Part b)*/
+const_b: rand_selection(makelist(i, i, 2, 20), 2);
+denom_b: (x^2+2*x+1)*(x^2+const_b[1])^2;
+frac_b: (const_b[2]*x+1)/denom_b;
+tans3: x+1;
+tans4: (x+1)^2;
+tans5: (x^2+const_b[1]);
+tans6: (x^2+const_b[1])^2;
+tans7: [["const", false, "It is a constant."         ],
+        ["lin",   true,  "It is linear in x."        ], 
+        ["quad",  false, "It is quadratic in x."     ], 
+        ["other", false, "It is not a polynomial."   ] ];
+

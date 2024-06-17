@@ -1,0 +1,14 @@
+round_n(x_, n_):= float(floor(x_) + (round(10^n_ * (x_-floor(x_)))/10^n_));
+round_2(x_):= round_n(x_, 2);
+
+initial_contam_pc: round_2((rand(30) + 1)/10);
+vol: round_2((rand(3) + 7) * 100);
+rate_in: round_2((rand(5)+1)*10);
+clean_pc: round_2(initial_contam_pc/(rand([2,4,5])));
+
+tans1: round_n(-vol/rate_in * log(clean_pc/initial_contam_pc), 4);
+
+/* feedback */
+initial_contam_vol: initial_contam_pc/100 * vol;
+clean_contam_vol: clean_pc/100 * vol;
+exp_coeff: round_n(rate_in/vol, 6);

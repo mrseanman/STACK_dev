@@ -1,0 +1,72 @@
+texput(u, "\\mathbf{u}");
+texput(v, "\\mathbf{v}");
+texput(w, "\\mathbf{w}");
+texput(udotv, "\\mathbf{u}\\cdot\\mathbf{v}");
+texput(udotw, "\\mathbf{u}\\cdot\\mathbf{w}");
+
+/*functions for plotting vectors*/
+make_arrow(
+    start_,
+    end_,
+    [arrow_options_]):= 
+    block(
+        [default_arrow_length_, default_arrow_angle_,
+            arrow_length_, arrow_angle_,
+            n_, p0_, p1_, p2_],
+        default_arrow_length_: 0.1,
+        default_arrow_angle_: %pi/8,
+
+        if emptyp(flatten(arrow_options_)) then block(
+            arrow_length_: default_arrow_length_,
+            arrow_angle_: default_arrow_angle_
+        ) elseif length(flatten(arrow_options_))=1 then block(
+            arrow_length_: arrow_options_[1],
+            arrow_angle_: default_arrow_angle_
+        ) elseif length(flatten(arrow_options_))=2 then block(
+            arrow_length_: arrow_options_[1],
+            arrow_angle_: arrow_options_[2]
+        ),
+    
+        n_: (end_ - start_)/ vec_norm(end_ - start_),
+        p0_: end_ - arrow_length_ * n_,
+        p1_: rotate_about_point(p0_, end_, arrow_angle_),
+        p2_: rotate_about_point(p0_, end_, -arrow_angle_),
+        return([discrete, [start_, end_, p1_, p2_, end_]])
+    );
+rotate_about_point( 
+    input,
+    rotation_centre,
+    theta):=
+    block(
+        [M_, V_, c_, s_, x_, y_],
+        c_: cos(theta),
+        s_: sin(theta),
+        x_: rotation_centre[1],
+        y_: rotation_centre[2],
+
+        M_: matrix(
+            [c_, -s_, x_ - c_ * x_ + s_ * y_],
+            [s_, c_, y_ - s_ * x_ - c_ * y_],
+            [0, 0, 1]
+        ),
+
+        V_: M_ . [input[1], input[2], 1],
+        return([V_[1][1], V_[2][1]])
+    );
+vec_norm(x_):= sqrt(x_.x_);
+make_vec_plot(vecs_):= block(
+    discrete_plots_: makelist(make_arrow(vecs_[i][1], vecs_[i][2]), i, 1, length(vecs_)),
+    plot(discrete_plots_,
+        [label, ["u", -0.35, float(sqrt(3)/4)], ["v", 0.333, float(sqrt(3)/4)], ["w", 0, -0.1] ],
+        [x, -1, 1], [y, -0.5, 1.5],
+        [box, false], [axes, false],
+        /* unfortunately [margin, 0] is not supported on our stack server */
+        [plottags, false],
+        [size,250,250],
+        [yx_ratio, 1])
+);
+
+/*question*/
+vecs: [ [ [0, sqrt(3)/2], [-1/2, 0] ],
+        [ [-1/2, 0], [1/2, 0] ], 
+        [ [0, sqrt(3)/2], [1/2, 0] ] ];

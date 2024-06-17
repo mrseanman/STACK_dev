@@ -1,0 +1,231 @@
+/*formatting shortcuts*/
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+texput(c, "\\mathbf{c}");
+texput(d, "\\mathbf{d}");
+texput(adotb, "\\mathbf{a}\\cdot\\mathbf{b}");
+texput(bdotc, "\\mathbf{b}\\cdot\\mathbf{c}");
+texput(dot, "\\cdot")
+texput(bcrossc, "\\mathbf{b}\\times\\mathbf{c}");
+texput(cross, "\\times");
+
+text_options: [
+  [ 
+    "has meaning and is a scalar",
+    "has meaning and is a vector",
+    "has no meaning"
+    ],
+  [
+    "the dot product of ",
+    "the cross product of ",
+    "the sum of ",
+    "a scalar multiple of ",
+    "the scalar product of "
+    ],
+  [
+    "two scalars",
+    "a scalar and a vector",
+    "a vector",
+    "two vectors"
+    ]
+];
+filler: " because it is ";
+
+
+/*all possible options*/
+/*format: object, meaning or not, filler text, reasoning*/
+all_expr: [
+  [
+    /* 1 */
+    castext("The expression ({@adotb@}){@dot@}{@c@}"), 
+    [ 
+      [1, false,    text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, true,     text_options[1][3]] 
+      ],
+    sconcat(filler, text_options[2][1]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, true,     text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]] 
+      ]
+  ],
+
+  /* 2 */
+  [ castext("The expression ({@adotb@}){@c@}"),
+    [
+      [1, false,    text_options[1][1]],
+      [2, true,     text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][4]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, true,     text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+
+  /* 3 */
+  [ castext("The expression |{@a@}|({@bdotc@})"),
+    [
+      [1, true,     text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][5]),
+    [ 
+      [1, true,     text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+
+  /* 4 */
+  [ castext("The expression {@a@}{@dot@}({@b@} + {@c@})"),
+    [ [1, true,     text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][1]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, true,     text_options[3][4]]
+      ]
+  ],
+
+  /* 5 */
+  [ castext("The expression ({@adotb@}) + {@c@}"),
+    [
+      [1, false,    text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, true,     text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][3]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, true,     text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+
+  /* 6 */
+  [ castext("The expression |{@a@}|{@dot@}({@b@} + {@c@})"),
+    [ 
+      [1, false,    text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, true,     text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][1]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, true,     text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+  
+  /* 7 */
+  [ castext("The expression {@a@}{@dot@}({@bcrossc@})"),
+    [ 
+      [1, true,     text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][1]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, true,     text_options[3][4]]
+      ]
+  ],
+
+  /* 8 */
+  [ castext("The expression {@a@}{@cross@}({@bdotc@})"),
+    [ 
+      [1, false,    text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, true,     text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][2]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, true,     text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+
+  /* 9 */
+  [ castext("The expression {@a@}{@cross@}({@bcrossc@})"),
+    [ 
+      [1, false,    text_options[1][1]],
+      [2, true,     text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][2]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, true,     text_options[3][4]]
+      ]
+  ],
+
+  /* 10 */
+  [ castext("The expression ({@adotb@}){@cross@}({@c@}{@dot@}{@d@})"),
+    [ 
+      [1, false,    text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, true,     text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][2]),
+    [
+      [1, true,     text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, false,    text_options[3][4]]
+      ]
+  ],
+
+  /* 11 */
+  [ castext("The expression ({@a@}{@cross@}{@b@}){@dot@}({@c@}{@cross@}{@d@})"),
+    [
+      [1, true,     text_options[1][1]],
+      [2, false,    text_options[1][2]],
+      [3, false,    text_options[1][3]]
+      ],
+    sconcat(filler, text_options[2][1]),
+    [ 
+      [1, false,    text_options[3][1]],
+      [2, false,    text_options[3][2]],
+      [3, false,    text_options[3][3]],
+      [4, true,     text_options[3][4]]
+      ]
+  ]
+];
+
+/*selected expressions*/
+expr: rand_selection(all_expr, 5);
+/*part i*/
+tans1: expr[1][2];
+tans2: expr[1][4];
+/*part ii*/
+tans3: expr[2][2];
+tans4: expr[2][4];
+/*part iii*/
+tans5: expr[3][2];
+tans6: expr[3][4];
+/*part iv*/
+tans7: expr[4][2];
+tans8: expr[4][4];
+/*part v*/
+tans9: expr[5][2];
+tans10: expr[5][4];

@@ -1,0 +1,28 @@
+f_1: rand_with_prohib(-10, 10, [-1, 0, 1]);
+disp_eqn: sconcat("y'(x) = ", string(f_1), "*y(x)");
+tans1: random_permutation([
+    [ 1, true, 
+        sconcat("The slope of y against x is always ", string(f_1), " times the y-coordinate.")],
+    [ 2, false,
+        sconcat("The slope of y against x is always ", string(f_1), " times the x-coordinate.")],
+    [ 3, false,
+        sconcat("The rate of change of x is always ", string(f_1), " times the x-coordinate.")],
+    [ 4, false,
+        sconcat("The slope of y against x is always ", string(f_1)), "."],
+    [ 5, false,
+        sconcat("The slope of y against x is always ", string(1/f_1), " times the y-coordinate.")] 
+]);
+
+round_4(x_) := float(round(10000 * x_)/10000);
+k_: round_4(rand([1/sqrt(3), 1/%e, 1/sqrt(5), 1/%pi]));
+f_2: rand([2,3,4]);
+tans2: random_permutation([
+    [ 1, true, 
+        k = k_],
+    [ 2, false,
+        k = round_4(f_2 * k_)],
+    [ 3, false,
+        k = round_4(k_ / f_2)],
+    [ 4, false,
+        k = round_4(k_ + f_2)]
+]);

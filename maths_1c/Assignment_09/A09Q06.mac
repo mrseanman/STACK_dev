@@ -1,0 +1,32 @@
+round_4(x_) := float(round(10000 * x_)/10000);
+poly: round_4(rand(1000)/1000)*t^2 + round_4(rand(10)/10);
+evap_rate: round_4(rand(10)/10);
+
+tans1: random_permutation([
+    [ 1, true, 
+        'diff(w(t), t) = -evap_rate/100 * w(t) + poly],
+    [ 2, false,
+        'diff(w(t), t) = (1-evap_rate/100) * w(t) + poly],    
+    [ 3, false,
+        'diff(w(t), t) = -evap_rate/100 * w(t) + poly * w(t)],
+    [ 4, false,
+        'diff(w(t), t) = -evap_rate * w(t) + diff(poly, t)],
+    [ 5, false,
+        'diff(w(t), t) = -evap_rate/100 * w(t) - integrate(poly, t)]
+]);
+
+rate_in: round_4((rand(5) + 2)*10);
+rate_degrade_at_1000: round_4((rand(4) + 1)*100);
+proportional_degrade: round_4(rate_degrade_at_1000/1000);
+tans2: random_permutation([
+    [ 1, true, 
+        'diff(y(t), t) = -proportional_degrade * y(t) + rate_in],
+    [ 2, false,
+        'diff(y(t), t) = -proportional_degrade * t + rate_in],    
+    [ 3, false,
+        'diff(y(t), t) = (1-proportional_degrade)*y(t) + rate_in],
+    [ 4, false,
+        'diff(y(t), t) = -proportional_degrade * y(t) + rate_in * y(t)],
+    [ 5, false,
+        'diff(y(t), t) = (1-proportional_degrade) + rate_in * y(t)]
+]);

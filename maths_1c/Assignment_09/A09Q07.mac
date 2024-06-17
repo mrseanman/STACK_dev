@@ -1,0 +1,6 @@
+ov_temp: rand_range(180, 220, 10);
+d_temp: rand_range(16, 24, 1);
+tans1: k*(ov_temp-T);
+tans2: d_temp;
+tans3: random_permutation([ [1, true, "greater than 0"], [2, false, "less than 0"], [3, false, "equal to 0"] ]);
+tans4: random_permutation([ [1, true, "increasing"], [2, false, "constant"], [3, false, "decreasing"] ])

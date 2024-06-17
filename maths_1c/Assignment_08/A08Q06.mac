@@ -1,0 +1,66 @@
+x_start: -10;
+x_end: 10;
+ticks: 150;
+
+form_discrete(func, start, end, nticks) := block(
+    xvals: makelist(float(start + i/nticks * (end - start)), i, 0, nticks),
+    [discrete, makelist([x1, apply(func, [x1])], x1, xvals)]
+);
+
+/* things that *are* functions */
+fns: [  lambda([x], x + sin(x)  ),
+        lambda([x], exp(x)      ),
+        lambda([x], x^2         )     ];
+
+fns_discrete: map(lambda([a], form_discrete(a, x_start, x_end, ticks)), fns);
+
+/*  to construct non-function plot */
+fn_to_swap(x):= x + 2*sin(x);
+fn_discrete: form_discrete(fn_to_swap, x_start, x_end, ticks);
+/* swap x and y in discrete*/
+xy_vals: fn_discrete[2];
+yx_vals: map(lambda([a], [a[2], a[1]]), xy_vals);
+non_fn_discrete: [discrete, yx_vals];
+
+make_plot(disc_f):= plot(disc_f,
+    [x, x_start, x_end],
+    [y, -10, 10],
+    [xlabel, "x"],
+    [ylabel, "y"],
+    [plottags,false]
+);
+
+/* strange bug in STACK (not present in local maxima install) */
+/* even with depends(y,x).... diff(y,x), 'diff(y,x) and 'diff('y,x) evaluate to 0 */
+/* Therefore putting all dependencies explicit e.g. diff(y(x),x) */
+/* not ideal! as this just one way diff eqns can be written down */
+/* depends(y,x);
+depends(h,x); */
+
+
+/* for some reason: */
+/* Now forming MCQs */
+/* Which is *not* possible solution to a diff eqn */
+disp_ans1: (rand(10)+1) * y(x) = rand(10) + 1 + diff(y(x),x)
+MCQ1: random_permutation([
+    [1, true,   disp_ans1                                           ],
+    [2, false,  v(t) = rand(10)+1                                   ],
+    [3, false,  x = 0                                               ],
+    [4, false,  y(x) = (rand(10)+1) * x^3 + rand(40)*x^2            ]
+]);
+
+/* Which is not a diff eqn */
+MCQ2: random_permutation([
+    [1, true,   "12y'' + 62"                        ],
+    [2, false,  rand(30) + 1 =  diff(y(x),x)/y(x)   ],
+    [3, false,  "5h'' + 2 = h'"                     ],
+    [4, false,  diff(a(x),x) + diff(h(x),x) = g(x)  ]
+]);
+
+/* Which is possible solution to a diff eqn */
+MCQ3: random_permutation([
+    [1, true,   make_plot(non_fn_discrete)  ],
+    [2, false,  make_plot(fns_discrete[1])  ],
+    [3, false,  make_plot(fns_discrete[2])  ],
+    [4, false,  make_plot(fns_discrete[3])  ]
+]);

@@ -1,0 +1,10 @@
+depends(A, t);
+change: diff(A, t);
+eqn_1: change = k*A(t);
+tans1: C*exp(k*t);
+tans2: C/2;
+tans3: -log(2)/k;
+tans4: C*2^(-t/T);
+pow: rand([2,3,4,5]);
+frac: 1/(2^pow);
+tans5: pow;

@@ -1,0 +1,27 @@
+/* 1: (a + x^(b-1))/(x^b)   ~~~ partial fraction then standard integrals */
+/* 2: 1/(ax+b)              ~~~ u sub then standard integral */
+type: rand([1,2]);
+lims: [rand_range(1,4,1), rand_range(5,10,1)];
+if type=1 then block(
+    summand: rand(10) + 2,
+    pow: rand(4) + 2,
+    arg: (summand + x^(pow-1))/x^pow,
+    disp_int: 'integrate(arg, x, lims[1], lims[2]),
+    /* for feedback */
+    arg_part_frac: partfrac(arg, x),
+    disp_int_part_frac: 'integrate(arg_part_frac, x, lims[1], lims[2]),
+    indef_int: integrate(arg, x)
+) else block(
+    coeff: rand(10) + 1,
+    summand: rand(10) + 1,
+    arg: 1/(summand + coeff*x),
+    disp_int: 'integrate(arg, x, lims[1], lims[2]),
+    /* for feedback */
+    ufn: summand + coeff*x,
+    disp_int_u: changevar(disp_int, u=ufn, u, x),
+    indef_int_u: ev(changevar('integrate(arg,x), u=ufn, u, x), nouns),
+    lims_u: map(lambda([z], ev(ufn, x=z)), lims)
+);
+
+
+tans1: ev(disp_int, nouns);

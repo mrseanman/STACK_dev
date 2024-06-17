@@ -1,0 +1,30 @@
+
+simp: true;
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+
+coeffs: firstn(random_permutation(makelist(i+1,i,9)), 2);
+prod: coeffs[1]*coeffs[2];
+prod2: prod * 2;
+sum: coeffs[1] + coeffs[2];
+
+simp: false;
+expr1: coeffs[1] * (a + coeffs[2] * b) + coeffs[2] * (coeffs[1] * b + a);
+
+expr21: (coeffs[1] * a + prod * b);
+expr22: (prod * b + coeffs[2] * a);
+expr2: (expr21) + (expr22);
+
+expr31: (coeffs[2]*a + coeffs[1] * a);
+expr32: (prod * b + prod * b)
+expr3: (expr31) + (expr32);
+expr4: sum * a + prod2 * b;
+
+tans1: set(E, G);
+tans2: set(A, B);
+tans3: set(F);
+
+/* feedback */
+/* for brevity */
+c1: coeffs[1];
+c2: coeffs[2];

@@ -1,0 +1,32 @@
+expr_f: 2-sin(x);
+expr_g: cos(2*x)-2;
+range_x: [x, -3*%pi/2, 3*%pi/2];
+range_y: [y, -4, 4];
+graph: plot([expr_g, expr_f],
+            range_x,
+            range_y,
+            nolegend,
+            [label, ["f", 3, 2.5], ["g", 4, -1], ["O", 0, 0]],
+            [xtics, false],
+            [ytics, false],
+            [xlabel, "x"],
+            [ylabel, "y"]);
+
+/*MCQ statements*/
+tans1: [    [1, false, "even"                                                        ],
+            [2, false, "odd"                                                         ],
+            [3, true, "neither even nor odd"                                         ]  ];
+
+tans2: [    [1, false, "symmetric with respect to the y-axis"                        ], 
+            [2, false, "symmetric with respect to the x-axis"                        ],
+            [3, false, "symmetric about the origin"                                  ],
+            [4, true, "not symmetric about the origin or with respect to the y-axis" ]  ];
+
+tans3: [    [1, true, "even"                                                         ],
+            [2, false, "odd"                                                         ],
+            [3, false, "neither even nor odd"                                        ]  ];
+
+tans4: [    [1, true, "symmetric with respect to the y-axis"                         ],
+            [2, false, "symmetric with respect to the x-axis"                        ],
+            [3, false, "symmetric about the origin"                                  ],
+            [4, false, "not symmetric about the origin or with respect to the y-axis"]  ];

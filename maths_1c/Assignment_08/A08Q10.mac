@@ -1,0 +1,11 @@
+A: rand(4) + 1;
+B: rand(4) + 1;
+C: rand_with_prohib(-10,10,[0]);
+p: rand([sin(x), cos(x), t, t^2]);
+q: rand([log(x), x^3/3, 1/x]);
+
+diff_eqn: A * 'diff(y,x) + B * p * y = C * q;
+tans1: exp(integrate(B/A * p, x));
+
+/* for feedback */
+gen_form: 'diff(y(x),x) + P(x)*y(x) = Q(x);

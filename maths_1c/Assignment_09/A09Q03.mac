@@ -1,0 +1,48 @@
+/*
+1) proper fraction with two distinct linear factors in denom, linear num
+2) improper fraction with two dist lin factors in denom, cubic num
+3) proper fraction with one distinct and one repeated lin factor in denom, quadratic num
+*/
+
+type: rand([1,2,3]);
+r():= rand_range(1,9,1);
+ints: makelist(i, i, 5);
+
+if type = 1 then block(
+  const: [r(), rand([1,2,3])],
+  factors: [t + const[1], const[2]*t - 1],
+  num: t,
+  nums: [const[1]/(1+const[1]*const[2]), 1/(1+const[1]*const[2])]
+) elseif type = 2 then block(
+  const: append( rand_selection(ints, 2), makelist(r(), 2) ),
+  factors: [t-const[1], t+const[2]],
+  num: t^3-const[3]*t-const[4]
+) else block(
+  const: rand_selection(ints, 2),
+  factors: [t-const[1] , (t-const[2])^2],
+  extra_fac: t-const[2],
+  num: t^2+1
+);
+
+/*general*/
+denom: if type = 2 then expand(product( factors[i], i, 1, length(factors))) else product( factors[i], i, 1, 2);
+arg: num/denom;
+disp_int: 'integrate(arg, t);
+tans1: ev(disp_int, nouns)+C;
+
+/*feedback*/
+if type = 2 then block(
+  new_frac: remainder(num, denom, t)/denom,
+  new_frac_2: factor(new_frac),
+  quot: quotient(num, denom, t),
+  longdiv: quot + new_frac,
+  longdiv_2: quot + new_frac_2,
+  nums: [ coeff(partfrac(arg, t), 1/factors[1]), coeff(partfrac(arg, t), 1/factors[2]) ]
+) elseif type = 3 then block(
+  nums: [ coeff(partfrac(arg, t), 1/factors[1]), coeff(partfrac(arg, t), 1/extra_fac), coeff(partfrac(arg, t), 1/factors[2]) ]
+);
+proper_arg: if type = 2 then new_frac_2 else arg;
+new_arg: if type = 2 then longdiv_2 else partfrac(arg, t);
+final_arg: if type = 2 then quot + nums[1]/factors[1] + nums[2]/factors[2] else new_arg;
+final_int: 'integrate(final_arg, t);
+  

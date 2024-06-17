@@ -1,0 +1,37 @@
+/* Coeff counted from leading coeff in poly */
+coeff_from_lead(p_, var_, from_lead_):= coeff (p_, var_, hipow(p_, var_) - from_lead_);
+/* Term (including x^n) counted from leading coeff in poly */
+term_from_lead(p_, var_, from_lead_):= coeff_from_lead(p_, var_, from_lead_)*x^(hipow(p_, var_) - from_lead_);
+
+
+/*three term polynomial, of order <= 4*/
+r():= rand_range(1, 8, 1);
+poly: apply("+", rand_selection( makelist( r()*x^(k-1), k, 5), 3 ));
+
+/*quadratic divisor with leading coeff factor of poly leading coeff*/
+div: rand( divisors(coeff( poly, x, hipow(poly, x) )) )*x^2 - rand_range(1, 20, 1);
+
+/*division*/
+quot: expand(quotient(poly, div));
+rem: expand(remainder(poly, div));
+tans1: quot;
+tans2: rem;
+
+/*feedback*/
+/*step 1*/
+div_lead: term_from_lead(div, x, 0);
+poly_lead: term_from_lead(poly, x, 0);
+quot_lead: term_from_lead(quot, x, 0);
+reexpress_1: ratsimp(poly - quot_lead*div);
+
+/*step 2*/
+re1_lead: term_from_lead(reexpress_1, x, 0);
+quot_2: term_from_lead(quot, x, 1);
+re2: ratsimp(reexpress_1 - quot_2*div);
+
+/*step 3*/
+re2_lead: term_from_lead(re2, x, 0);
+quot_3: term_from_lead(quot, x, 2);
+re3: ratsimp(re2 - quot_3*div);
+re3_lead: re3;
+quot;

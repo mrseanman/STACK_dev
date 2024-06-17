@@ -1,0 +1,14 @@
+p0: (rand(4)+2) * 10000;
+growth_time: (rand(5) + 5) * 10;
+growth_pc: (rand(10)+5) * 10;
+growth_frac: growth_pc/100;
+
+prediction_time: growth_time + (rand(5) + 5) * 10;
+
+k: log(1 + growth_frac)/growth_time;
+
+/* Population at t = prediction_time */
+tans1: round(p0 * exp(k * prediction_time));
+
+/* Population growth at t = prediction_time */
+tans2: round(k * p0 * exp(k * prediction_time));

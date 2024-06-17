@@ -1,0 +1,9 @@
+init: rand_range(100,200,10);
+water: rand_range(14,19,1);
+const: 0.01;
+temp(t):= water + (init-water)*exp(-const*t);
+
+temp_1: decimalplaces( temp(30), 1);
+temp_2: decimalplaces( temp(60), 1);
+
+tans1: decimalplaces( (temp_1^2-init*temp_2)/(2*temp_1-init-temp_2), 1 );
