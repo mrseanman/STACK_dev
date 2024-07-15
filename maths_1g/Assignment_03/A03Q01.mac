@@ -1,0 +1,24 @@
+/* --- (a) --- */
+owns_j: rand(3) + 5;
+owns_s: rand(3) + 5;
+owns_t: rand(3) + 5;
+
+needs_j: owns_j - rand(2) - 2;
+needs_s: owns_s - rand(2) - 2;
+needs_t: owns_t - rand(2) - 2;
+
+tans1:  binomial(owns_j, needs_j) *
+        binomial(owns_s, needs_s) *
+        binomial(owns_t, needs_t);
+
+
+/* --- (b) --- */
+all_cards: create_list(sconcat(i,j),
+    i, ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"],
+    j, ["♠","♣","♥","♦"]);
+
+n_in_hand: rand(3)+10;
+n_restriction: rand(2) + 3;
+chosen_restriction: rand_selection(all_cards, n_restriction);
+
+tans2: binomial(52 - n_restriction, n_in_hand - n_restriction);

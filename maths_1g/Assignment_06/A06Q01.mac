@@ -1,0 +1,31 @@
+r():= ev(rand(9)+1, simp);
+r2():= ev(rand_range(-9,9,1), simp);
+simp: false;
+A: matrix([r(), 0], [-1, r()]);
+/*type 1: cube of 2x2 matrix; type 2: 2x2 mult 2x3*/
+type: rand([1,2]);
+if type = 1 then block(
+  q: 'A^3,
+  AT: transpose(A),
+  C: zeromatrix(2,2),
+  square_process:
+    for a:1 thru 2 do for b:1 thru 2 do
+      C[ev(a,simp),ev(b,simp)]:
+        apply("+",zip_with("*",A[ev(a,simp)],AT[ev(b,simp)])),
+  square: ev(C, simp),
+  D: zeromatrix(2,2),
+  cube_process:
+    for a:1 thru 2 do for b:1 thru 2 do
+      D[ev(a,simp),ev(b,simp)]:
+        apply("+",zip_with("*",square[ev(a,simp)],AT[ev(b,simp)]))
+) elseif type = 2 then block(
+  q: 'A . 'B,
+  B: matrix([r2(), r2(), r2()], [r2(), r2(), r2()]),
+  BT: transpose(B),
+  C: zeromatrix(2,3),
+  mult_process:
+    for a:1 thru 2 do for b:1 thru 3 do
+      C[ev(a,simp),ev(b,simp)]:
+        apply("+",zip_with("*",A[ev(a,simp)],BT[ev(b,simp)]))
+);
+tans1: ev(q, simp, nouns);

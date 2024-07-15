@@ -1,0 +1,21 @@
+texput(AB, "{\\overrightarrow{\\rm AB}}");
+texput(AC, "{\\overrightarrow{\\rm AC}}");
+texput(OA, "{\\overrightarrow{\\rm OA}}");
+texput(OB, "{\\overrightarrow{\\rm OB}}");
+texput(a, "{\\mathbf{a}}");
+texput(b, "{\\mathbf{b}}");
+texput(c, "{\\mathbf{c}}");
+texput(u, "{\\mathbf{u}}");
+
+r():= rand(10);
+r2():= rand([-3, -2, -1, 1, 2, 3]);
+A_vec: [ r(), r(), r() ];
+A: ntupleify(A_vec);
+line_vec: [ r2(), r2(), r2() ];
+lv: ntupleify(line_vec);
+B_vec: A_vec + line_vec; 
+B: ntupleify(B_vec);
+tans1: ntupleify(A_vec + 2 * line_vec);
+
+/* see https://math.stackexchange.com/questions/405966/if-i-have-three-points-is-there-an-easy-way-to-tell-if-they-are-collinear */
+three_points_colinear(A,B,C):= is((B[2] - A[2]) * (C[1] - B[1]) = (C[2] - B[2]) * (B[1] - A[1]));

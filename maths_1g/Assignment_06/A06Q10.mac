@@ -1,0 +1,21 @@
+texput(x, "\\mathbf{x}");
+texput(y, "\\mathbf{y}");
+
+/* a^2 + b^2 + c^2 = d^2 for some d */
+sq_sum_triples: [
+    [1, 2, 2],
+    [2, 3, 6],
+    [2, 6, 9],
+    [4, 4, 7],
+    [1, 4, 8]
+];
+
+triple: makelist(
+  rand([-1,1]) * x, x, rand(sq_sum_triples)
+  ) * (rand_with_step(1,4,1))^2;
+
+vec_norm(x_):= sqrt(x_.x_);
+
+x_vec: transpose(matrix(triple));
+tans1: ntupleify(triple/vec_norm(triple));
+disp_ans: transpose(matrix(args(tans1)));

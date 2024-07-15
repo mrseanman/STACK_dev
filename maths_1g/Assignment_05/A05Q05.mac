@@ -1,0 +1,28 @@
+/*  Matrix multiplication that always returns a matrix and only works on matrices */
+/*  Normal Maxima behaviour is to evaluate [1].[2] = 2 ... not [1].[2]=[2] as we would expect.*/
+safe_matrix_mult(A,B) :=
+    block(
+        [ncolsA,nrowsB],
+        ncolsA: length(transpose(A)),
+        nrowsB: length(B),
+        if (not(matrixp(A)) or not(matrixp(B))) then
+            return(false)
+        elseif (not(is(ncolsA=nrowsB))) then
+            return(false)
+        else
+            block(
+                [mult],
+                mult:A.B,
+                if (matrixp(mult)) then
+                    return(mult)
+                else    
+                    return(matrix([mult]))
+            )
+    );
+
+r():= rand_with_prohib(-8, 8, [0]);
+
+A: matrix([r(), r()]);
+B: matrix([r()], [r()]);
+
+tans1: safe_matrix_mult(A, B);

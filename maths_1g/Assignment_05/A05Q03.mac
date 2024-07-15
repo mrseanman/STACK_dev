@@ -1,0 +1,258 @@
+/* ------ PRE-WRITTEN FUNCTIONS ------------------------------------------------ */
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+
+/* Takes in a row operation and returns an elementary transformation    */
+/* matrix for that row operation. i.e. it applies that row operation to */
+/* the identity matrix and returns the result.                          */
+/* To apply this to a matrix (do the row operations to it), just matrix */
+/* multiply the result from this function on the left. E.g.             */
+/* row_lin(R[2], R[2] + R[3]) . M                                       */
+/* For a linear transformation of rows, pass row_lin(R[i], eqn) where:  */
+/*  - i is the row getting transformed                                  */
+/*  - eqn is an equation in rows for what row_i should become where     */
+/*          R[k] represents the kth row                                 */
+/* e.g. row_lin(R[2], R[2] + 4*R[3]) represents R[2] -> R[2] + 4*R[3]   */
+/* For a row swap (also technically linear), pass row_swap(R[i]. R[j])  */
+/* this will swap rows i and j                                          */
+row_op_to_emat(row_op_):= block(
+    [matrix_size_, I_, op_type_, swap_list_, row_to_operate_, transformation_,
+        original_row_, symbol_to_row_relations_, new_row_],
+    matrix_size_: 3,
+    I_: ident(matrix_size_),
+    op_type_: type_of_operation(row_op_),
+    if op_type_ = "swap" then block(
+        swap_list_: get_row_list_from_swap_op(row_op_),
+        return(
+            apply(
+                matrix,
+                makelist(I_[swap_func(swap_list_, i_)], i_, matrix_size_)))
+    ) elseif op_type_ = "linear" then block(        
+        row_to_operate_: get_operate_row_from_row_op(row_op_),
+        transformation_: get_transformation_from_lin_row_op(row_op_),
+        original_row_: I_[row_to_operate_],
+        symbol_to_row_relations_: makelist(R[i_]=I_[i_], i_, matrix_size_),
+        /* listify just for safety */
+        new_row_: listify(psubst(symbol_to_row_relations_, transformation_)),
+        return(
+            apply(
+                matrix,
+                makelist(if i_=row_to_operate_ then new_row_ else I_[i_], i_, matrix_size_)))
+    ) else return("error")
+);  
+
+get_operate_row_from_row_op(row_op_):= first(args(first(args(row_op_))));
+get_transformation_from_lin_row_op(row_op_):= second(args(row_op_));
+get_row_list_from_swap_op(row_op_):= map(lambda([x_], first(args(x_))), args(row_op_));
+
+
+type_of_operation(row_op_):= 
+    if op(row_op_) = row_swap then
+        "swap"
+    elseif op(row_op_) = row_lin then
+        "linear"
+    else
+        "error";
+
+swap_func(swap_list_, x_):= 
+    if x_ = swap_list_[1] then
+        swap_list_[2]
+    elseif x_ = swap_list_[2] then
+        swap_list_[1]
+    else
+        x_;
+
+tex_row_lin(row_op_) := block(
+    [action_row_, row_transformation_],
+    [action_row_, row_transformation_]: args(row_op_),
+    sconcat(tex1(action_row_), "\\, \\rightarrow\\, ", tex1(row_transformation_))
+);
+
+tex_row_swap(row_op_) := block(
+    [rows_],
+    rows_: get_row_list_from_swap_op(row_op_),
+    sconcat("R_", tex1(rows_[1]), "\\, \\leftrightarrow \\,", "R_", tex1(rows_[2]))
+);
+
+texput(row_lin, tex_row_lin);
+texput(row_swap, tex_row_swap);
+
+/* Takes in a sequence of row operations and an initial matrix and              */
+/* spits out a sequence of matrices resulting from sequential application       */
+/* of the row operations                                                        */
+/* At each step M_ is substituted for cur_mat_ (M_ is shorthand for cur_mat_)   */
+/* The row operations with the relevant substitutions will also be returned     */
+make_matrix_seq(initial_matrix_, row_ops_):= block(
+    [cur_mat_, cur_seq_mats_, row_op_, row_op_updated_, cur_seq_row_ops_],
+    cur_mat_: initial_matrix_,
+    cur_seq_mats_: [initial_matrix_],
+    cur_seq_row_ops_: [],
+    for row_op_ in row_ops_ do block(
+        row_op_updated_: ev(row_op_, M_ = cur_mat_),
+        cur_seq_row_ops_: append(cur_seq_row_ops_, [row_op_updated_]),
+        cur_mat_: row_op_to_emat(row_op_updated_) . cur_mat_,
+        cur_seq_mats_: append(cur_seq_mats_, [cur_mat_])
+    ),
+    [ cur_seq_mats_, cur_seq_row_ops_ ]
+);
+
+
+/* ------- tex forming --------- */
+make_system_from_aug_matrix(m_, vars_):= block(
+    [yo_],
+    out_: "\\begin{array}{@{}}",
+    for cur_mat_row_ in m_ do block(
+        cur_line_: "",
+        for coeff_index_:1 thru length(cur_mat_row_) do block(
+            coeff_: cur_mat_row_[coeff_index_],
+            var_: re_index(coeff_index_, vars_),
+            component_:
+                if coeff_index_ = 1 then
+                    sconcat(
+                        if coeff_ = 0 then
+                            sconcat("0\\,", tex1(var_))
+                        else
+                            tex1(coeff_* var_)                        
+                    )
+                elseif coeff_index_ = length(cur_mat_row_)  then
+                    sconcat(
+                        " &= &",
+                        tex1(coeff_)
+                    )
+                else  
+                    if numberp(coeff_) then
+                        sconcat(
+                            if coeff_ >= 0 then " &+ &" else " &- &",
+                            if coeff_ = 0 then
+                                sconcat("0\\,", tex1(var_))
+                            else
+                                tex1(abs(coeff_)* var_)
+                        )
+                    else
+                        sconcat(
+                            " &+ &",
+                            tex1(coeff_ * var_)
+                        ),
+            cur_line_: sconcat(cur_line_, component_)
+        ),
+        cur_line_: sconcat(cur_line_, " \\\\ "),
+        out_: sconcat(out_, cur_line_)
+    ),
+    sconcat(
+        substring(out_, 1, slength(out_) - 2),
+        "\\end{array}"
+    )
+);
+
+/* recycle indexing */
+re_index(i_, list_):= block(
+    l_: length(list_),
+    i_r_: mod(i_ - 1, l_),
+    list_[i_r_ + 1]
+);
+
+/* use inert function system_array(mat_aug_, vars_) */
+/* to tex a system from a matrix                    */
+texput(aug_mat_to_system_array_texify, lambda([x], make_system_from_aug_matrix(
+    first(args(x)), second(args(x)))));
+
+/* use inert function system_array_(mat, rhs, vars_) */
+/* to tex a system from a matrix                    */
+texput(mat_to_system_array_texify, lambda([x], make_system_from_aug_matrix(
+                                    addcol(
+                                        first(args(x)),
+                                        second(args(x))),
+                                    third(args(x))
+                                )
+                            )
+    );
+
+
+/* disects the auto generated tex to put a vertical bar before last column */
+texput(aug_mat_texify, lambda([x],
+        block(
+            [mat_tex_, array_fmt_end_],
+            mat_tex_: tex1(first(args(x))),
+            array_fmt_end_: ssearch("c}", mat_tex_),
+            sinsert("|", mat_tex_, array_fmt_end_)
+        )
+    )
+);
+
+
+/* matrix operation sequence is of form [seq_row_ops, seq_matrices]. */
+/* This texifies a downward sequence of matrices resulting from a the sequence */
+/* of row operations, with row ops denoted as well */
+texput(mat_op_seq_texify, lambda([x],
+        block(
+            mats_: args(x)[1][1],
+            ops_: args(x)[1][2],
+            out_: tex1(mats_[1]),
+            for i_: 1 thru length(ops_) do
+                out_: sconcat(out_,
+                    " \\newline \\qquad {\\Large \\downarrow} \\quad {\\scriptstyle ",
+                    tex1(ops_[i_]),
+                    " }",
+                    "\\newline",
+                    tex1(mats_[i_ + 1])
+                    ),
+            out_
+        )
+    )
+);
+
+texput(aug_mat_op_seq_texify, lambda([x],
+        block(
+            mats_: args(x)[1][1],
+            ops_: args(x)[1][2],
+            out_: tex1(aug_mat_texify(mats_[1])),
+            for i_: 1 thru length(ops_) do
+                out_: sconcat(out_,
+                    " \\newline \\qquad {\\Large \\downarrow} \\quad {\\scriptstyle ",
+                    tex1(ops_[i_]),
+                    " } ",
+                    "\\newline",
+                    tex1(aug_mat_texify(mats_[i_ + 1]))
+                    ),
+            out_
+        )
+    )
+);
+
+
+
+/* ------ QUESTION ------------------------------------------------------------- */
+r():= rand_with_prohib(-7, 7, [0]);
+v3():= [ r(), r(), r() ];
+vecs: [ v3(), v3() ];
+while not(linearly_independent(vecs)) do
+	vecs: [ v3(), v3() ];
+
+root_1: r();
+root_2: rand_with_prohib(-7, 7, [0, root_1]);
+poly: expand((k - root_1) * (k - root_2));
+
+coeff_b: coeff(poly, k, 1);
+coeff_c: coeff(poly, k, 0);
+
+m: matrix(  vecs[1],
+            vecs[2],
+            -coeff_c * vecs[1] - coeff_b * vecs[2]);
+
+vars: [x, y, z];
+lhs_vec: m . vars;
+rhs_vec: [ 1, k, k^2 ];
+m_aug: addcol(m, rhs_vec);
+
+/* when does system have unique solution */
+tans1: DNE;
+
+/* when does system have infinitely many solutions */
+tans2: {root_1, root_2};
+
+/* ------ FEEDBACK ------------------------------------------------------------- */
+row_op_1: row_lin(R[3], R[3] + coeff_c * R[1]);
+row_op_2: row_lin(R[3], R[3] + coeff_b * R[2]);
+
+[mat_seq, row_ops]: make_matrix_seq(m_aug, [row_op_1, row_op_2]);
+
+mat_op_seq_disp: aug_mat_op_seq_texify([mat_seq, row_ops]);

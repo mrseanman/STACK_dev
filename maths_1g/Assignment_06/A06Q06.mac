@@ -1,0 +1,36 @@
+r_pm():= rand([-1, 1]);
+
+order_by_abs(a,b):= abs(a) <= abs(b);
+three_points_in_abs_order():= sort(rand_selection(makelist(r_pm() * i, i, 1, 13), 3), order_by_abs);
+
+xs: three_points_in_abs_order();
+ys: three_points_in_abs_order();
+zs: three_points_in_abs_order();
+
+closest_to_yz: [xs[1], ys[2], zs[2]];
+closest_to_xz: [xs[2], ys[1], zs[3]];
+closest_to_xy: [xs[3], ys[3], zs[1]];
+
+[A, B, C]: random_permutation([closest_to_yz, closest_to_xz, closest_to_xy]);
+
+MCQ1: [
+  ["A", is(A = closest_to_yz)],
+  ["B", is(B = closest_to_yz)],
+  ["C", is(C = closest_to_yz)]
+];
+
+MCQ2: [
+  ["A", is(A = closest_to_xz)],
+  ["B", is(B = closest_to_xz)],
+  ["C", is(C = closest_to_xz)]
+];
+
+MCQ3: [
+  ["A", is(A = closest_to_xy)],
+  ["B", is(B = closest_to_xy)],
+  ["C", is(C = closest_to_xy)]
+];
+
+tans1: first(mcq_correct(MCQ1));
+tans2: first(mcq_correct(MCQ2));
+tans3: first(mcq_correct(MCQ3));

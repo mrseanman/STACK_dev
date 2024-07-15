@@ -1,0 +1,32 @@
+r():= rand(10);
+simp: false;
+/*formula*/
+eg: matrix([a,b], [c,d]);
+det_eg: ev(determinant(eg), simp);
+inv_eg: 1/(det_eg)*ev(det_eg*invert(eg),simp);
+
+
+/*question*/
+/* 1 is random matrix, 2 is definitely singular matrix */
+type: rand([1,1,2]);
+if type = 1 then
+  m: matrix([r(), r()], [r(), r()])
+else block(
+  a: r(),
+  d: r(),
+  b: -d,
+  c: -a,
+  m: matrix([ev(a, simp),ev(b, simp)],[ev(c, simp),ev(d, simp)])
+);
+
+det_unsimp: determinant(m);
+det: ev(det_unsimp, simp);
+if det = 0 then block(
+  check_det: false,
+  tans1: matrix([DNE, DNE], [DNE, DNE])
+  ) 
+else block(
+  check_det: true,
+  comp_step: 1/(det)*ev(det*invert(m),simp),
+  tans1: ev(invert(m), simp)
+);

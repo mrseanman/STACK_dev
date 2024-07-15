@@ -1,0 +1,63 @@
+/* I thought of doing a basic interface for students to freely input    */
+/* their own row operations but eventually decided against it.          */
+/* So, a lot of the following is a bit over-cooked.                     */
+
+/* Takes in a row operation and returns an elementary transformation    */
+/* matrix for that row operation. i.e. it applies that row operation to */
+/* the identity matrix and returns the result.                          */
+/* row_op_ takes the form [n, eqn] where:                               */
+/*  - n is the row getting transformed                                  */
+/*  - eqn is an equation in rows for what row_n should become where     */
+/*      + R[k] represents the kth row                                   */
+/* e.g. [2, R[2] + 4*R[3]] represents R[2] -> R[2] + 4*R[3]             */
+/* The inert function swap() is the row_op for swapping rows.           */
+/* E.g. swap(R[1], R[2])                                                */
+row_op_to_emat(row_op_) := block(
+    /* just working with 3x3 matrices for now */
+    matrix_size_: 3,
+    I_: ident(matrix_size_),
+    if is_swap_op(row_op_) then block(
+        swap_list_: get_row_list_from_swap(row_op_),
+        return_val_:
+            apply(matrix,
+                makelist(I_[swap_func(swap_list_, i_)], i_, matrix_size_))
+    ) else block(        
+        row_to_operate_: row_op_[1],
+        transformation_: row_op_[2],
+        original_row_: I_[row_to_operate_],
+        symbol_to_row_relations_: makelist(R[i_]=I_[i_], i_, matrix_size_),
+        /* listify just for safety */
+        new_row_: listify(psubst(symbol_to_row_relations_, transformation_)),
+        return_val_: apply(matrix,
+            makelist(if i_=row_to_operate_ then new_row_ else I_[i_], i_, matrix_size_))
+    ),
+    return_val_
+);  
+
+is_swap_op(x_):=
+    if atom(x_) then
+        false
+    elseif op(x_) = swap then
+        true
+    else
+        false;
+
+
+swap_func(swap_list_, x_):= 
+    if x_ = swap_list_[1] then
+        swap_list_[2]
+    elseif x_ = swap_list_[2] then
+        swap_list_[1]
+    else
+        x_;
+
+get_row_list_from_swap(swap_):= map(lambda([x_], first(args(x_))), args(swap_));
+
+/* ------ Question ------ */
+
+m: rand(zeromatrix(3,3) + 10);
+coeff: rand_with_prohib(0, 15, [0, 2, -2])/2;
+sel_rows: rand_selection([1,2,3], 2);
+row_op: R[sel_rows[1]] + coeff * R[sel_rows[2]];
+
+tans1: row_op_to_emat([sel_rows[1], row_op]) . m;

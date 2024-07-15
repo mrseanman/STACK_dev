@@ -1,0 +1,15 @@
+r():= rand(10) + 1;
+not_echelon: matrix([r(), r(), 0], [0, 0, r()], [r(), 0, 0]);
+reduced_echelon: rref(matrix([1, r(), 0], [0, 0, 1], [0 ,0, 0]));
+
+MCQ1: [
+    ["It is not in echelon form."                         , true ],
+    ["It is in echelon form but not reduced echelon form.", false],
+    ["It is in reduced echelon form."                     , false]
+]
+
+MCQ2: [
+    ["It is not in echelon form."                         , false],
+    ["It is in echelon form but not reduced echelon form.", false],
+    ["It is in reduced echelon form."                     , true ]
+]

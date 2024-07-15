@@ -1,0 +1,7 @@
+m_i: rand(3) + 3;
+m_j: rand_with_prohib(m_i - 1, m_i + 3, [m_i]); 
+
+m: rand(zeromatrix(m_i, m_j) + 5);
+
+tans1: m_i;
+tans2: m_j;

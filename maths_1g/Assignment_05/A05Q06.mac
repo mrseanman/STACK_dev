@@ -1,0 +1,93 @@
+/* ------ PRE-WRITTEN FUNCTIONS ------------------------------------------------ */
+make_system_from_aug_matrix(m_, vars_):= block(
+    [yo_],
+    out_: "\\begin{array}{@{}}",
+    for cur_mat_row_ in m_ do block(
+        cur_line_: "",
+        for coeff_index_:1 thru length(cur_mat_row_) do block(
+            coeff_: cur_mat_row_[coeff_index_],
+            var_: re_index(coeff_index_, vars_),
+            component_:
+                if coeff_index_ = 1 then
+                    sconcat(
+                        if coeff_ = 0 or coeff_ = 1 or coeff_ = -1 then
+                            sconcat(tex1(coeff_), "\\,", tex1(var_))
+                        else
+                            tex1(coeff_* var_)                        
+                    )
+                elseif coeff_index_ = length(cur_mat_row_)  then
+                    sconcat(
+                        " &= &",
+                        tex1(coeff_)
+                    )
+                else  
+                    if numberp(coeff_) then
+                        sconcat(
+                            if coeff_ >= 0 then " &+ &" else " &- &",
+                            if coeff_ = 0 or coeff_ = 1 or coeff_ = -1 then
+                                sconcat(tex1(abs(coeff_)), "\\,", tex1(var_))
+                            else
+                                tex1(abs(coeff_)* var_)
+                        )
+                    else
+                        sconcat(
+                            " &+ &",
+                            tex1(coeff_ * var_)
+                        ),
+            cur_line_: sconcat(cur_line_, component_)
+        ),
+        cur_line_: sconcat(cur_line_, " \\\\ "),
+        out_: sconcat(out_, cur_line_)
+    ),
+    sconcat(
+        substring(out_, 1, slength(out_) - 2),
+        "\\end{array}"
+    )
+);
+
+/* recycle indexing */
+re_index(i_, list_):= block(
+    l_: length(list_),
+    i_r_: mod(i_ - 1, l_),
+    list_[i_r_ + 1]
+);
+
+/* use inert function system_array(mat_aug_, vars_) */
+/* to tex a system from a matrix                    */
+texput(aug_mat_to_system_array_texify, lambda([x], make_system_from_aug_matrix(
+    first(args(x)), second(args(x)))));
+
+texput(mat_to_system_array_texify, lambda([x], make_system_from_aug_matrix(
+                                    addcol(
+                                        first(args(x)),
+                                        second(args(x))),
+                                    third(args(x))
+                                )
+                            )
+    );
+/* ------ QUESTION ------------------------------------------------ */
+
+r():= rand_with_prohib(-5,5,[0]);
+r_01():= random_permutation([1,1,0]);
+r_3():= [r(), r(), r()];
+
+vars: [x_1, x_2, x_3];
+
+m: matrix(
+    r_01() * r_3(),
+    r_01() * r_3(),
+    r_01() * r_3()
+);
+
+eqns_lhs: m . vars;
+eqns_rhs: r_3();
+
+eqns_rhs_disp: transpose(matrix(eqns_rhs));
+eqns_vars_disp: transpose(matrix(vars));
+
+tans1: m;
+tans2: eqns_rhs_disp;
+
+
+/* ------ FEEDBACK ------------------------------------------------ */
+system_with_all_zeros_disp: mat_to_system_array_texify(m, eqns_rhs, vars)

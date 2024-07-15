@@ -1,0 +1,11 @@
+A_: rand(zeromatrix(2, 2) + 5);
+B_: rand(zeromatrix(2, 2) + 5);
+coeff_1: rand(4) + 2;
+
+C_: rand(zeromatrix(2, 3) + 5);
+D_: rand(zeromatrix(3, 2) + 5);
+coeff_2: rand_with_prohib(-10, 10, [0, 1]);
+
+tans1: A_ + coeff_1 * B_;
+
+tans2: matrix([NA, NA], [NA, NA]);

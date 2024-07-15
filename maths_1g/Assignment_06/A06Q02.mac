@@ -1,0 +1,16 @@
+M: matrix([a, b], [c, d]);
+A: matrix([1, -1], [-1, 1]);
+tans1: [
+  [0, false, "a = b"              ],
+  [1, false, "a = c"              ],
+  [2, true , "a = d"              ],
+  [3, true , "b = c"              ],
+  [4, false, "b = d"              ],
+  [5, false, "None of the above." ]
+];
+matrix1: A . M;
+matrix2: M . A;
+eqn1: matrix1[1][1] = matrix2[1][1];
+eqn2: matrix1[1][2] = matrix2[1][2];
+eqn3: matrix1[2][1] = matrix2[2][1];
+eqn4: matrix1[2][2] = matrix2[2][2];

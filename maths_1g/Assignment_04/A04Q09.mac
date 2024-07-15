@@ -1,0 +1,42 @@
+/* [w]oodwind/[b]rass/[s]tring_[h]igh/[l]ow */
+w_h: 5;
+w_l: 4;
+b_h: 4;
+b_l: 4;
+s_h: 3;
+s_l: 3;
+
+w: w_h + w_l;
+b: b_h + b_l;
+s: s_h + s_l;
+
+h: w_h + b_h + s_h; 
+l: w_l + b_l + s_l;
+
+t: h + l;
+
+/* number of different ensembles containing...*/
+
+/* n11 high woodwind & n12 low*/
+n11: rand_with_step(2, w_h - 1, 1);
+n12: rand_with_step(2, l - 1, 1);
+tans1: binomial(w_h, n11) * binomial(l, n12);
+
+/* only brass and woodwind with n21 total players*/
+n21: w + b - rand_with_step(3, 5, 1);
+tans2: binomial(b+w, n21);
+
+/* n31 players, either:
+    all string
+    string with 2 low brass */
+n31: s - rand([1,2]);
+tans3:
+    /* all string */
+    binomial(s, n31) +
+    /* string + 2 low brass */
+    binomial(s, n31 - 2) * binomial(b_l, 2)
+
+/* n41 players, no high string */
+n41: t - s_h - rand_with_step(3,6,1);
+tans4: binomial(t - s_h, n41);
+

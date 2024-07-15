@@ -1,0 +1,7 @@
+A_: rand(zeromatrix(2, 2) + 5);
+B_: rand(zeromatrix(2, 2) + 5);
+coeff_1: rand(4) + 2;
+coeff_2: rand_with_prohib(-10, 10, [0, 1]);
+
+eqn: coeff_1 * X + coeff_2 * A = B;
+tans1: 1/coeff_1 * (B_ - coeff_2 * A_);

@@ -1,0 +1,13 @@
+/* --- (a) --- */
+n_cables: rand(5) + 5;
+n_sockets: n_cables + rand(4) + 2;
+
+tans1: binomial(n_sockets, n_cables) * n_cables!;
+
+/* --- (b) --- */
+n_racers: rand(30) + 20;
+tans2: binomial(n_racers, 3) * 3!;
+
+/* --- (c) --- */
+id_length: rand(3) + 4;
+tans3: 9 * binomial(9, id_length - 1) * (id_length-1)!;

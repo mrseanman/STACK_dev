@@ -1,0 +1,14 @@
+consts: rand_selection([1,2,3,4,5,6], 2);
+denom: consts[1]*consts[2];
+x_sub: consts[1]*a;
+y_sub: consts[2]*b;
+n: rand([3,4,5]);
+gen: expand((x+y)^n);
+simp: false;
+expr1: (x_sub+y_sub)^n;
+no_simp: subst( [x = x_sub, y = y_sub], gen );
+expr2: (x_sub^n+y_sub^n);
+expr: (expr1 - expr2)/denom;
+simp1: ev(expand(expr1), simp);
+simp2: ev(expr2, simp);
+tans1: ev(expand(expr), simp);

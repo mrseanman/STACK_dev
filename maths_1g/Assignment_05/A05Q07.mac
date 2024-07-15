@@ -1,0 +1,10 @@
+r():= rand([1,2,3,4,5]);
+n: rand([3,4,5]);
+x_sub: r()*a;
+y_sub: -r()*b;
+gen: expand((x+y)^n);
+simp: false;
+expr: (x_sub+y_sub)^n;
+no_simp: subst( [x = x_sub, y = y_sub], gen );
+tans1: ev(expand(expr),simp);
+

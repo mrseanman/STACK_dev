@@ -1,0 +1,133 @@
+/*1 has no sol, 2 has unique sol, 3 has inf sols*/
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+lmxchar: "";
+r():= rand_range(-9, 9, 1);
+vec(k):= makelist(r(), k);
+poss_vals: makelist([i], i, -9, 9);
+
+sols: [
+    "no solutions",
+    "a unique solution",
+    "infinitely many solutions"
+    ];
+reason: [
+    "is inconsistent.",
+    "has no free variables when written in row echelon form.",
+    "has one or more free variables when written in row echelon form."
+    ];
+
+type: rand([1,2,3]);
+if type = 1 then block (
+  j: rand([3,4,5]),
+  indep_rows: [vec(j), vec(j)],
+  while not(linearly_independent(indep_rows)) do 
+    indep_rows: [vec(j), vec(j)],
+  rows: append(indep_rows, [indep_rows[2]*2]),
+  aug_vals: append(rand_selection( delete([0], poss_vals), 2 ), [[0]]),
+  tans1: [ [1, true, sols[1]], [2, false, sols[2]], [3, false, sols[3]] ],
+  tans2: [ [1, true, reason[1]], [2, false, reason[2]], [3, false, reason[3]] ]
+) elseif type = 2 then block (
+  j: 3,
+  rows: [vec(3), vec(3), vec(3)],
+  while not(linearly_independent(rows)) do 
+    rows: [vec(3), vec(3), vec(3)],
+  aug_vals: rand_selection( poss_vals, 3 ),
+  tans1: [ [1, false, sols[1]], [2, true, sols[2]], [3, false, sols[3]] ],
+  tans2: [ [1, false, reason[1]], [2, true, reason[2]], [3, false, reason[3]] ]
+) else block (
+  j: rand([3,4,5]),
+  indep_rows: [vec(j), vec(j)],
+  while not(linearly_independent(indep_rows)) do 
+    indep_rows: [vec(j), vec(j)],
+  rows: append(indep_rows, [indep_rows[1]+indep_rows[2]]),
+  two_vals: rand_selection( poss_vals, 2 ),
+  aug_vals: append(two_vals, [two_vals[1]+two_vals[2]]),
+  tans1: [ [1, false, sols[1]], [2, false, sols[2]], [3, true, sols[3]] ],
+  tans2: [ [1, false, reason[1]], [2, false, reason[2]], [3, true, reason[3]] ]
+);
+
+m: apply(matrix, rows);
+aug_col: apply(matrix, aug_vals);
+
+/*for feedback*/
+
+ordergreat(x_1, x_2, x_3, x_4, x_5);
+
+xtot: [[x_1],[x_2],[x_3],[x_4],[x_5]];
+xvec: apply( matrix, firstn(xtot, j) );
+row1: row(m,1) . xvec;
+row2: row(m,2) . xvec;
+row3: row(m,3) . xvec;
+val1: row(aug_col,1);
+val2: row(aug_col,2);
+val3: row(aug_col,3);
+
+/* ------- tex forming --------- */
+make_system_from_aug_matrix(m_, vars_):= block(
+    [yo_],
+    out_: "\\begin{array}{@{}}",
+    for cur_mat_row_ in m_ do block(
+        cur_line_: "",
+        for coeff_index_:1 thru length(cur_mat_row_) do block(
+            coeff_: cur_mat_row_[coeff_index_],
+            var_: re_index(coeff_index_, vars_),
+            component_:
+                if coeff_index_ = 1 then
+                    sconcat(
+                        if coeff_ = 0 then
+                            sconcat("0\\,", tex1(var_))
+                        else
+                            tex1(coeff_* var_)                        
+                    )
+                elseif coeff_index_ = length(cur_mat_row_)  then
+                    sconcat(
+                        " &= &",
+                        tex1(coeff_)
+                    )
+                else  
+                    if numberp(coeff_) then
+                        sconcat(
+                            if coeff_ >= 0 then " &+ &" else " &- &",
+                            if coeff_ = 0 then
+                                sconcat("0\\,", tex1(var_))
+                            else
+                                tex1(abs(coeff_)* var_)
+                        )
+                    else
+                        sconcat(
+                            " &+ &",
+                            tex1(coeff_ * var_)
+                        ),
+            cur_line_: sconcat(cur_line_, component_)
+        ),
+        cur_line_: sconcat(cur_line_, " \\\\ "),
+        out_: sconcat(out_, cur_line_)
+    ),
+    sconcat(
+        substring(out_, 1, slength(out_) - 2),
+        "\\end{array}"
+    )
+);
+
+/* recycle indexing */
+re_index(i_, list_):= block(
+    l_: length(list_),
+    i_r_: mod(i_ - 1, l_),
+    list_[i_r_ + 1]
+);
+
+/* use inert function system_array(mat_aug_, vars_) */
+/* to tex a system from a matrix                    */
+texput(system_array_aug, lambda([x], make_system_from_aug_matrix(
+    first(args(x)), second(args(x)))));
+
+/* use inert function system_array_(mat, rhs, vars_) */
+/* to tex a system from a matrix                    */
+texput(system_array, lambda([x], make_system_from_aug_matrix(
+                                    addcol(
+                                        first(args(x)),
+                                        second(args(x))),
+                                    third(args(x))
+                                )
+                            )
+    );

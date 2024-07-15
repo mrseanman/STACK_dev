@@ -1,0 +1,97 @@
+/* I thought of doing a basic interface for students to freely input    */
+/* their own row operations but eventually decided against it.          */
+/* So, a lot of the following is a bit over-cooked.                     */
+
+/* Takes in a row operation and returns an elementary transformation    */
+/* matrix for that row operation. i.e. it applies that row operation to */
+/* the identity matrix and returns the result.                          */
+/* row_op_ takes the form [n, eqn] where:                               */
+/*  - n is the row getting transformed                                  */
+/*  - eqn is an equation in rows for what row_n should become where     */
+/*      + R[k] represents the kth row                                   */
+/* e.g. [2, R[2] + 4*R[3]] represents R[2] -> R[2] + 4*R[3]             */
+row_op_to_emat(row_op_) := block(
+    /* just working with 3x3 matrices for now */
+    matrix_size_: 3,
+    I_: ident(matrix_size_),
+    if is_swap_op(row_op_) then block(
+        swap_list_: get_row_list_from_swap(row_op_),
+        return_val_:
+            apply(matrix,
+                makelist(I_[swap_func(swap_list_, i_)], i_, matrix_size_))
+    ) else block(        
+        row_to_operate_: row_op_[1],
+        transformation_: row_op_[2],
+        original_row_: I_[row_to_operate_],
+        symbol_to_row_relations_: makelist(R[i_]=I_[i_], i_, matrix_size_),
+        /* listify just for safety */
+        new_row_: listify(psubst(symbol_to_row_relations_, transformation_)),
+        return_val_: apply(matrix,
+            makelist(if i_=row_to_operate_ then new_row_ else I_[i_], i_, matrix_size_))
+    ),
+    return_val_
+);  
+
+is_swap_op(x_):=
+    if atom(x_) then
+        false
+    elseif op(x_) = swap then
+        true
+    else
+        false;
+
+
+swap_func(swap_list_, x_):= 
+    if x_ = swap_list_[1] then
+        swap_list_[2]
+    elseif x_ = swap_list_[2] then
+        swap_list_[1]
+    else
+        x_;
+
+get_row_list_from_swap(swap_):= map(lambda([x_], first(args(x_))), args(swap_));
+
+
+/* ----- Question ----- */
+m0: rand(zeromatrix(3,3) + 10);
+swp_row_nums: sort(rand_selection([1,2,3],2));
+swp_rows: [R[swp_row_nums[1]], R[swp_row_nums[2]]] ;
+
+/* R1 -> R1 - R2 */
+tans1: -1;
+/* R2 -> R2 + R1 */
+tans2: 1;
+/* R1 -> R1 - R2 */
+tans3: -1;
+/* R1 -> -R1     */
+tans4: -1;
+
+/* for prt checking */
+check_ans: row_op_to_emat(swap(swp_rows[1], swp_rows[2]));
+
+/* ----- General Feedback ----- */
+t_row_op_1: [swp_row_nums[1], R[swp_row_nums[1]] + tans1 * R[swp_row_nums[2]]];
+t_row_op_2: [swp_row_nums[2], R[swp_row_nums[2]] + tans2 * R[swp_row_nums[1]]];
+t_row_op_3: [swp_row_nums[1], R[swp_row_nums[1]] + tans3 * R[swp_row_nums[2]]];
+t_row_op_4: [swp_row_nums[1], tans4 * R[swp_row_nums[1]]                     ];
+
+I3: ident(3);
+t_after_step_1: row_op_to_emat(t_row_op_1) . I3;
+t_after_step_2: row_op_to_emat(t_row_op_2) . t_after_step_1;
+t_after_step_3: row_op_to_emat(t_row_op_3) . t_after_step_2;
+t_after_step_4: row_op_to_emat(t_row_op_4) . t_after_step_3;
+
+
+/* ----- PRT ----- */
+/* for prt feedback  */
+s_row_op_1: [swp_row_nums[1], R[swp_row_nums[1]] + ans1 * R[swp_row_nums[2]]];
+s_row_op_2: [swp_row_nums[2], R[swp_row_nums[2]] + ans2 * R[swp_row_nums[1]]];
+s_row_op_3: [swp_row_nums[1], R[swp_row_nums[1]] + ans1 * R[swp_row_nums[2]]];
+s_row_op_4: [swp_row_nums[1], ans4 * R[swp_row_nums[1]]                     ];
+
+s_after_step_1: row_op_to_emat(s_row_op_1) . I3;
+s_after_step_2: row_op_to_emat(s_row_op_2) . s_after_step_1;
+s_after_step_3: row_op_to_emat(s_row_op_3) . s_after_step_2;
+s_after_step_4: row_op_to_emat(s_row_op_4) . s_after_step_3;
+
+sans: s_after_step_4;

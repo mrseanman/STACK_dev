@@ -1,0 +1,48 @@
+r():= rand_with_prohib(-10, 10, [0]);
+A: [r(), r(), r()];
+AB: [r(), r(), r()];
+B: A + AB;
+
+vec_dp(a,b):= lreduce("+", a * b);
+vec_length(a):= sqrt(vec_dp(a,a));
+
+/* 1: Definite Right angle */
+/* 2: Definite Isocelese */
+/* (maybe both will happen silultaneously) */
+type: rand([1,2]);
+if type = 1 then block(
+  AC1: rand_with_prohib(-3, 3, [0]),
+  AC2: rand_with_prohib(-3, 3, [0]),
+  AC3: -(AC1 * AB[1] + AC2 * AB[2])/AB[3],
+  coeff: denom(AC3),
+  AC: coeff * [AC1, AC2, AC3]
+)
+else
+  AC: [-AB[2], AB[3], -AB[1]];
+
+C: A + AC;
+BC: C - B;
+lengths: map(vec_length, [AB, AC, BC]);
+
+is_isoc: is(length(setify(lengths)) < 3);
+
+max_length: apply(max, lengths);
+other_lengths: delete(max_length, lengths);
+is_ra: is(max_length^2 = other_lengths[1]^2 + other_lengths[2]^2);
+
+tans1: lengths[1];
+tans2: lengths[2];
+tans3: lengths[3];
+
+/* Is the triangle isoc? */
+MCQ1: [
+  ["Yes", is_isoc],
+  ["No", not(is_isoc)]
+];
+
+/* Is the triangle right angle? */
+MCQ2: [
+  ["Yes", is_ra],
+  ["No", not(is_ra)]
+];
+

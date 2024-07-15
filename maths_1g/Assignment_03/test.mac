@@ -1,0 +1,24 @@
+/* R1 -> R1 - R2 */
+tans1: a;
+/* R2 -> R2 + R1 */
+tans2: b;
+/* R1 -> R1 - R2 */
+tans3: c;
+/* R1 -> -R1     */
+tans4: d;
+
+/* for prt checking */
+check_ans: row_op_to_emat(swap(swp_rows[1], swp_rows[2]));
+
+/* ----- General Feedback ----- */
+t_row_op_1: [swp_row_nums[1], R[swp_row_nums[1]] + tans1 * R[swp_row_nums[2]]];
+t_row_op_2: [swp_row_nums[2], R[swp_row_nums[2]] + tans2 * R[swp_row_nums[1]]];
+t_row_op_3: [swp_row_nums[1], R[swp_row_nums[1]] + tans3 * R[swp_row_nums[2]]];
+t_row_op_4: [swp_row_nums[1], tans4 * R[swp_row_nums[1]]                     ];
+
+I3: ident(3);
+t_after_step_1: row_op_to_emat(t_row_op_1) . I3;
+t_after_step_2: row_op_to_emat(t_row_op_2) . t_after_step_1;
+t_after_step_3: row_op_to_emat(t_row_op_3) . t_after_step_2;
+t_after_step_4: row_op_to_emat(t_row_op_4) . t_after_step_3;
+

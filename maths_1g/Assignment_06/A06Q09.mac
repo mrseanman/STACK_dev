@@ -1,0 +1,16 @@
+texput(i, "{\\mathbf{i}}");
+texput(j, "{\\mathbf{j}}");
+texput(k, "{\\mathbf{k}}");
+ordergreat(k,j,i);
+p: matrix([i],[j],[k]);
+r():= rand_range(-9, 9, 1);
+r3():= matrix([r()], [r()], [r()]);
+colv1: r3();
+colv2: r3();
+u: texboldatoms(dotproduct(p,colv1));
+v: texboldatoms(dotproduct(p,colv2));
+vec1: flatten(args(colv1));
+vec2: flatten(args(colv2));
+/*part a*/
+tans1: ntupleify(vec1+vec2)
+alt_1: texboldatoms(dotproduct(p, colv1+colv2));

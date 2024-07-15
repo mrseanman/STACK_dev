@@ -1,0 +1,19 @@
+r():= rand(9)+1;
+matrices: [
+  matrix( [1,0,1], [0,0,r()], [0,1,0] ),
+  matrix( [r(),0,1,0], [0,1,-1,r()], [0,0,0,0] ),
+  matrix( [0,1,r(),0], [0,0,0,1] ),
+  zeromatrix( 3,3 ),
+  matrix( [1,0,r(),-r(),0], [0,0,0,0,0], [0,1,r(),0,1] ),
+  matrix( [0,0,1], [0,1,0], [1,0,0] ),
+  matrix( [1,2,r()], [1,0,0], [0,1,1], [0,0,1] ),
+  matrix( [2,1,r(),r()], [0,0,1,-1], [0,0,0,r()], [0,0,0,0] ) ];
+  
+selected: rand_selection(matrices, 4);
+tans1: rank(selected[1]);
+tans2: rank(selected[2]);
+tans3: rank(selected[3]);
+tans4: rank(selected[4]);
+
+/*for feedback*/
+ech: map(triangularize, selected);

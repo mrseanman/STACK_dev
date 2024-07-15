@@ -1,0 +1,44 @@
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+lmxchar: "";
+r():= rand_with_prohib(-9, 9, [0]);
+vec(k):= makelist(r(), k);
+poss_vals: makelist([i], i, -9, 9);
+
+/*type 1 has no sol, 2 has unique sol, 3 has inf sols*/
+type: rand([1,2,3]);
+if type = 1 then block (
+  row1: vec(3),
+  rows: [row1, -row1, row1 + 2],
+  val1: r(),
+  aug_vals: [ [val1], [val1 + 10], [val1 + 2] ],
+  tans1: DNE,
+  tans2: DNE,
+  tans3: DNE
+) elseif type = 2 then block(
+  rows: [ [r(), r(), 0], [r(), 0, r()], [0, 0, r()] ],
+  while not(linearly_independent(rows)) do 
+    rows: [ [r(), r(), 0], [r(), 0, r()], [0, 0, r()] ],
+  aug_vals: rand_selection( poss_vals, 3 )
+) else block(
+  row1: vec(3),
+  row2: [r(), r(), 0],
+  rows: [ row1, row2, row2 - row1 ],
+  val1: [r()*3],
+  val2: [r()],
+  aug_vals: [ val1, val2, val2-val1 ]
+);
+m: apply(matrix, rows);
+aug_col: apply(matrix, aug_vals);
+fullm: addcol(m, aug_col);
+rrefm: rref(fullm);
+rref_L: submatrix(rrefm, 4);
+rref_R: col(rrefm, 4);
+if type = 2 then block (
+  tans3: rrefm[3][4],
+  tans2: rrefm[2][4] - rrefm[2][3]*tans3,
+  tans1: rrefm[1][4] - rrefm[1][2]*tans2
+) elseif type = 3 then block (
+  tans3: t,
+  tans2: rrefm[2][4] - rrefm[2][3]*tans3,
+  tans1: rrefm[1][4] - rrefm[1][2]*tans2 - rrefm[1][3]*tans3
+);
