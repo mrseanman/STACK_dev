@@ -1,16 +1,33 @@
+/*ordergreat(i,j,k); apparently does nothing, hence work-arounds */
 texput(i, "{\\mathbf{i}}");
 texput(j, "{\\mathbf{j}}");
 texput(k, "{\\mathbf{k}}");
-ordergreat(k,j,i);
-p: matrix([i],[j],[k]);
+texput(u, "{\\mathbf{u}}");
+texput(v, "{\\mathbf{v}}");
 r():= rand_range(-9, 9, 1);
-r3():= matrix([r()], [r()], [r()]);
-colv1: r3();
-colv2: r3();
-u: texboldatoms(dotproduct(p,colv1));
-v: texboldatoms(dotproduct(p,colv2));
-vec1: flatten(args(colv1));
-vec2: flatten(args(colv2));
+r3():= [r(), r(), r()];
+make_vec(l):= l[1]*i+l[2]*j+l[3]*k;
+vec_mod(l):= sqrt(l[1]^2+l[2]^2+l[3]^2);
+vec1: r3();
+vec2: r3();
+simp: false;
+disp1: make_vec(vec1);
+disp2: make_vec(vec2);
 /*part a*/
-tans1: ntupleify(vec1+vec2)
-alt_1: texboldatoms(dotproduct(p, colv1+colv2));
+sum: ev(vec1+vec2,simp);
+tans1: ntupleify(sum);
+alt1: make_vec(sum);
+/*part b*/
+alt2: vec_mod(vec1);
+tans2: ev(alt2, simp);
+/*part c*/
+c: makelist(rand([-3,-2,-1,2,3]), 2);
+comb: c[1]*vec1+c[2]*vec2;
+step3: make_vec(ev(vec1*c[1], simp))+make_vec(ev(vec2*c[2], simp));
+alt3: make_vec(ev(comb, simp));
+tans3: ntupleify(ev(comb, simp));
+/*part d*/
+diff: ev(vec1 - vec2, simp);
+step4: make_vec(diff);
+alt4: vec_mod(diff);
+tans4: ev(alt4, simp);
