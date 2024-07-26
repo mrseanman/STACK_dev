@@ -1,0 +1,6 @@
+r():= rand_with_prohib(-6,6,[0]);
+base: r()/rand([1,2,3]);
+mult: r();
+term(n):= ev(mult*base^(n-1), simp);
+simp: false;
+tans1: mult*base^(n-1);

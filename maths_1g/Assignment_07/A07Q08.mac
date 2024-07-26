@@ -1,0 +1,22 @@
+r():= rand_range(1,9,1);
+first: r();
+/*1,2 different recurrence relations, 3 is fn of n*/
+type: rand([1,2,3]);
+if type = 1 then block(
+  const: makelist(r(), 2),
+  term(n):= if n=1 then first else const[1]*term(n-1)-const[2],
+  gen: const[1]*a_n - const[2]
+) elseif type = 2 then block(
+  const: r(),
+  term(n):= if n=1 then first else term(n-1)/(const+term(n-1)),
+  gen: a_n/(const+a_n)
+) else block(
+  const: r(),
+  term(n):= (-1)^(n-1)/const^n,
+  gen: (-1)^(n-1)/const^n,
+  first: term(1)
+);
+tans1: term(2);
+tans2: term(3);
+tans3: term(4);
+tans4: term(5);

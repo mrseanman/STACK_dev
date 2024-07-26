@@ -1,0 +1,13 @@
+r3():= makelist(rand_with_prohib(-9,9,[0]),3);
+centre: r3();
+radius: rand_range(3, 10, 1);
+
+tans1: (x-centre[1])^2 + (y-centre[2])^2 + (z-centre[3])^2 = radius^2;
+disp_eqn: expand(lhs(tans1)) - rhs(tans1) = 0;
+
+/* Feedback */
+standard_form: (x-c_1)^2 + (y-c_2)^2 + (z-c_3)^2 = r^2;
+linear_term_x: coeff(lhs(disp_eqn),x,1) * x;
+constant_term_standard_form: c_1^2 + c_2^2 + c_3^2 - r^2;
+constant_term_given_eqn: ev(lhs(disp_eqn), x = 0, y = 0, z = 0);
+

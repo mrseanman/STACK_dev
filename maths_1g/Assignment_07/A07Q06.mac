@@ -1,0 +1,10 @@
+r3():= makelist(rand_with_prohib(-9,9,[0]),3);
+centre: r3();
+point: r3(); + centre;
+
+radial_displacement: point - centre;
+radius: sqrt(radial_displacement . radial_displacement);
+tans1: (x-centre[1])^2 + (y-centre[2])^2 + (z-centre[3])^2 = radius^2;
+
+/* Feedback */
+sphere_eqn: (x-C_1)^2 + (y-C_2)^2 + (z-C_3)^2 = r^2;

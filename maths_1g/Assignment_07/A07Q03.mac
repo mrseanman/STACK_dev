@@ -1,0 +1,48 @@
+texput(v, "{\\mathbf{v}}");
+
+poss_vals: delete(0,makelist(i,i,-9,9));
+r():= rand(poss_vals);
+/* being different values is important for the wrong options in MCQ below */
+r3():= rand_selection(poss_vals, 3);
+
+point: r3();
+pt: ntupleify(point);
+/* Exluding 1 because [1,1,1] would be a problem in MCQ below */
+dir: makelist(rand_with_prohib(-9,9,[0,1]), 3);
+vec: ntupleify(dir);
+
+/*symmetric equations*/
+sym: [
+  (x-point[1])/dir[1],
+  (y-point[2])/dir[2],
+  (z-point[3])/dir[3]
+];
+
+wrong: [
+  [x*point[1],          y*point[2],          z*point[3]],
+  [(x-point[2])/dir[1], (y-point[3])/dir[2], (z-point[1])/dir[3]],
+  [x-point[1],          y-point[2],          z-point[3]],
+  [(x-dir[1])/point[1], (y-dir[2])/point[2], (z-dir[3])/point[3]]
+];
+
+tans1: random_permutation([
+  [1, true,  castext("{@sym[1]@}      = {@sym[2]@}      = {@sym[3]@}")],
+  [2, false, castext("{@wrong[1][1]@} = {@wrong[1][2]@} = {@wrong[1][3]@}")],
+  [3, false, castext("{@wrong[2][1]@} = {@wrong[2][2]@} = {@wrong[2][3]@}")],
+  [4, false, castext("{@wrong[3][1]@} = {@wrong[3][2]@} = {@wrong[3][3]@}")],
+  [5, false, castext("{@wrong[4][1]@} = {@wrong[4][2]@} = {@wrong[4][3]@}")]
+]);
+
+/*intersection with planes*/
+x_xy: rhs(first(solve( sym[1] = subst(0,z,sym[3]), x)));
+y_xy: rhs(first(solve( sym[2] = subst(0,z,sym[3]), y)));
+tans2: ntuple(x_xy, y_xy, 0);
+
+x_xz: rhs(first(solve( sym[1] = subst(0,y,sym[2]), x)));
+z_xz: rhs(first(solve( sym[3] = subst(0,y,sym[2]), z)));
+tans3: ntuple(x_xz, 0, z_xz);
+
+y_yz: rhs(first(solve( sym[2] = subst(0,x,sym[1]), y)));
+z_yz: rhs(first(solve( sym[3] = subst(0,x,sym[1]), z)));
+tans4: ntuple(0, y_yz, z_yz);
+

@@ -1,0 +1,41 @@
+texput(i, "{\\mathbf{i}}");
+texput(j, "{\\mathbf{j}}");
+texput(k, "{\\mathbf{k}}");
+texput(v, "{\\mathbf{v}}");
+r():= rand_range(-15, 15, 1);
+r3():= [r(), r(), r()];
+new_point: r3();
+old_point: r3();
+dir: makelist( rand_with_prohib(-15,15,[0])/rand([1,2,3]), 3);
+param_part: t*dir;
+ans: new_point + param_part;
+tans1: ans[1];
+tans2: ans[2];
+tans3: ans[3];
+tans4: ntupleify(ans);
+par_line: [ x = old_point[1]+param_part[1], y = old_point[2]+param_part[2], z = old_point[3]+param_part[3] ];
+type: rand([1,2]);
+/*type 1 gives direction vector, type 2 gives parallel line*/
+simp: false;
+dir_vec: dir[1]*i + dir[2]*j + dir[3]*k;
+
+/* PRT */
+
+simp: true;
+
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+
+points_colinear(points):= block(
+    vects: makelist(points[i+1] - points[i], i, length(points) - 1),
+    is(rank(apply(matrix, vects)) < 2)
+    );
+
+test_line_param_eqn(teacher_ans, student_ans, param):= points_colinear(
+  [
+    ev(teacher_ans, ev(param, simp) = 0),
+    ev(teacher_ans, ev(param, simp) = 1),
+    ev(student_ans, ev(param, simp) = 0),
+    ev(student_ans, ev(param, simp) = 1)
+  ]);
+
+simp: false;

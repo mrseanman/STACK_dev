@@ -1,0 +1,35 @@
+round_4(x_) := float(round(10000 * x_)/10000);
+
+denominator: rand_range(5,10,1);
+numerator: rand_range(1,denominator - 1);
+coeff: numerator/denominator;
+summand: rand([1,2,3,4]);
+
+expr: a[n] = summand + (-coeff)^n;
+
+table: makelist(ev([a[i], round_4(rhs(expr))], n = i), i, 1, 10);
+tans1: map(second, table);
+
+make_plot(seq):= 
+  p: plot(
+    [discrete, seq],
+    [x, 0, 11], [y, apply(min, seq) - 0.1, apply(max, seq) + 0.1],
+    [xlabel, "n"], [ylabel, "a_n"],
+    [style, [points, 1, 1]]
+  );
+
+correct_seq: map(second, table);
+wrongs: [
+  -correct_seq,
+  makelist(summand + (coeff)^i, i, 10),
+  correct_seq + 1
+];
+
+MCQ1: random_permutation([
+  [1, true, make_plot(correct_seq)],
+  [2, false, make_plot(wrongs[1])],
+  [3, false, make_plot(wrongs[2])],
+  [4, false, make_plot(wrongs[3])]
+]);
+
+tans2: summand;

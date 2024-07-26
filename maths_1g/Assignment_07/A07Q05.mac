@@ -1,0 +1,18 @@
+point: rand_range(-10,10,1);
+vars: random_permutation([x,y]);
+
+eqn: vars[1] = point;
+
+MCQ1: [
+  ["A line"  , true  ],
+  ["A plane" , false ],
+  ["A point" , false ],
+  ["A circle", false ]
+];
+
+MCQ2: [
+  ["A line"  , false ],
+  ["A plane" , true  ],
+  ["A point" , false ],
+  ["A circle", false ]
+];
