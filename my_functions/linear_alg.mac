@@ -3,7 +3,7 @@ linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
 
 /*  Matrix multiplication that always returns a matrix and only works on matrices */
 /*  Normal Maxima behaviour is to evaluate [1].[2] = 2 ... not [1].[2]=[2] as we would expect.*/
-safe_matrix_mult(A,B) :=
+safe_matrix_mult(A,B):=
     block(
         [ncolsA,nrowsB],
         ncolsA: length(transpose(A)),
@@ -23,6 +23,18 @@ safe_matrix_mult(A,B) :=
             )
     );
 
+vec_norm(vec):= sqrt(vec.vec);
+
+generate_perp_vec(vec):= block(
+    /* Rejects a vector with any value above max val */
+    max_val: 30,
+    rand_vec: makelist(rand_with_prohib(-5, 5, [0]), length(vec)),
+    while not(linearly_independent([vec, rand_vec])) do
+        rand_vec: makelist(rand_with_prohib(-10, 10, [0]), length(vec)),
+    perp: vec_norm(vec)^2 * rand_vec - vec.rand_vec * vec,
+    perp: perp/first(apply(ezgcd, perp)),
+    if apply(max, perp) > max_val then generate_perp_vec(vec) else perp
+    );
 
 /* see https://math.stackexchange.com/questions/405966/if-i-have-three-points-is-there-an-easy-way-to-tell-if-they-are-collinear */
 three_points_colinear(A,B,C):= is((B[2] - A[2]) * (C[1] - B[1]) = (C[2] - B[2]) * (B[1] - A[1]));
@@ -42,3 +54,9 @@ test_line_param_eqn(teacher_ans, student_ans, param):= points_colinear(
     ev(student_ans, ev(param, simp) = 0),
     ev(student_ans, ev(param, simp) = 1)
   ]);
+
+cross_product(a,b) := [
+    a[2]*b[3] - a[3]*b[2],
+    a[3]*b[1] - a[1]*b[3],
+    a[1]*b[2] - a[2]*b[1]
+    ];
