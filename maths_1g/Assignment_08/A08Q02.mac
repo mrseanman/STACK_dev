@@ -1,0 +1,61 @@
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+
+r_vec(dimension):= makelist(rand_with_prohib(-10, 10, [0]), dimension);
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+vec_norm(vec):= sqrt(vec.vec);
+generate_perp_vec(vec):= block(
+    rand_vec: makelist(rand_with_prohib(-5, 5, [0]), length(vec)),
+    while not(linearly_independent([vec, rand_vec])) do
+        rand_vec: makelist(rand_with_prohib(-10, 10, [0]), length(vec)),
+    perp: vec_norm(vec)^2 * rand_vec - vec.rand_vec * vec,
+    perp/first(apply(ezgcd, perp))
+    );
+
+make_MCQ():= block(
+	[a, b, MCQ, type, facts],
+	dimension: rand([2,3]),
+	a: r_vec(dimension),
+	/* 1: parallel, 2: perp, 3: neither */
+	type: rand([1,2,3]),
+	if type = 1 then block(
+		coeff: rand([3,4,6,7]),
+		b: coeff * a,
+		MCQ: [
+			["parallel", true],
+			["perpendicular", false],
+			["neither parallel nor perpendicular", false]
+		],
+		facts: ['a.'b = a.b, 'b = coeff * 'a]
+		)
+	elseif type = 2 then block(
+		b: generate_perp_vec(a),
+		MCQ: [
+			["parallel", false],
+			["perpendicular", true],
+			["neither parallel nor perpendicular", false]
+		],
+		facts: ['a.'b = a.b, castext("{@'a@} and {@'b@} are linearly independent")]
+		)
+	else block(
+		b: r_vec(dimension),
+		while not(linearly_independent([a,b])) or a.b=0 do
+			b: r_vec(dimension),
+		MCQ: [
+			["parallel", false],
+			["perpendicular", false],
+			["neither parallel nor perpendicular", true]
+		],
+		facts: ['a.'b = a.b, castext("{@'a@} and {@'b@} are linearly independent")]
+	),
+	[a, b, MCQ, facts]
+);
+
+questions: makelist(make_MCQ(), 3);
+as: map(first, questions);
+bs: map(second, questions);
+MCQs: map(third, questions);
+facts: map(fourth, questions);
+
+disp_as: map(lambda([x], transpose(matrix(x))), as);
+disp_bs: map(lambda([x], transpose(matrix(x))), bs);

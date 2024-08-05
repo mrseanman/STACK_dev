@@ -1,0 +1,33 @@
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+
+texput(u, "\\mathbf{u}");
+texput(v, "\\mathbf{v}");
+texput(PQ, "\\overrightarrow{\\rm PQ}");
+texput(PR, "\\overrightarrow{\\rm PR}");
+texput(PS, "\\overrightarrow{\\rm PS}");
+texput(QS, "\\overrightarrow{\\rm QS}");
+texput(RS, "\\overrightarrow{\\rm RS}");
+
+r3():= makelist(rand(6), 3);
+p3():= makelist(rand_range(-6,6,1), 3);
+u_: r3();
+while u_ = [0,0,0] do
+  u_: r3();
+v_: r3();
+while v_ = [0,0,0] or not linearly_independent([u_, v_]) do
+  v_: r3();
+U_: ntupleify(u_);
+V_: ntupleify(v_);
+
+pt1: p3();
+points: [pt1, pt1+u_, pt1+v_, pt1+u_+v_];
+vtx: map(ntupleify, points);
+
+cross_product(a,b) := [
+    a[2]*b[3] - a[3]*b[2],
+    a[3]*b[1] - a[1]*b[3],
+    a[1]*b[2] - a[2]*b[1]
+    ];
+vec_mag(a) := sqrt(a . a);
+uxv: cross_product(u_, v_);
+tans1: vec_mag(uxv);

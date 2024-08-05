@@ -1,0 +1,41 @@
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+
+texput(PQ, "\\overrightarrow{\\rm PQ}");
+texput(PR, "\\overrightarrow{\\rm PR}");
+texput(n, "\\mathbf{n}");
+texput(i, "\\mathbf{i}");
+texput(j, "\\mathbf{j}");
+texput(k, "\\mathbf{k}");
+
+r3():= makelist(rand(6), 3);
+p3():= makelist(rand_range(-6,6,1), 3);
+u_: r3();
+while u_ = [0,0,0] do
+  u_: r3();
+v_: r3();
+while v_ = [0,0,0] or not linearly_independent([u_, v_]) do
+  v_: r3();
+U_: ntupleify(u_);
+V_: ntupleify(v_);
+
+pt1: p3();
+/*points P, Q, R*/
+points: [pt1, pt1+u_, pt1+v_];
+vtx: map(ntupleify, points);
+/*vector QR*/
+w_: v_ - u_;
+
+cross_product(a,b) := [
+    a[2]*b[3] - a[3]*b[2],
+    a[3]*b[1] - a[1]*b[3],
+    a[1]*b[2] - a[2]*b[1]
+    ];
+vec_mag(a) := sqrt(a . a);
+uxv: cross_product(u_, v_);
+tans1: ntupleify(uxv);
+tans2: vec_mag(uxv)/2;
+
+cd: [i,j,k];
+prod: matrix(cd, u_, v_);
+make_disp(vec):= vec[1]*i + vec[2]*j + vec[3]*k;
+alt_n: make_disp(uxv);

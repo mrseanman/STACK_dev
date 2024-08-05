@@ -1,0 +1,20 @@
+r():= rand_with_prohib(-9,9,[0]);
+poss_denom: append(makelist(i+3, i, 9), [%pi, sqrt(2)]);
+conv: rand([true,false]);
+term_1: rand(9)+1;
+/*disp_type 1: first few terms written as sequence; 2: sum of general term given*/
+disp_type: rand([1,2]);
+if conv then block(
+  denom: rand(poss_denom),
+  c_r: r()/denom,
+  while abs(c_r) >= 1 do
+    c_r: r()/denom,
+  tans2: term_1/(1-c_r)
+) else block(
+  c_r: r()/r(),
+  while abs(c_r) < 1 do
+    c_r: r()/r(),
+  tans2: DNE
+);
+a[n]:= ev(term_1*c_r^n,simp);
+tans1: [[1, conv, "convergent"], [2, not(conv), "divergent"]];

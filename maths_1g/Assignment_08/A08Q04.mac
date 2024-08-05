@@ -1,0 +1,28 @@
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+texput(c, "\\mathbf{c}");
+texput(x, "\\mathbf{x}");
+texput(y, "\\mathbf{y}");
+
+texput(i, "\\mathbf{i}");
+texput(j, "\\mathbf{j}");
+texput(k, "\\mathbf{k}");
+
+make_disp(vec):= vec[1]*i + vec[2]*j + vec[3]*k;
+
+cross_product(a,b) := [
+    a[2]*b[3] - a[3]*b[2],
+    a[3]*b[1] - a[1]*b[3],
+    a[1]*b[2] - a[2]*b[1]
+    ];
+
+r3():= makelist(rand_with_prohib(-10, 10, [0]), 3);
+
+a_: r3();
+b_: r3();
+c_: cross_product(a_,b_);
+tans1: make_disp(c_);
+
+disp_a: make_disp(a_);
+disp_b: make_disp(b_);
+

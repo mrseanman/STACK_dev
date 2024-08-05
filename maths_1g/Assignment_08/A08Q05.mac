@@ -1,0 +1,38 @@
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+texput(c, "\\mathbf{c}");
+texput(d, "\\mathbf{d}");
+texput(x, "\\mathbf{x}");
+texput(y, "\\mathbf{y}");
+
+texput(i, "\\mathbf{i}");
+texput(j, "\\mathbf{j}");
+texput(k, "\\mathbf{k}");
+
+vec_norm(vec):= sqrt(vec.vec);
+make_lin_indep_array(generator, n):= block(
+    vecs: makelist(generator(), n),
+    while not(linearly_independent(vecs)) do 
+        vecs: makelist(generator(), n),
+    vecs
+    );
+linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
+normalise(vec):= vec/vec_norm(vec);
+cross_product(a,b) := [
+    a[2]*b[3] - a[3]*b[2],
+    a[3]*b[1] - a[1]*b[3],
+    a[1]*b[2] - a[2]*b[1]
+    ];
+make_disp(vec):= transpose(matrix(vec));
+
+r3():= makelist(rand_with_prohib(-4, 4, [0]), 3);
+
+[a_, b_]: make_lin_indep_array(r3, 2);
+disp_a: make_disp(a_);
+disp_b: make_disp(b_);
+
+cp: cross_product(a_, b_);
+disp_cp: make_disp(cp);
+ncp: normalise(cp);
+disp_ncp: make_disp(ncp);
+tans1: {ntupleify(ncp), ntupleify(-ncp)};

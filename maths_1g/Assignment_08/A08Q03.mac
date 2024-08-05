@@ -1,0 +1,78 @@
+texput(AB, "{\\overrightarrow{\\rm AB}}");
+texput(AC, "{\\overrightarrow{\\rm AC}}");
+texput(BC, "{\\overrightarrow{\\rm BC}}");
+
+vec_norm(x_):= sqrt(x_.x_);
+
+/* I struggled to guarantee any random traingle would not be ra or isoc */
+/* Simple enough to test for these properties. */
+is_tri_isoc(corner_points):= block(
+	sides: [
+		corner_points[1] - corner_points[2],
+		corner_points[2] - corner_points[3],
+		corner_points[3] - corner_points[1]
+	],
+	is(length(setify(map(vec_norm, sides))) < 3)
+	);
+
+is_tri_right_angle(corner_points):= block(
+	sides: [
+		corner_points[1] - corner_points[2],
+		corner_points[2] - corner_points[3],
+		corner_points[3] - corner_points[1]
+	],
+	products: [
+		sides[1].sides[2],
+		sides[2].sides[3],
+		sides[3].sides[1]
+	],
+	member(0, products)
+	);
+
+ra: rand([true, false]);
+isoc: rand([true, false]);
+
+/* v_1 = AB */
+v_1: rand_selection(makelist(i,i,7), 3); 
+/* Originally set as isocolese (and definitely not ra) triangle */
+/* v_2 = AC */
+v_2: [v_1[1], -v_1[3], v_1[2]];
+if not(isoc) then v_2: rand([-3,-2,2,3]) * v_2;
+if ra then 
+	if isoc then block(v_1[1]: 0, v_2[1]: 0) else v_2[1]: 0;
+
+translate: makelist(rand_with_prohib(-20,20,[0]), i, 3);
+points: [
+	translate,
+	translate + v_1,
+	translate + v_2
+];
+points_disp: map(ntupleify, points);
+
+isoc_real: is_tri_isoc(points);
+ra_real: is_tri_right_angle(points);
+
+Q1: castext("{@T@} is isocelese:");
+MCQ1: [
+	["True",isoc_real],
+	["False", not(isoc_real)]
+];
+
+Q2: castext("{@T@} is right-angled:");
+MCQ2: [
+	["True", ra_real],
+	["False", not(ra_real)]
+];
+
+/* Feedback */
+/* v_3: BC */
+v_3: -v_1 + v_2;
+
+vs_disp: map(lambda([x], transpose(matrix(x))), [v_1, v_2, v_3]);
+
+products: [
+	v_1.v_2,
+	v_2.v_3,
+	v_3.v_1
+];
+lengths: map(vec_norm, [v_1, v_2, v_3]);

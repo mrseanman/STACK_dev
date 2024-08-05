@@ -1,0 +1,13 @@
+make_float(n):= float(round(1000*n)/1000);
+pm():= rand([+1, -1]);
+term_1: pm()*rand([1,2]);
+conv: rand([true, false]);
+if conv then block(
+  c_r: pm()*rand([1/5, 2/5, 1/2, 4/5]),
+  tans2: term_1/(1-c_r)
+) else block(
+  c_r: pm()*rand([6/5, 3/2, 5/2]),
+  tans2: DNE
+);
+a[n]:= ev(make_float(term_1*c_r^n), simp);
+tans1: [[1, conv, "convergent"], [2, not(conv), "divergent"]];

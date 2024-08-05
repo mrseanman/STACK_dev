@@ -1,0 +1,13 @@
+texput(a, "\\mathbf{a}");
+texput(b, "\\mathbf{b}");
+allowed_values: delete(0, makelist(i, i, -10, 10));
+r3():= rand_selection(allowed_values, 3);
+
+a_: makelist(rand([s,t]), 3) * r3();
+b_: makelist(rand([s,t]), 3) * r3();
+disp_a: transpose(matrix(a_));
+disp_b: traspose(matrix(b_));
+
+variables: listofvars(a_ + b_);
+
+tans1: a_.b_;
