@@ -1,6 +1,13 @@
 /*  Find if a list of m-vectors are linearly independent */
 linearly_independent(vects):= is(rank(apply(matrix,vects))=length(vects));
 
+make_lin_indep_array(generator, n):= block(
+    vecs: makelist(generator(), n),
+    while not(linearly_independent(vecs)) do 
+        vecs: makelist(generator(), n),
+    vecs
+    );
+
 /*  Matrix multiplication that always returns a matrix and only works on matrices */
 /*  Normal Maxima behaviour is to evaluate [1].[2] = 2 ... not [1].[2]=[2] as we would expect.*/
 safe_matrix_mult(A,B):=
