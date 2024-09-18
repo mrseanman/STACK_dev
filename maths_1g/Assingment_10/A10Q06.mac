@@ -1,0 +1,8 @@
+bcc_a: [0,2,0,0];
+bcc_b: [1/2,0,1/2,0];
+
+tans1: bcc_a[2];
+tans2: bcc_a[4];
+
+tans3: bcc_b[3];
+tans4: bcc_b[4];

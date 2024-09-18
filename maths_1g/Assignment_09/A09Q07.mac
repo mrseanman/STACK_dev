@@ -1,0 +1,9 @@
+var: rand([1, 2]);
+if var = 1 then (
+    tans1: 1,
+    tans2: 4
+) else (
+    tans1: 2,
+    tans2: 3
+);
+

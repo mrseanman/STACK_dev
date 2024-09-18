@@ -1,0 +1,6 @@
+tans1: 1/5;
+tans2: 6;
+tans3: [[1,false,"a"],[2,false,"b"],[3,false,"c"],[4,false,"d"],[5,false,"e"],[6,true,"f"]];
+tans4: [[1,false,"a"],[2,false,"b"],[3,false,"c"],[4,false,"d"],[5,false,"e"],[6,true,"f"]];
+tans5: [[1,false,"normalised degree centrality"],[2,true,"betweenness centrality"],[3,false,"normalised closeness centrality"]];
+tans6: 6;

@@ -1,0 +1,8 @@
+even: rand(10);
+odd: rand(9)+1;
+while odd = even do
+  odd: rand(9)+1;
+num: even*100+odd*10;
+tans1: num/99;
+dec: even+odd*0.1+even*0.01+odd*0.001+even*0.0001;
+

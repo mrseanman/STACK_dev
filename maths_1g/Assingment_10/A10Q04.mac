@@ -1,0 +1,6 @@
+const: rand([0,1]);
+summand: k+const;
+simp: false;
+qsum: sum(summand, k, 1, n^2);
+tans1: ev(qsum, simp);
+

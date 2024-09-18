@@ -1,0 +1,18 @@
+r():= rand_with_prohib(-9,9,[0]);
+conv: rand([true,false]);
+conv_r: [%e/4, %e/5, %e/6, %pi/4, %pi/5, %pi/6, sqrt(2)/2];
+div_r: [2*%e/3, 4*%e/5, %e/2, %pi/2, 4*%pi/5, sqrt(2)];
+term_1: rand(9)+1;
+/*disp_type 1: first few terms written as sequence; 2: sum of general term given*/
+disp_type: rand([1,2]);
+if conv then block(
+  denom: rand(poss_denom),
+  c_r: rand(conv_r),
+  tans2: term_1/(1-c_r)
+) else block(
+  c_r: rand(div_r),
+  tans2: DNE
+);
+a[n]:= ev(term_1*c_r^n,simp);
+tans1: [[1, conv, "convergent"], [2, not(conv), "divergent"]];
+

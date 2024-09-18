@@ -1,0 +1,49 @@
+/* Helper function to parse character string to a number */
+parse_digit(char) :=
+    block(
+        [digits],
+        digits : "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        sposition(char, digits) - 1
+    );
+
+number_to_base_string(num, base) :=
+    block(
+        [digits, result, digit_value],
+        digits : "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        result : "",
+        /* Handle zero case */
+        if num = 0 then
+            return("0"),
+        /* Convert number to the given base */
+        while num > 0 do (
+            digit_value : mod(num, base),
+            result : sconcat(substring(digits, digit_value + 1, digit_value + 2), result),
+            num : floor(num / base)
+        ),
+        return(result)
+    );
+
+parse_string_in_base(string, base):=
+    block(
+        [result, counter],
+        result: 0,
+        counter: 0,
+        for char in reverse(charlist(string)) do (
+            result: result + parse_digit(char) * base^counter,
+            counter: counter + 1
+            ),
+        result);
+
+nums: [
+    rand([1, 2]) * 10,
+    2^rand([5,6,7]) - 1,
+    rand(100) + 100,
+    rand(1000) + 100
+    ];
+
+bases: [2, 2, rand([5, 6, 7]), rand([7, 8, 9])];
+
+tans1: number_to_base_string(nums[1], bases[1]);
+tans2: number_to_base_string(nums[2], bases[2]);
+tans3: number_to_base_string(nums[3], bases[3]);
+tans4: number_to_base_string(nums[4], bases[4]);

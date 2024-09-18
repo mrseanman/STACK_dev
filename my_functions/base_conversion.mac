@@ -1,0 +1,29 @@
+parse_digit(char) :=
+    block(
+        [digits],
+        digits : "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        sposition(char, digits) - 1
+    );
+
+number_to_base_string(num, base) :=
+    block(
+        [digits, result, digit_value],
+        digits : "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        result : "",
+        /* Handle zero case */
+        if num = 0 then
+            return("0"),
+        /* Convert number to the given base */
+        while num > 0 do (
+            digit_value : mod(num, base),
+            result : sconcat(substring(digits, digit_value + 1, digit_value + 2), result),
+            num : floor(num / base)
+            ),
+        result
+    );
+
+nums: append([[12, 13]], makelist(makelist(rand(50) + 20, 2),4));
+disp_nums: map(lambda([x], map(lambda([y], number_to_base_string(y, 2)), x)), nums);
+disp_sums: map(lambda([x], sconcat( x[1], " + ", x[2], "= ")), disp_nums);
+/* disp_sums: map(lambda([x], castext(sconcat("\\(", x[1], "_2 + ", x[2], "_2 = \\)"))), disp_nums); */
+tanss: map(lambda([x], number_to_base_string(x[1] + x[2], 2)), nums);

@@ -1,0 +1,13 @@
+/* Nodes */
+tans1: {a, b, c, d, e, f};
+
+/* Edges */
+tans2: {ab, bc, cd, de, ea, ec, bd};
+
+/* So that putting ab indtead of ba as edge doesn't matter */
+relations: [
+    ab = ba, ac = ca, ad = da, ae = ea,
+    bc = cb, bd = db, be = eb,
+    cd = dc, ce = ec,
+    de = ed
+    ];

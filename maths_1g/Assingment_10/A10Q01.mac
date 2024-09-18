@@ -1,0 +1,14 @@
+/*strings used to get around truncation of trailing zeros*/
+natnum: rand([1, 1/2]);
+if natnum = 1 then block(
+  tans1: "0.9999",
+  tans2: "1.0000",
+  texput(a, "{1.000000}"),
+  texput(b, "{0.999999}")
+) else block(
+  tans1: "0.4999",
+  tans2: "0.5000",
+  texput(a, "{0.500000}"),
+  texput(b, "{0.499999}")
+);
+tanss: {tans1, tans2};

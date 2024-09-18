@@ -1,0 +1,6 @@
+var: rand([1, 2]);
+MCQ1: [
+    ["connected", false],
+    ["disconnected", true]
+    ];
+

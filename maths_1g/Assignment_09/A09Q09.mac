@@ -1,0 +1,35 @@
+/* Multply the matrices, then if an element of the product is >= 1, */
+/* make that 1. Else make that element 0 */
+mat_mul_then_geq1(a,b):= map(lambda([x], map(lambda([y], if y >= 1 then 1 else 0), x)), a.b);
+/* Matrix power according to the above mult */
+mat_pow_geq1(m, p):= block(
+    [result],
+    result: m,
+    thru p-1 do result: mat_mul_then_geq1(result, m),
+    result
+    );
+make_rand_sq_mat(f, n):= apply(matrix, makelist(makelist(f(), n), n));
+
+dim: rand([5, 6]);
+/* To make disconnected more likely */
+r():= rand([0, 0, 1]);
+
+m: make_rand_sq_mat(r, dim);
+
+/* Make symmetric */
+m: m + transpose(m);
+/* Make ones and zeros */
+m: map(lambda([x], mod(x, 2)), m);
+
+/* Put ones in diagonal for the connectedness test */
+m_test: m + apply(diag_matrix, makelist(1, dim));
+m_test: mat_pow_geq1(m_test, dim);
+
+/* See if matrix is all ones  */
+/* See: https://math.stackexchange.com/questions/864604/checking-connectivity-of-adjacency-matrix */
+connected: is(m_test = zeromatrix(dim, dim) + 1);
+
+MCQ1: [
+    ["connected", connected],
+    ["disconnected", not connected]
+    ];

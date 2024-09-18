@@ -1,0 +1,20 @@
+tans1: [[1, false, "Graph I"], [2, true, "Graph II"]];
+tans2: 2/3;
+all_bc: [
+   ["a",2   ],
+   ["b",1   ],
+   ["c",2   ],
+   ["d",2   ],
+   ["e",1   ],
+   ["f",2   ],
+   ["g",3   ],
+   ["h",0   ],
+   ["i",0   ],
+   ["k",3/2 ],
+   ["m",0   ],
+   ["n",0   ]
+  ];
+bc: rand_selection(all_bc,2);
+tans3: bc[1][2];
+tans4: bc[2][2];
+tans5: [[1,true,"Closeness centrality"],[2,false,"Betweenness centrality"]];

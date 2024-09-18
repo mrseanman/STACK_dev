@@ -1,0 +1,9 @@
+ncc_a: [5/3, 1, 4/3, 4/3];
+ncc_b: [1, 4/3, 1, 4/3];
+
+tans1: ncc_a[1];
+tans2: ncc_a[3];
+tans3: ncc_a[4];
+
+tans4: ncc_b[3];
+tans5: ncc_b[4];

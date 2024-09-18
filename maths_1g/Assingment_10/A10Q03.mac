@@ -1,0 +1,15 @@
+type: rand([1,2]);
+simp: false;
+pow: rand([2,3,4]);
+if type = 1 then block(
+  t1: k^pow,
+  t2: j^pow,
+  sumq: sum(t1, k, 0, n) - sum(t2, j, 1, n+1),
+  tans1: -(n+1)^pow
+) else block(
+  t1: (k+1)^pow,
+  t2: k^pow,
+  sumq: sum(t1 - t2, k, 1, n),
+  tans1: (n+1)^pow - 1
+);
+

@@ -1,0 +1,10 @@
+dim: rand([3, 4, 5, 6, 7, 8]);
+
+m: rand(zeromatrix(dim, dim) + 8);
+/* Make symmetric */
+/* Happy accident, diagonals are even, meaning there are no self connected nodes */
+m: m + transpose(m);
+/* Make ones and zeros */
+m: map(lambda([x], mod(x, 2)), m);
+
+tans1: dim;
